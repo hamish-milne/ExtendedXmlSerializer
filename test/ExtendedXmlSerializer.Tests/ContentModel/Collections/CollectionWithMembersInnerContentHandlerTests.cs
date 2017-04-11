@@ -23,8 +23,8 @@
 
 using System.Collections.Generic;
 using ExtendedXmlSerializer.Configuration;
+using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.ExtensionModel.Types;
-using ExtendedXmlSerializer.ExtensionModel.Xml;
 using Xunit;
 
 namespace ExtendedXmlSerializer.Tests.ContentModel.Collections

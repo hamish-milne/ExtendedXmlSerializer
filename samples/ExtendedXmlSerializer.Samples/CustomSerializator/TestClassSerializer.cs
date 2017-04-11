@@ -25,7 +25,7 @@ using System;
 using System.Globalization;
 using System.Xml;
 using System.Xml.Linq;
-using ExtendedXmlSerializer.ExtensionModel.Xml;
+using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 
 namespace ExtendedXmlSerialization.Samples.CustomSerializator
 {

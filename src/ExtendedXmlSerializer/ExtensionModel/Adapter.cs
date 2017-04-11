@@ -23,7 +23,7 @@
 
 using System.Xml.Linq;
 using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.ExtensionModel.Xml;
+using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using XmlWriter = System.Xml.XmlWriter;
 
 namespace ExtendedXmlSerializer.ExtensionModel

@@ -25,8 +25,8 @@ using System;
 using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.ExtensionModel.Content.Members;
+using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.ExtensionModel.Types;
-using ExtendedXmlSerializer.ExtensionModel.Xml;
 using ExtendedXmlSerializer.Tests.Support;
 using FluentAssertions;
 using JetBrains.Annotations;
@@ -72,10 +72,10 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Content.Members
 		public void ConfiguredTuple()
 		{
 			var configuration = new ConfigurationContainer().Extend(ParameterizedMembersExtension.Default)
-			                                               .Type<Tuple<string>>()
-			                                               .Member(x => x.Item1)
-			                                               .Name("NewName")
-			                                               .Configuration;
+			                                                .Type<Tuple<string>>()
+			                                                .Member(x => x.Item1)
+			                                                .Name("NewName")
+			                                                .Configuration;
 			var serializer = new SerializationSupport(configuration);
 			var expected = new Tuple<string>("Hello World!");
 			var actual = serializer.Assert(expected,
@@ -88,16 +88,16 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Content.Members
 		public void ConfiguredCreatedTuple()
 		{
 			var configuration = new ConfigurationContainer().UseAutoFormatting()
-			                                               .Extend(ParameterizedMembersExtension.Default)
-			                                               .Type<Tuple<string, int, TypeCode>>()
-			                                               .Member(x => x.Item1, m => m.Name("Message"))
-														   .Member(x => x.Item2, m => m.Name("Number"))
-														   .Member(x => x.Item3, m => m.Name("Codez"))
-														   .Configuration;
+			                                                .Extend(ParameterizedMembersExtension.Default)
+			                                                .Type<Tuple<string, int, TypeCode>>()
+			                                                .Member(x => x.Item1, m => m.Name("Message"))
+			                                                .Member(x => x.Item2, m => m.Name("Number"))
+			                                                .Member(x => x.Item3, m => m.Name("Codez"))
+			                                                .Configuration;
 			var serializer = new SerializationSupport(configuration);
 			var expected = Tuple.Create("Hello World!", 6776, TypeCode.Empty);
 			var actual = serializer.Assert(expected,
-										   @"<?xml version=""1.0"" encoding=""utf-8""?><Tuple xmlns:exs=""https://extendedxmlserializer.github.io/v2"" exs:arguments=""string,int,TypeCode"" Message=""Hello World!"" Number=""6776"" Codez=""Empty"" xmlns=""https://extendedxmlserializer.github.io/system"" />");
+			                               @"<?xml version=""1.0"" encoding=""utf-8""?><Tuple xmlns:exs=""https://extendedxmlserializer.github.io/v2"" exs:arguments=""string,int,TypeCode"" Message=""Hello World!"" Number=""6776"" Codez=""Empty"" xmlns=""https://extendedxmlserializer.github.io/system"" />");
 			actual.ShouldBeEquivalentTo(expected);
 		}
 
