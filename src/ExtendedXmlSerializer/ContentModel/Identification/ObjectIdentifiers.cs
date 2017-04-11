@@ -25,13 +25,12 @@ using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
-using ExtendedXmlSerializer.ContentModel.Identification;
 using ExtendedXmlSerializer.ContentModel.Members;
 using ExtendedXmlSerializer.ContentModel.Reflection;
 using ExtendedXmlSerializer.ReflectionModel;
 using JetBrains.Annotations;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
+namespace ExtendedXmlSerializer.ContentModel.Identification
 {
 	sealed class ObjectIdentifiers : IObjectIdentifiers
 	{

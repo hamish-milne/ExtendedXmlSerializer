@@ -24,7 +24,7 @@
 using System.Collections.Immutable;
 using ExtendedXmlSerializer.Core.Sources;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
+namespace ExtendedXmlSerializer.ContentModel.Identification
 {
 	public interface IObjectIdentifiers : IParameterizedSource<object, ImmutableArray<string>> {}
 }
