@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 using ExtendedXmlSerializer.Configuration;
+using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.ExtensionModel.Types;
 using ExtendedXmlSerializer.Tests.Support;
 using JetBrains.Annotations;
@@ -43,7 +44,7 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Types
 
 		class Subject
 		{
-			public static Subject Create(string message) => new Subject { PropertyName = message };
+			public static Subject Create(string message) => new Subject {PropertyName = message};
 
 			Subject() {}
 

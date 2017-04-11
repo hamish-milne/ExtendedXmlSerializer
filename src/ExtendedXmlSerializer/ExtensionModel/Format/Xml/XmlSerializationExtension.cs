@@ -33,7 +33,7 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
-	sealed class XmlSerializationExtension : ISerializerExtension
+	sealed class XmlSerializationExtension : IFormatExtension
 	{
 		readonly static ISpecification<IInnerContent> Specification =
 			IsTypeSpecification<IListInnerContent>.Default.And(ElementSpecification.Default);

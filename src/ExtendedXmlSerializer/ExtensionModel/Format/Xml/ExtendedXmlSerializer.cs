@@ -52,8 +52,11 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		}
 
 		public void Serialize(System.Xml.XmlWriter writer, object instance)
-			=> _serializers.Get(instance.GetType().GetTypeInfo())
-			               .Write(_writers.Get(new Writing<System.Xml.XmlWriter>(writer, instance)), instance);
+		{
+			_serializers.Get(instance.GetType().GetTypeInfo())
+			            .Write(_writers.Get(new Writing<System.Xml.XmlWriter>(writer, instance)), instance);
+			writer.Flush();
+		}
 
 		public object Deserialize(System.Xml.XmlReader reader)
 		{

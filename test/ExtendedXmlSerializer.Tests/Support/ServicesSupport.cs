@@ -25,17 +25,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel;
-using IServiceProvider = ExtendedXmlSerializer.ExtensionModel.IServiceProvider;
+using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 
 namespace ExtendedXmlSerializer.Tests.Support
 {
-	class ServicesSupport : IServices
+	sealed class ServicesSupport : IServices
 	{
 		readonly IServices _services;
 
-		public ServicesSupport() : this(DefaultExtensions.Default.ToArray()) {}
+		public ServicesSupport() : this(new ExtendedXmlSerializer.ExtensionModel.Format.Xml.DefaultExtensions().ToArray()) {}
 
 		public ServicesSupport(params ISerializerExtension[] extensions)
 			: this(ServicesFactory.Default.Get(new ConfigurationContainer(extensions))) {}
@@ -75,45 +74,45 @@ namespace ExtendedXmlSerializer.Tests.Support
 			=> _services.RegisterInstance(serviceType, instance, serviceName);
 
 		public IServiceRepository Register(Type serviceType) => _services.Register(serviceType);
-		public IServiceRepository Register<TService>(Func<IServiceProvider, TService> factory) => _services.Register(factory);
+		public IServiceRepository Register<TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, TService> factory) => _services.Register(factory);
 
-		public IServiceRepository Register<T, TService>(Func<IServiceProvider, T, TService> factory)
+		public IServiceRepository Register<T, TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, T, TService> factory)
 			=> _services.Register(factory);
 
-		public IServiceRepository Register<T, TService>(Func<IServiceProvider, T, TService> factory, string serviceName)
+		public IServiceRepository Register<T, TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, T, TService> factory, string serviceName)
 			=> _services.Register(factory, serviceName);
 
-		public IServiceRepository Register<T1, T2, TService>(Func<IServiceProvider, T1, T2, TService> factory)
+		public IServiceRepository Register<T1, T2, TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, T1, T2, TService> factory)
 			=> _services.Register(factory);
 
-		public IServiceRepository Register<T1, T2, TService>(Func<IServiceProvider, T1, T2, TService> factory,
+		public IServiceRepository Register<T1, T2, TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, T1, T2, TService> factory,
 		                                                     string serviceName) => _services.Register(factory, serviceName);
 
-		public IServiceRepository Register<T1, T2, T3, TService>(Func<IServiceProvider, T1, T2, T3, TService> factory)
+		public IServiceRepository Register<T1, T2, T3, TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, T1, T2, T3, TService> factory)
 			=> _services.Register(factory);
 
-		public IServiceRepository Register<T1, T2, T3, TService>(Func<IServiceProvider, T1, T2, T3, TService> factory,
+		public IServiceRepository Register<T1, T2, T3, TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, T1, T2, T3, TService> factory,
 		                                                         string serviceName)
 			=> _services.Register(factory, serviceName);
 
-		public IServiceRepository Register<T1, T2, T3, T4, TService>(Func<IServiceProvider, T1, T2, T3, T4, TService> factory)
+		public IServiceRepository Register<T1, T2, T3, T4, TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, T1, T2, T3, T4, TService> factory)
 			=> _services.Register(factory);
 
-		public IServiceRepository Register<T1, T2, T3, T4, TService>(Func<IServiceProvider, T1, T2, T3, T4, TService> factory,
+		public IServiceRepository Register<T1, T2, T3, T4, TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, T1, T2, T3, T4, TService> factory,
 		                                                             string serviceName)
 			=> _services.Register(factory, serviceName);
 
-		public IServiceRepository Register<TService>(Func<IServiceProvider, TService> factory, string serviceName)
+		public IServiceRepository Register<TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, TService> factory, string serviceName)
 			=> _services.Register(factory, serviceName);
 
 		public IServiceRepository RegisterFallback(Func<Type, bool> predicate, Func<Type, object> factory)
 			=> _services.RegisterFallback(predicate, factory);
 
 		public IServiceRepository RegisterConstructorDependency<TDependency>(
-			Func<IServiceProvider, ParameterInfo, TDependency> factory) => _services.RegisterConstructorDependency(factory);
+			Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, ParameterInfo, TDependency> factory) => _services.RegisterConstructorDependency(factory);
 
 		public IServiceRepository RegisterConstructorDependency<TDependency>(
-			Func<IServiceProvider, ParameterInfo, object[], TDependency> factory)
+			Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, ParameterInfo, object[], TDependency> factory)
 			=> _services.RegisterConstructorDependency(factory);
 
 		public IServiceRepository Decorate(Type serviceType, Type decoratorType)
@@ -122,7 +121,7 @@ namespace ExtendedXmlSerializer.Tests.Support
 		public IServiceRepository Decorate<TService, TDecorator>() where TDecorator : TService
 			=> _services.Decorate<TService, TDecorator>();
 
-		public IServiceRepository Decorate<TService>(Func<IServiceProvider, TService, TService> factory)
+		public IServiceRepository Decorate<TService>(Func<ExtendedXmlSerializer.ExtensionModel.IServiceProvider, TService, TService> factory)
 			=> _services.Decorate(factory);
 
 		public object GetInstance(Type serviceType) => _services.GetInstance(serviceType);

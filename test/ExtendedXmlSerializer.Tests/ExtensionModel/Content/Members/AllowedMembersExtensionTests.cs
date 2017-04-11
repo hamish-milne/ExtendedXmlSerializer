@@ -22,8 +22,8 @@
 // SOFTWARE.
 
 using System;
-using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Content;
+using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.ExtensionModel.Types;
 using ExtendedXmlSerializer.Tests.Support;
 using Xunit;
@@ -37,7 +37,7 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Content.Members
 		{
 			var serializer = new ConfigurationContainer().Type<Subject>().Member(x => x.Property2).Ignore().Configuration;
 			var support = new SerializationSupport(serializer);
-			var instance = new Subject { Property1 = "Hello World!", Property2 = 1000, Property3 = DateTime.Now };
+			var instance = new Subject {Property1 = "Hello World!", Property2 = 1000, Property3 = DateTime.Now};
 			var actual = support.Cycle(instance);
 			Assert.NotEqual(instance.Property2, actual.Property2);
 		}
@@ -47,7 +47,7 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Content.Members
 		{
 			var serializer = new ConfigurationContainer().Type<Subject>().Member(x => x.Property2).Include().Configuration;
 			var support = new SerializationSupport(serializer);
-			var instance = new Subject { Property1 = "Hello World!", Property2 = 1000, Property3 = DateTime.Now };
+			var instance = new Subject {Property1 = "Hello World!", Property2 = 1000, Property3 = DateTime.Now};
 			var actual = support.Cycle(instance);
 			Assert.NotEqual(instance.Property1, actual.Property1);
 			Assert.Equal(instance.Property2, actual.Property2);
@@ -59,12 +59,12 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Content.Members
 		{
 			var serializer =
 				new ConfigurationContainer().Type<Subject>()
-				                           .Member(x => x.Property2)
-				                           .Owner.Member(x => x.Property1)
-				                           .Owner.OnlyConfiguredProperties()
-				                           .Configuration;
+				                            .Member(x => x.Property2)
+				                            .Owner.Member(x => x.Property1)
+				                            .Owner.OnlyConfiguredProperties()
+				                            .Configuration;
 			var support = new SerializationSupport(serializer);
-			var instance = new Subject { Property1 = "Hello World!", Property2 = 1000, Property3 = DateTime.Now };
+			var instance = new Subject {Property1 = "Hello World!", Property2 = 1000, Property3 = DateTime.Now};
 			var actual = support.Cycle(instance);
 			Assert.Equal(instance.Property1, actual.Property1);
 			Assert.Equal(instance.Property2, actual.Property2);
@@ -76,11 +76,11 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Content.Members
 		{
 			var serializer =
 				new ConfigurationContainer().Type<Subject>()
-										   .Member(x => x.Property2)
-										   .Owner.Member(x => x.Property3)
-										   .Owner.Configuration.OnlyConfiguredProperties();
+				                            .Member(x => x.Property2)
+				                            .Owner.Member(x => x.Property3)
+				                            .Owner.Configuration.OnlyConfiguredProperties();
 			var support = new SerializationSupport(serializer);
-			var instance = new Subject { Property1 = "Hello World!", Property2 = 1000, Property3 = DateTime.Now };
+			var instance = new Subject {Property1 = "Hello World!", Property2 = 1000, Property3 = DateTime.Now};
 			var actual = support.Cycle(instance);
 			Assert.NotEqual(instance.Property1, actual.Property1);
 			Assert.Equal(instance.Property2, actual.Property2);

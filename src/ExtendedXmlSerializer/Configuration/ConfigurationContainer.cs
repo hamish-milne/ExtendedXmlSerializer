@@ -1,18 +1,18 @@
 ﻿// MIT License
-// 
+//
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,37 +21,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Linq;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.ExtensionModel;
-using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 
 namespace ExtendedXmlSerializer.Configuration
 {
-	public class ConfigurationContainer : KeyedByTypeCollection<ISerializerExtension>, IConfigurationContainer
+	public class ConfigurationContainer<T> : KeyedByTypeCollection<ISerializerExtension>, IConfigurationContainer
 	{
-		readonly static ServicesFactory ServicesFactory = ServicesFactory.Default;
-
 		readonly IServicesFactory _source;
 
-		public ConfigurationContainer() : this(DefaultExtensions.Default.ToArray()) {}
-
-		public ConfigurationContainer(params ISerializerExtension[] extensions) : this(ServicesFactory, extensions) {}
+		public ConfigurationContainer(params ISerializerExtension[] extensions) : this(ServicesFactory.Default, extensions) {}
 
 		public ConfigurationContainer(IServicesFactory source, params ISerializerExtension[] extensions) : base(extensions)
 		{
 			_source = source;
 		}
 
-		public IExtendedXmlSerializer Create()
+		public T Create()
 		{
 			using (var services = _source.Get(this))
 			{
-				var result = services.Get<IExtendedXmlSerializer>();
+				var result = services.Get<T>();
 				return result;
 			}
 		}
 
-		T IConfigurationContainer.Find<T>() => Find<T>();
+		TExtension IConfigurationContainer.Find<TExtension>() => Find<TExtension>();
 	}
 }

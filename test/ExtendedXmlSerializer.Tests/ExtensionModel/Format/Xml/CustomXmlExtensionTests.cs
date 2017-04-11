@@ -24,7 +24,6 @@
 using System;
 using System.Globalization;
 using System.Xml.Linq;
-using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.ExtensionModel.Types;
 using ExtendedXmlSerializer.Tests.Support;
@@ -40,9 +39,9 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Format.Xml
 		public void Verify()
 		{
 			var serializer = new ConfigurationContainer().Type<TestClassWithSerializer>()
-			                                            .CustomSerializer(new CustomSerializer())
-			                                            .Configuration
-			                                            .Create();
+			                                             .CustomSerializer(new CustomSerializer())
+			                                             .Configuration
+			                                             .Create();
 			var support = new SerializationSupport(serializer);
 			var expected = new TestClassWithSerializer("String", 17);
 			var actual = support.Assert(expected,

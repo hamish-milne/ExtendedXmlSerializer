@@ -24,6 +24,7 @@
 using System.Collections.Immutable;
 using System.Linq;
 using ExtendedXmlSerializer.Configuration;
+using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.ExtensionModel.Types;
 using ExtendedXmlSerializer.Tests.Support;
 using Xunit;

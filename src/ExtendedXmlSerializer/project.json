@@ -27,8 +27,9 @@
       "buildOptions": {
         "define": [ "CLASSIC", "NET45" ]
       },
-      "dependencies": {
-      },
+        "dependencies": {
+            "Newtonsoft.Json": "10.0.2"
+        },
       "frameworkAssemblies": {
         "System.Data": "4.0.0.0",
         "System.Xml": "4.0.0.0",

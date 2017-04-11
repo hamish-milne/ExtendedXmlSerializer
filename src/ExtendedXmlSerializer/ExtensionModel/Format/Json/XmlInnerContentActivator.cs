@@ -21,27 +21,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Immutable;
-using ExtendedXmlSerializer.ContentModel.Identification;
-using ExtendedXmlSerializer.Core;
+using ExtendedXmlSerializer.ContentModel;
+using ExtendedXmlSerializer.ContentModel.Content;
+using ExtendedXmlSerializer.ContentModel.Format;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
+namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
-	sealed class IdentifierCommand : ICommand<IIdentityStore>
+	sealed class XmlInnerContentActivator : IInnerContentActivator
 	{
-		readonly ImmutableArray<string> _identifiers;
+		readonly IReader _activator;
+		readonly IXmlContentsActivator _contents;
 
-		public IdentifierCommand(ImmutableArray<string> identifiers)
+		public XmlInnerContentActivator(IReader activator, IXmlContentsActivator contents)
 		{
-			_identifiers = identifiers;
+			_activator = activator;
+			_contents = contents;
 		}
 
-		public void Execute(IIdentityStore parameter)
+		public IInnerContent Get(IFormatReader parameter)
 		{
-			foreach (var identifier in _identifiers)
-			{
-				parameter.Get(string.Empty, identifier);
-			}
+			var xml = (System.Xml.XmlReader) parameter.Get();
+			var attributes = xml.HasAttributes ? new XmlAttributes(xml) : (XmlAttributes?) null;
+
+			var depth = XmlDepth.Default.Get(xml);
+			var content = depth.HasValue ? new XmlElements(xml, depth.Value) : (XmlElements?) null;
+
+			var result = attributes.HasValue || content.HasValue
+				? _contents.Create(parameter, _activator.Get(parameter), new XmlContent(attributes, content))
+				: null;
+			return result;
 		}
 	}
 }

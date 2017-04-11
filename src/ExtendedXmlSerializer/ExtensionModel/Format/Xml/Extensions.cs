@@ -1,18 +1,18 @@
 ﻿// MIT License
-// 
+//
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,10 +28,8 @@ using System.Text;
 using System.Xml;
 using System.Xml.Linq;
 using ExtendedXmlSerializer.Configuration;
-using ExtendedXmlSerializer.ContentModel.Members;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
-using ExtendedXmlSerializer.Core.Specifications;
 using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic;
 using ExtendedXmlSerializer.ReflectionModel;
@@ -42,26 +40,6 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 	{
 		public static XElement Member(this XElement @this, string name)
 			=> @this.Element(XName.Get(name, @this.Name.NamespaceName));
-
-		public static IMemberConfiguration Attribute<T, TMember>(
-			this MemberConfiguration<T, TMember> @this, Func<TMember, bool> when)
-		{
-			@this.Configuration.With<MemberFormatExtension>().Specifications[@this.Get()] =
-				new AttributeSpecification(new DelegatedSpecification<TMember>(when).Adapt());
-			return @this.Attribute();
-		}
-
-		public static IMemberConfiguration Attribute(this IMemberConfiguration @this)
-		{
-			@this.Configuration.With<MemberFormatExtension>().Registered.Add(@this.Get());
-			return @this;
-		}
-
-		public static IMemberConfiguration Content(this IMemberConfiguration @this)
-		{
-			@this.Configuration.With<MemberFormatExtension>().Registered.Remove(@this.Get());
-			return @this;
-		}
 
 		public static TypeConfiguration<T> CustomSerializer<T>(this TypeConfiguration<T> @this,
 		                                                       Action<System.Xml.XmlWriter, T> serializer,
@@ -89,6 +67,9 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			@this.Configuration.With<MigrationsExtension>().Add(@this.Get(), migrations.Fixed());
 			return @this;
 		}
+
+		public static IExtendedXmlSerializer Create(this IConfigurationContainer @this)
+			=> @this.AsValid<ConfigurationContainer>().Create();
 
 		public static IConfigurationContainer UseAutoFormatting(this IConfigurationContainer @this)
 			=> @this.Extend(AutoMemberFormatExtension.Default);

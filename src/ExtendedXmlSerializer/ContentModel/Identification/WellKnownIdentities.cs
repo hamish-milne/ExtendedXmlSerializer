@@ -24,7 +24,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
-using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 
 namespace ExtendedXmlSerializer.ContentModel.Identification
 {
@@ -36,7 +35,7 @@ namespace ExtendedXmlSerializer.ContentModel.Identification
 			new Dictionary<Assembly, IIdentity>
 			{
 				{
-					typeof(IExtendedXmlSerializer).GetTypeInfo().Assembly,
+					typeof(ISerializer).GetTypeInfo().Assembly,
 					new Identity("exs", Defaults.Identifier)
 				},
 				{

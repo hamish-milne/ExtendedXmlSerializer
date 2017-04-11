@@ -22,7 +22,6 @@
 // SOFTWARE.
 
 using System.Collections.Generic;
-using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using FluentAssertions;
 using JetBrains.Annotations;

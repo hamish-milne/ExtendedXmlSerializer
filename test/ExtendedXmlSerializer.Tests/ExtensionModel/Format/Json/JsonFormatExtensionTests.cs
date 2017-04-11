@@ -30,7 +30,9 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Format.Json
 		[Fact]
 		public void Verify()
 		{
-			Assert.True(true);
+			/*const int expected = 6776;
+
+			var serializer = new ConfigurationContainer().Create();*/
 		}
 	}
 }

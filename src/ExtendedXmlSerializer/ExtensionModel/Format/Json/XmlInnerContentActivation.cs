@@ -21,25 +21,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Xml.Linq;
-using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
-using XmlWriter = System.Xml.XmlWriter;
+using System.Reflection;
+using ExtendedXmlSerializer.ContentModel.Content;
+using ExtendedXmlSerializer.ContentModel.Reflection;
+using ExtendedXmlSerializer.Core.Sources;
+using JetBrains.Annotations;
 
-namespace ExtendedXmlSerializer.ExtensionModel
+namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
-	class Adapter<T> : IExtendedXmlCustomSerializer
+	sealed class XmlInnerContentActivation : IInnerContentActivation
 	{
-		readonly IExtendedXmlCustomSerializer<T> _configuration;
+		readonly IActivation _activation;
+		readonly IParameterizedSource<TypeInfo, IXmlContentsActivator> _activator;
 
-		public Adapter(IExtendedXmlCustomSerializer<T> configuration)
+		[UsedImplicitly]
+		public XmlInnerContentActivation(IActivation activation) : this(activation, XmlContentsActivatorSelector.Default) {}
+
+		public XmlInnerContentActivation(IActivation activation, IParameterizedSource<TypeInfo, IXmlContentsActivator> activator)
 		{
-			_configuration = configuration;
+			_activation = activation;
+			_activator = activator;
 		}
 
-		public object Deserialize(XElement xElement) => _configuration.Deserialize(xElement);
-
-		public void Serializer(XmlWriter xmlWriter, object instance)
-			=> _configuration.Serializer(xmlWriter, instance.AsValid<T>());
+		public IInnerContentActivator Get(TypeInfo parameter)
+			=> new XmlInnerContentActivator(_activation.Get(parameter), _activator.Get(parameter));
 	}
 }

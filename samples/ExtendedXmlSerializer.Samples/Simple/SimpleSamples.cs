@@ -22,7 +22,6 @@
 // SOFTWARE.
 
 using System;
-using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 
 namespace ExtendedXmlSerialization.Samples.Simple

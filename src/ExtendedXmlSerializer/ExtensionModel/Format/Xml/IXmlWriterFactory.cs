@@ -21,11 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.IO;
-using ExtendedXmlSerializer.Core.Sources;
-
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
-	public interface IXmlWriterFactory : IParameterizedSource<Stream, System.Xml.XmlWriter>,
-	                                     IParameterizedSource<TextWriter, System.Xml.XmlWriter> {}
+	public interface IXmlWriterFactory : IWriterFactory<System.Xml.XmlWriter> {}
 }
