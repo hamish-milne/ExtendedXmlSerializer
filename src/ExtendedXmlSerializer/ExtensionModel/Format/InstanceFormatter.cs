@@ -23,10 +23,11 @@
 
 using System;
 using System.IO;
+using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format
 {
-	class InstanceFormatter<TRead, TWrite> : IInstanceFormatter where TWrite : IDisposable
+	class InstanceFormatter<TInstance, TRead, TWrite> : IFormatter<TInstance> where TWrite : IDisposable
 	{
 		readonly ISerializer<TRead, TWrite> _serializer;
 		readonly IWriterFactory<TWrite> _factory;
@@ -39,7 +40,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format
 			_stream = stream;
 		}
 
-		public string Get(object parameter)
+		public string Get(TInstance parameter)
 		{
 			var stream = _stream();
 			using (var writer = _factory.Get(stream))
@@ -51,4 +52,31 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format
 			}
 		}
 	}
+
+	/*	class InstanceFormatter<TInstance, TWrite> : IFormatter<TInstance> where TWrite : IDisposable
+		{
+			readonly ISerialize<TWrite> _serializer;
+			readonly IWriterFactory<TWrite> _factory;
+			readonly Func<Stream> _stream;
+
+			public InstanceFormatter(ISerialize<TWrite> serializer, IWriterFactory<TWrite> factory, Func<Stream> stream)
+			{
+				_serializer = serializer;
+				_factory = factory;
+				_stream = stream;
+			}
+
+			public string Get(TInstance parameter)
+			{
+				var stream = _stream();
+				using (var writer = _factory.Get(stream))
+				{
+					_serializer.Serialize(writer, parameter);
+					stream.Seek(0, SeekOrigin.Begin);
+					var result = new StreamReader(stream).ReadToEnd();
+					return result;
+				}
+			}
+		}
+	*/
 }

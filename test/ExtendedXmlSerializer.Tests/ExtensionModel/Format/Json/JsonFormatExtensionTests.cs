@@ -1,4 +1,4 @@
-// MIT License
+/*// MIT License
 //
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
@@ -32,7 +32,7 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Format.Json
 		{
 			/*const int expected = 6776;
 
-			var serializer = new ConfigurationContainer().Create();*/
+			var serializer = new ConfigurationContainer().Create();#1#
 		}
 	}
-}
+}*/

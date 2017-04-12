@@ -42,5 +42,10 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 		public ISerializer Get(TypeInfo parameter) => Create(parameter.AccountForNullable());
 
 		ISerializer Create(TypeInfo parameter) => new Container(_elements.Get(parameter), _contents.Get(parameter));
+
+		public ISerializer<T> Get<T>(TypeInfo type)
+		{
+			throw new System.NotImplementedException();
+		}
 	}
 }

@@ -95,28 +95,28 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			where T : IConfigurationContainer => configure(@this).Create();
 
 
-		public static string Serialize(this IExtendedXmlSerializer @this, object instance)
+		public static string Serialize<T>(this IExtendedXmlSerializer @this, T instance)
 			=> Serialize(@this, WriterFactory, New, instance);
 
-		public static string Serialize(this IExtendedXmlSerializer @this, XmlWriterSettings settings, object instance)
+		public static string Serialize<T>(this IExtendedXmlSerializer @this, XmlWriterSettings settings, T instance)
 			=> Serialize(@this, new XmlWriterFactory(CloseSettings.Default.Get(settings)), New, instance);
 
-		public static string Serialize(this IExtendedXmlSerializer @this, Stream stream, object instance)
+		public static string Serialize<T>(this IExtendedXmlSerializer @this, Stream stream, T instance)
 			=> Serialize(@this, XmlWriterFactory.Default, stream.Self, instance);
 
-		public static string Serialize(this IExtendedXmlSerializer @this, XmlWriterSettings settings, Stream stream,
-		                               object instance)
+		public static string Serialize<T>(this IExtendedXmlSerializer @this, XmlWriterSettings settings, Stream stream,
+		                               T instance)
 			=> Serialize(@this, new XmlWriterFactory(settings), stream.Self, instance);
 
-		static string Serialize(this IExtendedXmlSerializer @this, IXmlWriterFactory factory, Func<Stream> stream,
-		                        object instance)
-			=> new InstanceFormatter(@this, factory, stream).Get(instance);
+		static string Serialize<T>(this IExtendedXmlSerializer @this, IXmlWriterFactory factory, Func<Stream> stream,
+		                        T instance)
+			=> new InstanceFormatter<T>(@this, factory, stream).Get(instance);
 
-		public static void Serialize(this IExtendedXmlSerializer @this, TextWriter writer, object instance)
+		public static void Serialize<T>(this IExtendedXmlSerializer @this, TextWriter writer, T instance)
 			=> Serialize(@this, XmlWriterFactory.Default, writer, instance);
 
-		public static void Serialize(this IExtendedXmlSerializer @this, XmlWriterSettings settings, TextWriter writer,
-		                             object instance)
+		public static void Serialize<T>(this IExtendedXmlSerializer @this, XmlWriterSettings settings, TextWriter writer,
+		                             T instance)
 			=> Serialize(@this, new XmlWriterFactory(settings), writer, instance);
 
 		static void Serialize(this IExtendedXmlSerializer @this, IXmlWriterFactory factory, TextWriter writer, object instance)
@@ -146,6 +146,49 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 		static T Deserialize<T>(this IExtendedXmlSerializer @this, IXmlReaderFactory factory, TextReader reader)
 			=> @this.Deserialize(factory.Get(reader)).AsValid<T>();
+
+
+
+
+
+
+		/*public static T Deserializer<T>(this IExtendedXmlSerializer<T> @this, string data)
+			=> Deserializer(@this, CloseRead, new MemoryStream(Encoding.UTF8.GetBytes(data)));
+
+		public static T Deserializer<T>(this IExtendedXmlSerializer<T> @this, Stream stream)
+			=> Deserializer(@this, Defaults.ReaderSettings, stream);
+
+		public static T Deserializer<T>(this IExtendedXmlSerializer<T> @this, XmlReaderSettings settings, Stream stream)
+			=> Deserializer(@this, new XmlReaderFactory(settings, settings.NameTable.Context()), stream);
+
+		static T Deserializer<T>(this IExtendedXmlSerializer<T> @this, IXmlReaderFactory factory, Stream stream)
+			=> @this.Deserialize(factory.Get(stream));
+
+		public static T Deserializer<T>(this IExtendedXmlSerializer<T> @this, TextReader reader)
+			=> Deserializer(@this, Defaults.ReaderSettings, reader);
+
+		public static T Deserializer<T>(this IExtendedXmlSerializer<T> @this, XmlReaderSettings settings, TextReader reader)
+			=> Deserializer(@this, new XmlReaderFactory(settings, settings.NameTable.Context()), reader);
+
+		static T Deserializer<T>(this IExtendedXmlSerializer<T> @this, IXmlReaderFactory factory, TextReader reader)
+			=> @this.Deserialize(factory.Get(reader));*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		sealed class CloseSettings : IAlteration<XmlWriterSettings>, IAlteration<XmlReaderSettings>
 		{

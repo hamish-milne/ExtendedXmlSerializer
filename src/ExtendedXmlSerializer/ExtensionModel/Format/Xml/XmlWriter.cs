@@ -1,18 +1,18 @@
 // MIT License
-// 
+//
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -56,8 +56,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			: this(aliases, formatter, store, parts, parameter.Writer, parameter.Instance, DefaultSeparator) {}
 
 		public XmlWriter(IAliases aliases, IIdentifierFormatter formatter, IIdentityStore store, ITypePartResolver parts,
-		                 System.Xml.XmlWriter writer, object instance,
-		                 Delimiter separator)
+		                 System.Xml.XmlWriter writer, object instance, Delimiter separator)
 		{
 			_aliases = aliases;
 			_formatter = formatter;
@@ -87,9 +86,9 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 		public void EndCurrent() => _writer.WriteEndElement();
 
-		public void Content(string content) => _writer.WriteString(content);
+		public void Content(object content) => _writer.WriteValue(content);
 
-		public void Content(IIdentity property, string content)
+		public void Content(IIdentity property, object content)
 		{
 			var identifier = property.Identifier.NullIfEmpty();
 			var prefix = identifier != null ? Prefix(identifier) : null;
@@ -97,12 +96,15 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 			if (!string.IsNullOrEmpty(prefix))
 			{
-				_writer.WriteAttributeString(prefix, name, identifier, content);
+				_writer.WriteStartAttribute(prefix, name, identifier);
 			}
 			else
 			{
-				_writer.WriteAttributeString(name, content);
+				_writer.WriteStartAttribute(name);
 			}
+
+			Content(content);
+			EndCurrent();
 		}
 
 		string Prefix(string parameter) => Lookup(parameter) ?? CreatePrefix(parameter);

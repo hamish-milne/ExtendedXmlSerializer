@@ -32,4 +32,13 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 
 		public void Write(IFormatWriter writer, object instance) => writer.EndCurrent();
 	}
+
+	sealed class EndCurrentElement<T> : IWriter<T>
+	{
+		public static EndCurrentElement<T> Default { get; } = new EndCurrentElement<T>();
+		EndCurrentElement() { }
+
+		public void Write(IFormatWriter writer, T instance) => writer.EndCurrent();
+	}
+
 }

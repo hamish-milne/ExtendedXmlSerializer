@@ -90,9 +90,9 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 
 		public void EndCurrent() => _writer.WriteEnd();
 
-		public void Content(string content) => _writer.WriteValue(content);
+		public void Content(object content) => _writer.WriteValue(content);
 
-		public void Content(IIdentity property, string content)
+		public void Content(IIdentity property, object content)
 		{
 			/*var identifier = property.Identifier.NullIfEmpty();
 			var prefix = identifier != null ? Prefix(identifier) : null;

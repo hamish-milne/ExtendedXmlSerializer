@@ -23,10 +23,15 @@
 
 namespace ExtendedXmlSerializer
 {
-	public interface ISerializer<in TRead, in TWrite>
+	public interface IDeserialize<in TRead>
 	{
 		object Deserialize(TRead reader);
+	}
 
+	public interface ISerializer<in TRead, in TWrite>
+	{
 		void Serialize(TWrite writer, object instance);
+
+		object Deserialize(TRead reader);
 	}
 }

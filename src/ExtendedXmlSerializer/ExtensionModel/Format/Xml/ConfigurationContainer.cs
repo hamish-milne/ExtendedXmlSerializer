@@ -22,12 +22,11 @@
 // SOFTWARE.
 
 using System.Linq;
-using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
-	public sealed class ConfigurationContainer : ConfigurationContainer<IExtendedXmlSerializer>
+	public sealed class ConfigurationContainer : Configuration.ConfigurationContainer<IExtendedXmlSerializer>
 	{
 		public ConfigurationContainer() : this(new DefaultExtensions().ToArray()) {}
 
@@ -41,6 +40,27 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 					DefaultMetadataSpecification.Default, new XmlSerializationExtension(),
 					SerializationExtension<IExtendedXmlSerializer, ExtendedXmlSerializer>.Default,
 					DeclaredNames.Default, DeclaredMemberNames.Default, DefaultMemberOrder.Default)
-				.ToArray()) {}
+				.ToArray())
+		{ }
 	}
+
+/*
+	public sealed class ConfigurationContainer<T> : Configuration.ConfigurationContainer<IExtendedXmlSerializer>
+	{
+		public ConfigurationContainer() : this(new DefaultExtensions().ToArray()) { }
+
+		public ConfigurationContainer(params ISerializerExtension[] extensions) : base(extensions) { }
+
+		public sealed class DefaultExtensions : Items<ISerializerExtension>
+		{
+			public DefaultExtensions() : base(
+				new ExtensionModel.DefaultExtensions(
+						DefaultMetadataSpecification.Default, new XmlSerializationExtension(),
+						SerializationExtension<IExtendedXmlSerializer<T>, ExtendedXmlSerializer<T>>.Default,
+						DeclaredNames.Default, DeclaredMemberNames.Default, DefaultMemberOrder.Default)
+					.ToArray())
+			{ }
+		}
+	}
+*/
 }

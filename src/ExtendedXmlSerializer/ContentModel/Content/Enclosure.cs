@@ -43,4 +43,28 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 
 		protected override void Finish(IFormatWriter writer, object instance) => _finish.Write(writer, instance);
 	}
+
+	sealed class Enclosure<T> : IWriter<T>
+	{
+		readonly static EndCurrentElement<T> EndCurrentElement = EndCurrentElement<T>.Default;
+
+		readonly IWriter<T> _start, _body, _finish;
+
+		public Enclosure(IWriter<T> start, IWriter<T> body) : this(start, body, EndCurrentElement) { }
+
+		public Enclosure(IWriter<T> start, IWriter<T> body, IWriter<T> finish)
+		{
+			_start = start;
+			_body = body;
+			_finish = finish;
+		}
+
+		public void Write(IFormatWriter writer, T instance)
+		{
+			_start.Write(writer, instance);
+			_body.Write(writer, instance);
+			_finish.Write(writer, instance);
+		}
+	}
+
 }

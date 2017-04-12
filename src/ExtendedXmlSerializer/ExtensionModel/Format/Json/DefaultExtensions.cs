@@ -22,11 +22,10 @@
 // SOFTWARE.
 
 using System.Linq;
-using ExtendedXmlSerializer.Configuration;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
-	public sealed class ConfigurationContainer : ConfigurationContainer<ISerializer>
+	public sealed class ConfigurationContainer<T> : Configuration.ConfigurationContainer<ISerializer>
 	{
 		public ConfigurationContainer() : this(
 			new DefaultExtensions(

@@ -35,8 +35,8 @@ namespace ExtendedXmlSerializer.ContentModel.Format
 
 		void EndCurrent();
 
-		void Content(IIdentity property, string content);
+		void Content(IIdentity property, object content);
 
-		void Content(string content);
+		void Content(object content);
 	}
 }
