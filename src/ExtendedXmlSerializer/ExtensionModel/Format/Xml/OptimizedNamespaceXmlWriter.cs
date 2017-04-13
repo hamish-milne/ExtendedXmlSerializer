@@ -41,8 +41,6 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 		public object Get() => _writer.Get();
 
-		public object Instance => _writer.Instance;
-
 		public void Start(IIdentity identity)
 		{
 			_writer.Start(identity);

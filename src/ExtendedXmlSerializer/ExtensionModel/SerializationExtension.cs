@@ -30,23 +30,22 @@ namespace ExtendedXmlSerializer.ExtensionModel
 {
 	public interface ISerializationExtension : ISerializerExtension {}
 
-	sealed class SerializationExtension<TInterface, TImplementation> : ISerializationExtension where TImplementation : TInterface
+	sealed class SerializationExtension<TInterface, TImplementation> : ISerializationExtension
+		where TImplementation : TInterface
 	{
-		public static SerializationExtension<TInterface, TImplementation> Default { get; } = new SerializationExtension<TInterface, TImplementation>();
+		public static SerializationExtension<TInterface, TImplementation> Default { get; } =
+			new SerializationExtension<TInterface, TImplementation>();
+
 		SerializationExtension() {}
 
 		public IServiceRepository Get(IServiceRepository parameter)
-		{
-			var result = parameter
-				.Register<ISerializer, RuntimeSerializer>()
-				.Register<ISerializers, Serializers>()
-				.Decorate<ISerializers, ReferenceAwareSerializers>()
-				.RegisterConstructorDependency<IContents>((provider, info) => provider.Get<DeferredContents>())
-				.Register<IContents, Contents>()
-				.Decorate<IContents>((factory, contents) => new RecursionAwareContents(contents))
-				.Register<TInterface, TImplementation>();
-			return result;
-		}
+			=> parameter.Register<ISerializer, RuntimeSerializer>()
+			            .Register<ISerializers, Serializers>()
+			            .Decorate<ISerializers, ReferenceAwareSerializers>()
+			            .RegisterConstructorDependency<IContents>((provider, info) => provider.Get<DeferredContents>())
+			            .Register<IContents, Contents>()
+			            .Decorate<IContents>((factory, contents) => new RecursionAwareContents(contents))
+			            .Register<TInterface, TImplementation>();
 
 		void ICommand<IServices>.Execute(IServices parameter) {}
 	}

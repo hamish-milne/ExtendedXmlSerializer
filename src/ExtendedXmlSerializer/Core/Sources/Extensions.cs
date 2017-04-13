@@ -62,6 +62,8 @@ namespace ExtendedXmlSerializer.Core.Sources
 
 		public static Parser<T> Get<T>(this IParsing<T> @this) => @this.Get;
 
+		public static T Get<T>(this ISource<object> @this) => @this.Get().AsValid<T>();
+
 		public static T ParseAsOptional<T>(this Parser<T> @this, string data)
 			=> @this.XOptional().Invoke(Inputs.Default.Get(data)).Value.GetOrDefault();
 

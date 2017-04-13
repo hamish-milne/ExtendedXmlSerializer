@@ -1,4 +1,4 @@
-﻿// MIT License
+﻿/*// MIT License
 //
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
@@ -37,4 +37,4 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 		public ConfigurationContainer(params ISerializerExtension[] extensions) : base(extensions) { }
 	}
 
-}
+}*/

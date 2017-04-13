@@ -24,6 +24,7 @@
 using System;
 using System.Linq.Expressions;
 using ExtendedXmlSerializer.Configuration;
+using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Format;
 using ExtendedXmlSerializer.ExtensionModel.Types;
 
@@ -33,6 +34,9 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 	{
 		public static IConfigurationContainer EnableReferences(this IConfigurationContainer @this)
 			=> @this.Apply<ReferencesExtension>();
+
+		public static IConfigurationContainer EnableDeferredReferences(this IConfigurationContainer @this)
+			=> @this.Extend(ReaderContextExtension.Default, DeferredReferencesExtension.Default);
 
 		public static TypeConfiguration<T> EnableReferences<T, TMember>(this TypeConfiguration<T> @this,
 		                                                                Expression<Func<T, TMember>> member)

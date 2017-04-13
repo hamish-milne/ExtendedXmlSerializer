@@ -53,7 +53,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 
 		public void Serialize(JsonTextWriter writer, object instance)
 			=> _serializers.Get(instance.GetType().GetTypeInfo())
-			               .Write(_writers.Get(new Writing<JsonTextWriter>(writer, instance)), instance);
+			               .Write(_writers.Get(writer), instance);
 
 		public object Deserialize(JsonTextReader reader)
 		{

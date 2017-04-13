@@ -33,7 +33,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Markup
 		public Serializers(IEnhancer enhancer, ISerializers serializers)
 			: base(new AlteredSource<TypeInfo, ISerializer>(enhancer, serializers)) {}
 
-		public ISerializer<T> Get<T>(TypeInfo type)
+		public ISerializer<T> Get<T>()
 		{
 			throw new System.NotImplementedException();
 		}

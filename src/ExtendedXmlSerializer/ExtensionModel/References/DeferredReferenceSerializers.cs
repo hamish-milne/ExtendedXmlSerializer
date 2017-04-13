@@ -40,7 +40,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 		protected override ISerializer Create(TypeInfo parameter)
 			=> new DeferredReferenceSerializer(_serializers.Get(parameter));
 
-		public ISerializer<T> Get<T>(TypeInfo type)
+		public ISerializer<T> Get<T>()
 		{
 			throw new System.NotImplementedException();
 		}

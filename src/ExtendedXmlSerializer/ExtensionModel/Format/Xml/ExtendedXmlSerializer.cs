@@ -53,10 +53,9 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 		public void Serialize(System.Xml.XmlWriter writer, object instance)
 		{
-			var writing = new Writing<System.Xml.XmlWriter>(writer, instance);
-			var formatWriter = _writers.Get(writing);
 			var typeInfo = instance.GetType().GetTypeInfo();
 			var serializer = _serializers.Get(typeInfo);
+			var formatWriter = _writers.Get(writer);
 			serializer.Write(formatWriter, instance);
 			writer.Flush();
 		}

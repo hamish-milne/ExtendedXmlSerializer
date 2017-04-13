@@ -38,7 +38,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 		}
 
 		public ISerializer Get(TypeInfo parameter) => new Container(_context.Get(parameter));
-		public ISerializer<T> Get<T>(TypeInfo type)
+
+		public ISerializer<T> Get<T>()
 		{
 			throw new System.NotImplementedException();
 		}

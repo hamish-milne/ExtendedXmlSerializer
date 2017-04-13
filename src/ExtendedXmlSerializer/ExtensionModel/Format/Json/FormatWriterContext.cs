@@ -49,7 +49,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 			_parts = parts;
 		}
 
-		public IFormatWriter Get(Writing<JsonTextWriter> parameter)
+		public IFormatWriter Get(JsonTextWriter parameter)
 			=> new FormatWriter(_table, _formatter, _store, _parts, parameter);
 	}
 }

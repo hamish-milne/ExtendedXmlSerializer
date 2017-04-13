@@ -27,6 +27,7 @@ using ExtendedXmlSerializer.ContentModel;
 using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Format;
 using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
 {
@@ -51,18 +52,22 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 			return result;
 		}
 
-		public ISerializer<T> Get<T>(TypeInfo type)
+		public ISerializer<T> Get<T>()
 		{
 			throw new System.NotImplementedException();
 		}
 
 		sealed class Serializer : ISerializer
 		{
+			readonly ISpecification<IFormatWriter> _specification;
 			readonly IRootReferences _references;
 			readonly ISerializer _container;
 
-			public Serializer(IRootReferences references, ISerializer container)
+			public Serializer(IRootReferences references, ISerializer container) : this(new InstanceConditionalSpecification(), references, container) {}
+
+			public Serializer(ISpecification<IFormatWriter> specification, IRootReferences references, ISerializer container)
 			{
+				_specification = specification;
 				_references = references;
 				_container = container;
 			}
@@ -71,14 +76,18 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 
 			public void Write(IFormatWriter writer, object instance)
 			{
-				var typeInfo = instance.GetType().GetTypeInfo();
-				var readOnlyList = _references.Get(writer);
-				if (readOnlyList.Any())
+				if (_specification.IsSatisfiedBy(writer))
 				{
-					throw new CircularReferencesDetectedException(
-						$"The provided instance of type '{typeInfo}' contains circular references within its graph. Serializing this instance would result in a recursive, endless loop. To properly serialize this instance, please create a serializer that has referential support enabled by extending it with the ReferencesExtension.",
-						_container);
+					var typeInfo = instance.GetType().GetTypeInfo();
+					var readOnlyList = _references.Get(writer);
+					if (readOnlyList.Any())
+					{
+						throw new CircularReferencesDetectedException(
+							$"The provided instance of type '{typeInfo}' contains circular references within its graph. Serializing this instance would result in a recursive, endless loop. To properly serialize this instance, please create a serializer that has referential support enabled by extending it with the ReferencesExtension.",
+							_container);
+					}
 				}
+				
 				_container.Write(writer, instance);
 			}
 		}

@@ -29,6 +29,7 @@ using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Content.Members;
 using ExtendedXmlSerializer.ExtensionModel.Format;
 using ExtendedXmlSerializer.ExtensionModel.References;
+using ExtendedXmlSerializer.ExtensionModel.Roots;
 using ExtendedXmlSerializer.ExtensionModel.Types;
 
 namespace ExtendedXmlSerializer.ExtensionModel
@@ -68,6 +69,7 @@ namespace ExtendedXmlSerializer.ExtensionModel
 			yield return new AllowedMembersExtension(_metadata);
 			yield return new AllowedMemberValuesExtension();
 			yield return new MemberFormatExtension();
+			yield return RootsExtension.Default;
 			yield return _serialization;
 		}
 	}
