@@ -23,15 +23,17 @@
 
 namespace ExtendedXmlSerializer.Core.Sources
 {
-	public sealed class AlteredSource<TParameter, TResult> : DecoratedSource<TParameter, TResult>
+	public sealed class AlteredSource<TParameter, TResult> : IParameterizedSource<TParameter, TResult>
 	{
 		readonly IAlteration<TResult> _alteration;
+		readonly IParameterizedSource<TParameter, TResult> _source;
 
-		public AlteredSource(IAlteration<TResult> alteration, IParameterizedSource<TParameter, TResult> source) : base(source)
+		public AlteredSource(IAlteration<TResult> alteration, IParameterizedSource<TParameter, TResult> source)
 		{
 			_alteration = alteration;
+			_source = source;
 		}
 
-		public override TResult Get(TParameter parameter) => _alteration.Get(base.Get(parameter));
+		public TResult Get(TParameter parameter) => _alteration.Get(_source.Get(parameter));
 	}
 }

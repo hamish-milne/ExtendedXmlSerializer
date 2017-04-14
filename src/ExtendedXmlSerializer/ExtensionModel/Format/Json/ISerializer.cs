@@ -25,5 +25,5 @@ using Newtonsoft.Json;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
-	public interface ISerializer : ISerializer<JsonTextReader, JsonTextWriter> {}
+	public interface ISerializer : IDeserialize<JsonTextReader>, ISerialize<JsonTextWriter> {}
 }

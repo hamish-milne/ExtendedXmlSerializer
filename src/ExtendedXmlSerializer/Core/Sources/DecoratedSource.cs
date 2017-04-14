@@ -44,6 +44,6 @@ namespace ExtendedXmlSerializer.Core.Sources
 			_source = source;
 		}
 
-		public virtual TResult Get(TParameter parameter) => _source.Get(parameter);
+		public TResult Get(TParameter parameter) => _source.Get(parameter);
 	}
 }

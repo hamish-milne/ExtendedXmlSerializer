@@ -21,13 +21,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
 using System.Reflection;
 using ExtendedXmlSerializer.Core.Specifications;
 using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Conversion
 {
-	public abstract class ConverterBase<T> : DecoratedSpecification<TypeInfo>, IConverter<T>
+	public abstract class ConverterBase<T> : DecoratedSpecification<TypeInfo>, IConverter<T>, IGenericAware
 	{
 		readonly protected static TypeEqualitySpecification<T> Specification = TypeEqualitySpecification<T>.Default;
 
@@ -38,5 +39,29 @@ namespace ExtendedXmlSerializer.ContentModel.Conversion
 		public abstract T Parse(string data);
 
 		public abstract string Format(T instance);
+
+		public TypeInfo Get() => Support<T>.Key;
+	}
+
+	public abstract class ConverterBase : IConverter
+	{
+		readonly ISpecification<TypeInfo> _specification;
+
+		protected ConverterBase(ISpecification<TypeInfo> specification)
+		{
+			_specification = specification;
+		}
+
+		public bool IsSatisfiedBy(TypeInfo parameter) => _specification.IsSatisfiedBy(parameter);
+
+		object IConverter<object>.Parse(string data)
+		{
+			throw new InvalidOperationException("This exists for static type checking purposes only.");
+		}
+
+		string IConverter<object>.Format(object instance)
+		{
+			throw new InvalidOperationException("This exists for static type checking purposes only.");
+		}
 	}
 }

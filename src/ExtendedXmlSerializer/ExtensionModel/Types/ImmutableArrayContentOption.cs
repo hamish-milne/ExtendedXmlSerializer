@@ -50,7 +50,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Types
 		}
 
 		protected override ISerializer Create(ISerializer item, TypeInfo classification, TypeInfo itemType)
-			=> new Serializer(CreateReader(itemType, _contents, item), new EnumerableWriter(_enumerators, item));
+			=> new Serializer(CreateReader(itemType, _contents, item), new EnumerableWriter(_enumerators, item).Adapt());
 
 		static IReader CreateReader(TypeInfo itemType, IInnerContentServices contents, IReader item)
 			=> (IReader) Activator.CreateInstance(typeof(Reader<>).MakeGenericType(itemType.AsType()), contents, item);

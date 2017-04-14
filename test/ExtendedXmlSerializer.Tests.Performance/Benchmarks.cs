@@ -67,6 +67,8 @@ namespace ExtendedXmlSerializer.Tests.Performance
 		readonly TestClassOtherClass _obj = new TestClassOtherClass().Init();
 		readonly byte[] _data;
 
+		readonly IXmlWriterFactory _writerFactory = XmlWriterFactory.Default;
+
 		readonly IXmlReaderFactory _readerFactory = new XmlReaderFactory();
 
 		public ExtendedXmlSerializerV2Test()
@@ -80,10 +82,9 @@ namespace ExtendedXmlSerializer.Tests.Performance
 		{
 			using (var stream = new MemoryStream())
 			{
-				using (var writer = XmlWriter.Create(stream))
+				using (var writer = _writerFactory.Get(stream))
 				{
 					_serializer.Serialize(writer, _obj);
-					writer.Flush();
 					stream.Seek(0, SeekOrigin.Begin);
 					var result = new StreamReader(stream).ReadToEnd();
 					return result;
@@ -98,7 +99,7 @@ namespace ExtendedXmlSerializer.Tests.Performance
 			{
 				using (var reader = _readerFactory.Get(stream))
 				{
-					return _serializer.Deserialize(reader);
+					return _serializer.Deserialize<TestClassOtherClass>(reader);
 				}
 			}
 		}

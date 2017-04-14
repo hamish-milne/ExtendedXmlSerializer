@@ -38,7 +38,6 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		public DefaultExtensions() : base(
 			new ExtensionModel.DefaultExtensions(
 					DefaultMetadataSpecification.Default, new XmlSerializationExtension(),
-					SerializationExtension<IExtendedXmlSerializer, ExtendedXmlSerializer>.Default,
 					DeclaredNames.Default, DeclaredMemberNames.Default, DefaultMemberOrder.Default)
 				.ToArray())
 		{ }

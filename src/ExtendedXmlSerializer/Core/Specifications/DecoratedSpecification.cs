@@ -32,6 +32,6 @@ namespace ExtendedXmlSerializer.Core.Specifications
 			_specification = specification;
 		}
 
-		public virtual bool IsSatisfiedBy(T parameter) => _specification.IsSatisfiedBy(parameter);
+		public bool IsSatisfiedBy(T parameter) => _specification.IsSatisfiedBy(parameter);
 	}
 }

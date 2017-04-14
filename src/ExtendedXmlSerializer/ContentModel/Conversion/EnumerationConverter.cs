@@ -26,11 +26,11 @@ using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ContentModel.Conversion
 {
-	class EnumerationConverter : Converter<Enum>
+	sealed class EnumerationConverter : Converter<Enum>
 	{
 		public EnumerationConverter(Type enumerationType) : base(new Source(enumerationType).Get, x => x.ToString()) {}
 
-		class Source : IParameterizedSource<string, Enum>
+		sealed class Source : IParameterizedSource<string, Enum>
 		{
 			readonly Type _enumerationType;
 

@@ -23,30 +23,49 @@
 
 using System.Collections.Generic;
 using System.Reflection;
+using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	sealed class RecursionAwareContents : CacheBase<TypeInfo, ISerializer>, IContents
+	sealed class RecursionAwareContents : GenericAdapter<IContents, ISerializer>, IContents
 	{
 		readonly IContents _contents;
 		readonly ISet<TypeInfo> _types;
 
 		public RecursionAwareContents(IContents contents) : this(contents, new HashSet<TypeInfo>()) {}
 
-		public RecursionAwareContents(IContents contents, ISet<TypeInfo> types)
+		public RecursionAwareContents(IContents contents, ISet<TypeInfo> types) : base(typeof(Serializer<>))
 		{
 			_contents = contents;
 			_types = types;
 		}
 
-		protected override ISerializer Create(TypeInfo parameter)
+		public new ISerializer Get(TypeInfo parameter)
 		{
 			var result = _types.Add(parameter)
 				? _contents.Get(parameter)
-				: new DeferredSerializer(_contents.Build(parameter));
+				: base.Get(parameter).Invoke(_contents);
 			_types.Remove(parameter);
 			return result;
+		}
+
+		sealed class Serializer<T> : GenericSerializerAdapter<T>
+		{
+			public Serializer(IContents contents) : base(new DeferredSerializer<T>(new Contents(contents).Build(Support<T>.Key))) {}
+
+			sealed class Contents : IParameterizedSource<TypeInfo, ISerializer<T>>
+			{
+				readonly IContents _contents;
+
+				public Contents(IContents contents)
+				{
+					_contents = contents;
+				}
+
+				public ISerializer<T> Get(TypeInfo parameter) => _contents.Get(parameter).AsValid<ISerializer<T>>();
+			}
 		}
 	}
 }

@@ -67,7 +67,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			            .Register<IInnerContentActivation, XmlInnerContentActivation>()
 			            .Register<IFormatWriters<System.Xml.XmlWriter>, FormatWriterContext>()
 			            .Register<IFormatReaderContexts<XmlNameTable>, FormatReaderContexts>()
-			            .Register<IFormatReaders<System.Xml.XmlReader>, FormatReaders>();
+			            .Register<IFormatReaders<System.Xml.XmlReader>, FormatReaders>()
+			            .Register<IExtendedXmlSerializer, ExtendedXmlSerializer>();
 
 		void ICommand<IServices>.Execute(IServices parameter) {}
 	}

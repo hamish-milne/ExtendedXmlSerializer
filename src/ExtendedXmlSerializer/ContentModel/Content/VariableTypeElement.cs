@@ -1,18 +1,18 @@
 // MIT License
-// 
+//
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -30,22 +30,23 @@ using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	sealed class VariableTypeElement : ElementBase
+	sealed class VariableTypeElement : IWriter
 	{
 		readonly ISpecification<Type> _specification;
+		readonly IWriter<object> _start;
 		readonly IIdentities _identities;
 
-		public VariableTypeElement(Type definition, IIdentities identities, IIdentity identity)
-			: this(new VariableTypeSpecification(definition), identities, identity) {}
+		public VariableTypeElement(Type definition, IIdentity identity, IIdentities identities)
+			: this(new VariableTypeSpecification(definition), new Element<object>(identity), identities) {}
 
-		public VariableTypeElement(ISpecification<Type> specification, IIdentities identities, IIdentity identity)
-			: base(identity)
+		public VariableTypeElement(ISpecification<Type> specification, IWriter<object> start, IIdentities identities)
 		{
 			_specification = specification;
+			_start = start;
 			_identities = identities;
 		}
 
-		public override void Write(IFormatWriter writer, object instance)
+		public void Write(IFormatWriter writer, object instance)
 		{
 			var type = instance.GetType();
 			if (_specification.IsSatisfiedBy(type))
@@ -54,7 +55,7 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 			}
 			else
 			{
-				base.Write(writer, instance);
+				_start.Write(writer, instance);
 			}
 		}
 	}

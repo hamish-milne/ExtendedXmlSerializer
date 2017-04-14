@@ -25,6 +25,8 @@ using System;
 using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using FluentAssertions;
+using XmlReader = System.Xml.XmlReader;
+using XmlWriter = System.Xml.XmlWriter;
 
 namespace ExtendedXmlSerializer.Tests.Support
 {
@@ -49,14 +51,15 @@ namespace ExtendedXmlSerializer.Tests.Support
 			return result;
 		}
 
-		public void Serialize(System.Xml.XmlWriter writer, object instance) => _serializer.Serialize(writer, instance);
-
-		public object Deserialize(System.Xml.XmlReader stream) => _serializer.Deserialize(stream);
-
-		public void WriteLine(object instance)
+		public void WriteLine<T>(T instance)
 		{
 			// https://github.com/aspnet/Tooling/issues/324#issuecomment-275236780
 			throw new InvalidOperationException(_serializer.Serialize(instance));
 		}
+
+		public TInstance Deserialize<TInstance>(XmlReader reader) => _serializer.Deserialize<TInstance>(reader);
+
+		public void Serialize<TInstance>(XmlWriter parameter, TInstance instance)
+			=> _serializer.Serialize(parameter, instance);
 	}
 }

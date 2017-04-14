@@ -25,15 +25,17 @@ using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.Core.Sources
 {
-	public sealed class AlteredSpecification<T> : DecoratedSpecification<T>
+	public sealed class AlteredSpecification<T> : ISpecification<T>
 	{
+		readonly ISpecification<T> _specification;
 		readonly IAlteration<T> _alteration;
 
-		public AlteredSpecification(IAlteration<T> alteration, ISpecification<T> specification) : base(specification)
+		public AlteredSpecification(ISpecification<T> specification, IAlteration<T> alteration)
 		{
+			_specification = specification;
 			_alteration = alteration;
 		}
 
-		public override bool IsSatisfiedBy(T parameter) => base.IsSatisfiedBy(_alteration.Get(parameter));
+		public bool IsSatisfiedBy(T parameter) => _specification.IsSatisfiedBy(_alteration.Get(parameter));
 	}
 }

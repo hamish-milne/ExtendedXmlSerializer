@@ -40,6 +40,6 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 		}
 
 		public override IWriter Create(IIdentity identity, TypeInfo classification)
-			=> new VariableTypeElement(classification.AsType(), _identities, identity);
+			=> new VariableTypeElement(classification.AsType(), identity, _identities);
 	}
 }

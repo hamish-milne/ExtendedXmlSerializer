@@ -47,6 +47,6 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
 				new Serializer(
 					_contents.Create(classification,
 					                 new ConditionalInnerContentHandler(_contents, new CollectionInnerContentHandler(item, _contents))),
-					new EnumerableWriter(_enumerators, item));
+					new EnumerableWriter(_enumerators, item).Adapt());
 	}
 }

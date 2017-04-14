@@ -24,11 +24,14 @@
 using System;
 using System.Reflection;
 using ExtendedXmlSerializer.Core.Specifications;
+using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Conversion
 {
-	class Converter<T> : ConverterBase<T>, IConverter
+	class Converter<T> : ConverterBase, IConverter<T>, IGenericAware
 	{
+		readonly static TypeEqualitySpecification<T> Specification = TypeEqualitySpecification<T>.Default;
+
 		readonly Func<string, T> _deserialize;
 		readonly Func<T, string> _serialize;
 
@@ -41,10 +44,9 @@ namespace ExtendedXmlSerializer.ContentModel.Conversion
 			_serialize = serialize;
 		}
 
-		public sealed override T Parse(string data) => _deserialize(data);
-		public sealed override string Format(T instance) => _serialize(instance);
+		public string Format(T instance) => _serialize(instance);
+		public T Parse(string data) => _deserialize(data);
 
-		object IConverter<object>.Parse(string data) => Parse(data);
-		string IConverter<object>.Format(object instance) => Format((T) instance);
+		public TypeInfo Get() => Support<T>.Key;
 	}
 }

@@ -62,7 +62,7 @@ namespace ExtendedXmlSerializer.ContentModel.Members
 			IMemberSerializer property = new PropertyMemberSerializer(member);
 			var runtime = _runtime.Get(profile.Metadata);
 			return runtime != null
-				? new RuntimeSerializer(new AlteredSpecification<object>(alteration, runtime),
+				? new RuntimeSerializer(new AlteredSpecification<object>(runtime, alteration),
 				                        property, Content(alteration, profile, access))
 				: property;
 		}
@@ -70,7 +70,7 @@ namespace ExtendedXmlSerializer.ContentModel.Members
 		IMemberSerializer Content(IAlteration<object> alteration, IMember profile, IMemberAccess access)
 		{
 			var body = _content.Get(profile);
-			var writer = Wrap(alteration, access, new Enclosure(new Element(profile), body));
+			var writer = Wrap(alteration, access, new Enclosure<object>(new Element<object>(profile).Adapt(), body).Adapt());
 			var result = new MemberSerializer(profile, access, body, writer);
 			return result;
 		}

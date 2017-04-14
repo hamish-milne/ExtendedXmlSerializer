@@ -25,7 +25,7 @@ using ExtendedXmlSerializer.ContentModel.Conversion;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Encryption
 {
-	class EncryptedConverter : ConverterBase<object>, IConverter
+	sealed class EncryptedConverter : ConverterBase<object>, IConverter
 	{
 		readonly IEncryption _encryption;
 		readonly IConverter _converter;

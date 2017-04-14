@@ -33,6 +33,9 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 
 		public MemberInfo Get(IFormatReader parameter) => parameter.Get(parameter.Content());
 
-		public void Write(IFormatWriter writer, MemberInfo instance) => writer.Content(writer.Get(instance));
+		public void Write(IFormatWriter writer, MemberInfo instance)
+		{
+			//writer.Content(writer.Get(instance));
+		}
 	}
 }

@@ -23,15 +23,14 @@
 
 using System.Reflection;
 using ExtendedXmlSerializer.ContentModel;
+using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Reflection;
-using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.Core.Specifications;
 using JetBrains.Annotations;
-using IContents = ExtendedXmlSerializer.ContentModel.Content.IContents;
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
 {
-	sealed class ReferenceContents : DecoratedSource<TypeInfo, ISerializer>, IContents
+	sealed class ReferenceContents : IContents
 	{
 		readonly static IsReferenceSpecification Specification = IsReferenceSpecification.Default;
 
@@ -39,6 +38,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 		readonly IReferenceEncounters _identifiers;
 		readonly IReferenceMaps _maps;
 		readonly IEntities _entities;
+		readonly IContents _option;
 		readonly IClassification _classification;
 
 		[UsedImplicitly]
@@ -48,18 +48,18 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 
 		public ReferenceContents(ISpecification<TypeInfo> specification, IReferenceEncounters identifiers,
 		                         IReferenceMaps maps, IEntities entities, IContents option, IClassification classification)
-			: base(option)
 		{
 			_identifiers = identifiers;
 			_maps = maps;
 			_entities = entities;
+			_option = option;
 			_classification = classification;
 			_specification = specification;
 		}
 
-		public override ISerializer Get(TypeInfo parameter)
+		public ISerializer Get(TypeInfo parameter)
 		{
-			var serializer = base.Get(parameter);
+			var serializer = _option.Get(parameter);
 			var result = serializer as RuntimeSerializer ??
 			             (_specification.IsSatisfiedBy(parameter)
 				             ? new ReferenceSerializer(_identifiers,

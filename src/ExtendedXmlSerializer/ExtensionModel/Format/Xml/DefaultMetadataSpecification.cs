@@ -35,10 +35,9 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			new MemberSpecification<PropertyInfo>(PropertyMemberSpecification.Default);
 
 		readonly static MemberSpecification<FieldInfo> Field =
-			new MemberSpecification<FieldInfo>(new FieldMemberSpecification(
-				                                   IsDefinedSpecification<XmlElementAttribute>.Default.Or(
-					                                   IsDefinedSpecification
-						                                   <XmlAttributeAttribute>.Default)));
+			new MemberSpecification<FieldInfo>(
+				new FieldMemberSpecification(IsDefinedSpecification<XmlElementAttribute>.Default.Or(
+					                             IsDefinedSpecification<XmlAttributeAttribute>.Default)));
 
 		public static DefaultMetadataSpecification Default { get; } = new DefaultMetadataSpecification();
 		DefaultMetadataSpecification() : base(Property, Field) {}

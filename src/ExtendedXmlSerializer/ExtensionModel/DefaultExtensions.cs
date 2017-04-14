@@ -25,6 +25,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using ExtendedXmlSerializer.ContentModel.Members;
 using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.ExtensionModel.Caching;
 using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Content.Members;
 using ExtendedXmlSerializer.ExtensionModel.Format;
@@ -38,19 +39,16 @@ namespace ExtendedXmlSerializer.ExtensionModel
 	{
 		readonly IMetadataSpecification _metadata;
 		readonly IFormatExtension _format;
-		readonly ISerializationExtension _serialization;
 		readonly ContentModel.Reflection.INames _defaultTypeNames;
 		readonly INames _defaultMemberNames;
 		readonly IParameterizedSource<MemberInfo, int> _defaultMemberOrder;
 
 		public DefaultExtensions(IMetadataSpecification metadata, IFormatExtension format,
-		                         ISerializationExtension serialization,
 		                         ContentModel.Reflection.INames defaultTypeNames, INames defaultMemberNames,
 		                         IParameterizedSource<MemberInfo, int> defaultMemberOrder)
 		{
 			_metadata = metadata;
 			_format = format;
-			_serialization = serialization;
 			_defaultTypeNames = defaultTypeNames;
 			_defaultMemberNames = defaultMemberNames;
 			_defaultMemberOrder = defaultMemberOrder;
@@ -61,6 +59,7 @@ namespace ExtendedXmlSerializer.ExtensionModel
 			yield return DefaultReferencesExtension.Default;
 			yield return ContentModelExtension.Default;
 			yield return TypeModelExtension.Default;
+			yield return SerializerExtension.Default;
 			yield return _format;
 			yield return new ConverterRegistryExtension();
 			yield return MemberModelExtension.Default;
@@ -70,7 +69,8 @@ namespace ExtendedXmlSerializer.ExtensionModel
 			yield return new AllowedMemberValuesExtension();
 			yield return new MemberFormatExtension();
 			yield return RootsExtension.Default;
-			yield return _serialization;
+			yield return SerializationExtension.Default;
+			yield return CachingExtension.Default;
 		}
 	}
 }

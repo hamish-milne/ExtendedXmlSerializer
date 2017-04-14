@@ -24,36 +24,72 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Conversion
 {
 	public sealed class Optimizations : IAlteration<IConverter>, IOptimizations
 	{
-		readonly ICollection<Action> _containers = new HashSet<Action>();
+		readonly IGeneric<ICollection<Action>, IAlteration<IConverter>> _adapter;
+		readonly ICollection<Action> _containers;
 
-		public IConverter Get(IConverter parameter)
+		public Optimizations() : this(new HashSet<Action>()) {}
+
+		public Optimizations(ICollection<Action> containers) : this(containers, Adapter.Default) {}
+
+		public Optimizations(ICollection<Action> containers,
+		                     IGeneric<ICollection<Action>, IAlteration<IConverter>> adapter)
 		{
-			var parse = Create<string, object>(parameter.Parse);
-			var format = Create<object, string>(parameter.Format);
-			var result = new Converter<object>(parameter, parse, format);
-			return result;
+			_containers = containers;
+			_adapter = adapter;
 		}
 
-		Func<TParameter, TResult> Create<TParameter, TResult>(Func<TParameter, TResult> source)
-		{
-			var dictionary = new ConcurrentDictionary<TParameter, TResult>();
-			var cache = new Cache<TParameter, TResult>(source, dictionary);
-			_containers.Add(dictionary.Clear);
-			var result = cache.ToDelegate();
-			return result;
-		}
+		public IConverter Get(IConverter parameter) => _adapter.GetFrom(parameter)
+		                                                       .Invoke(_containers)
+		                                                       .Get(parameter);
+
 
 		public void Clear()
 		{
 			foreach (var container in _containers)
 			{
 				container.Invoke();
+			}
+		}
+
+		sealed class Adapter : Generic<ICollection<Action>, IAlteration<IConverter>>
+		{
+			public static Adapter Default { get; } = new Adapter();
+			Adapter() : base(typeof(Alteration<>)) {}
+
+			sealed class Alteration<T> : IAlteration<IConverter>
+			{
+				readonly ICollection<Action> _containers;
+
+				public Alteration(ICollection<Action> containers)
+				{
+					_containers = containers;
+				}
+
+				public IConverter Get(IConverter parameter)
+				{
+					var converter = parameter.AsValid<IConverter<T>>();
+					var parse = Create<string, T>(converter.Parse);
+					var format = Create<T, string>(converter.Format);
+					var result = new Converter<T>(converter, parse, format);
+					return result;
+				}
+
+				Func<TParameter, TResult> Create<TParameter, TResult>(Func<TParameter, TResult> source)
+				{
+					var dictionary = new ConcurrentDictionary<TParameter, TResult>(EqualityComparer<TParameter>.Default);
+					var cache = new Cache<TParameter, TResult>(source, dictionary);
+					_containers.Add(dictionary.Clear);
+					var result = cache.ToDelegate();
+					return result;
+				}
 			}
 		}
 	}

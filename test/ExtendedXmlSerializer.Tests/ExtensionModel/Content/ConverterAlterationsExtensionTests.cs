@@ -22,6 +22,7 @@
 // SOFTWARE.
 
 using ExtendedXmlSerializer.ContentModel.Conversion;
+using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
@@ -43,7 +44,7 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.Content
 			var actual = support.Assert(number, @"<?xml version=""1.0"" encoding=""utf-8""?><float xmlns=""https://extendedxmlserializer.github.io/system"">4.5678</float>");
 			Assert.Equal(number, actual);
 
-			var converter = sut.Get(FloatConverter.Default);
+			var converter = sut.Get(FloatConverter.Default).AsValid<IConverter<float>>();
 			var format = converter.Format(number);
 			for (var i = 0; i < 10; i++)
 			{

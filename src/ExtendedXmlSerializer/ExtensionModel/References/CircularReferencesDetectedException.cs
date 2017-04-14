@@ -26,13 +26,13 @@ using ExtendedXmlSerializer.ContentModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
 {
-	class CircularReferencesDetectedException : Exception
+	sealed class CircularReferencesDetectedException<T> : Exception
 	{
-		public CircularReferencesDetectedException(string message, IWriter writer) : base(message)
+		public CircularReferencesDetectedException(string message, IWriter<T> writer) : base(message)
 		{
 			Writer = writer;
 		}
 
-		public IWriter Writer { get; }
+		public IWriter<T> Writer { get; }
 	}
 }

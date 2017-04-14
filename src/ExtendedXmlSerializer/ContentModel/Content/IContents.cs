@@ -21,13 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Reflection;
-using ExtendedXmlSerializer.Core.Sources;
-
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	public interface IContents : ISelector<TypeInfo, ISerializer>
-	{
-		/*ISerializer<T> Get<T>();*/
-	}
+	public interface IContents : ISerializerSource {}
 }

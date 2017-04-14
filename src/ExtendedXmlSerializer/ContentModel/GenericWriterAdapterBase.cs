@@ -21,23 +21,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
 using System.Reflection;
-using ExtendedXmlSerializer.ContentModel;
-using ExtendedXmlSerializer.Core.Sources;
-using IContents = ExtendedXmlSerializer.ContentModel.Content.IContents;
+using ExtendedXmlSerializer.ContentModel.Format;
+using ExtendedXmlSerializer.Core;
+using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.References
+namespace ExtendedXmlSerializer.ContentModel
 {
-	sealed class DeferredContents : CacheBase<TypeInfo, ISerializer>, IContents
+	abstract class GenericWriterAdapterBase<T> : IWriter, IGenericAware
 	{
-		readonly Func<IContents> _contents;
+		readonly IWriter<T> _writer;
 
-		public DeferredContents(Func<IContents> contents)
+		protected GenericWriterAdapterBase(IWriter<T> writer)
 		{
-			_contents = contents;
+			_writer = writer;
 		}
 
-		protected override ISerializer Create(TypeInfo parameter) => _contents().Get(parameter);
+		void IWriter<object>.Write(IFormatWriter writer, object instance) => _writer.Write(writer, instance.AsValid<T>());
+
+		public TypeInfo Get() => Support<T>.Key;
 	}
 }

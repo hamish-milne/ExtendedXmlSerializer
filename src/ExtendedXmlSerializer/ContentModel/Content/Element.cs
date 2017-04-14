@@ -21,12 +21,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using ExtendedXmlSerializer.ContentModel.Format;
 using ExtendedXmlSerializer.ContentModel.Identification;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	sealed class Element : ElementBase
+	class Element<T> : IWriter<T>
 	{
-		public Element(IIdentity identity) : base(identity) {}
+		readonly IIdentity _identity;
+
+		public Element(IIdentity identity)
+		{
+			_identity = identity;
+		}
+
+		public void Write(IFormatWriter writer, T instance) => writer.Start(_identity);
 	}
 }

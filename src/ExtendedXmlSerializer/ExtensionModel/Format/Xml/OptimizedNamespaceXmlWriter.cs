@@ -50,8 +50,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 		public void EndCurrent() => _writer.EndCurrent();
 
-		public void Content(IIdentity property, object content) => _writer.Content(property, content);
-		public void Content(object content) => _writer.Content(content);
+		public void Content(IIdentity property, string content) => _writer.Content(property, content);
+		public void Content(string content) => _writer.Content(content);
 
 		public string Get(MemberInfo parameter) => _writer.Get(parameter);
 		public void Dispose() => _writer.Dispose();

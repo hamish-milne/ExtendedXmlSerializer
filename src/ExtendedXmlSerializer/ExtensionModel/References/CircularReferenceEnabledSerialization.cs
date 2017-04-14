@@ -1,18 +1,18 @@
 // MIT License
-//
+// 
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -25,43 +25,45 @@ using System.Reflection;
 using ExtendedXmlSerializer.ContentModel;
 using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Format;
+using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
 {
-	sealed class CircularReferenceEnabledSerialization : ISerializers
+	sealed class CircularReferenceEnabledSerialization : GenericAdapter<ISerializer, ISerializer>, ISerializers
 	{
-		readonly ISerializers _context;
+		readonly ISerializers _serializers;
 
-		public CircularReferenceEnabledSerialization(ISerializers context)
+		public CircularReferenceEnabledSerialization(ISerializers serializers) : base(typeof(Adapter<>))
 		{
-			_context = context;
+			_serializers = serializers;
 		}
 
-		public ISerializer Get(TypeInfo parameter) => new Container(_context.Get(parameter));
+		public new ISerializer Get(TypeInfo parameter) => base.Get(parameter)
+		                                                      .Invoke(_serializers.Get(parameter));
 
-		public ISerializer<T> Get<T>()
+		sealed class Adapter<T> : GenericSerializerAdapter<T>
 		{
-			throw new System.NotImplementedException();
+			public Adapter(ISerializer<T> content) : base(new Serializer<T>(content)) {}
 		}
 
-		sealed class Container : ISerializer
+		sealed class Serializer<T> : ISerializer<T>
 		{
-			readonly ISerializer _serializer;
+			readonly ISerializer<T> _serializer;
 
-			public Container(ISerializer serializer)
+			public Serializer(ISerializer<T> serializer)
 			{
 				_serializer = serializer;
 			}
 
-			public object Get(IFormatReader parameter) => _serializer.Get(parameter);
+			public T Get(IFormatReader parameter) => _serializer.Get(parameter);
 
-			public void Write(IFormatWriter writer, object instance)
+			public void Write(IFormatWriter writer, T instance)
 			{
 				try
 				{
 					_serializer.Write(writer, instance);
 				}
-				catch (CircularReferencesDetectedException e)
+				catch (CircularReferencesDetectedException<T> e)
 				{
 					e.Writer.Write(writer, instance);
 				}

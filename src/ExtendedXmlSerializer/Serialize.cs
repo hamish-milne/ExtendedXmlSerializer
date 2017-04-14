@@ -21,18 +21,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-namespace ExtendedXmlSerializer.Core.Sources
-{
-	public sealed class CoercedSource<TParameter, TResult> : DecoratedSource<TParameter, TResult>
-	{
-		readonly IAlteration<TParameter> _alteration;
+using ExtendedXmlSerializer.ContentModel.Content;
+using ExtendedXmlSerializer.ContentModel.Format;
 
-		public CoercedSource(IAlteration<TParameter> alteration, IParameterizedSource<TParameter, TResult> source)
-			: base(source)
+namespace ExtendedXmlSerializer
+{
+	sealed class Serialize<T> : ISerialize<T>
+	{
+		readonly IFormatWriters<T> _writers;
+		readonly ISerializerStore _store;
+
+		public Serialize(IFormatWriters<T> writers, ISerializerStore store)
 		{
-			_alteration = alteration;
+			_writers = writers;
+			_store = store;
 		}
 
-		public override TResult Get(TParameter parameter) => base.Get(_alteration.Get(parameter));
+		void ISerialize<T>.Serialize<TInstance>(T parameter, TInstance instance)
+			=> _store.Get<TInstance>()
+			         .Write(_writers.Get(parameter), instance);
 	}
 }

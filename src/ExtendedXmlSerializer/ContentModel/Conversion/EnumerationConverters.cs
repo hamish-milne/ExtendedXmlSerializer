@@ -28,11 +28,11 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Conversion
 {
-	class EnumerationConverters : DecoratedSpecification<TypeInfo>, IConverterSource
+	sealed class EnumerationConverters : DecoratedSpecification<TypeInfo>, IConverterSource
 	{
 		public static EnumerationConverters Default { get; } = new EnumerationConverters();
 		EnumerationConverters() : base(IsAssignableSpecification<Enum>.Default) {}
 
-		public IConverter Get(TypeInfo parameter) => new EnumerationConverter(parameter.AsType());
+		public IConverter Get(TypeInfo parameter) => new EnumerationConverter(parameter.AsType()) /*.Adapt()*/;
 	}
 }

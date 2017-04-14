@@ -1,18 +1,18 @@
 // MIT License
-//
+// 
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -39,8 +39,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
 	sealed class XmlWriter : Dictionary<string, string>, IFormatWriter
 	{
+		readonly static Delimiter Separator = DefaultClrDelimiters.Default.Separator;
 		readonly static string Xmlns = XNamespace.Xmlns.NamespaceName;
-		readonly static Delimiter DefaultSeparator = DefaultClrDelimiters.Default.Separator;
 
 		readonly IAliases _aliases;
 		readonly IIdentifierFormatter _formatter;
@@ -48,22 +48,20 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		readonly ITypePartResolver _parts;
 
 		readonly System.Xml.XmlWriter _writer;
-		readonly Delimiter _separator;
 		readonly Func<TypeParts, TypeParts> _selector;
 
-		public XmlWriter(IAliases aliases, IIdentifierFormatter formatter, IIdentityStore store, ITypePartResolver parts,
-						 System.Xml.XmlWriter writer)
-			: this(aliases, formatter, store, parts, writer, DefaultSeparator) {}
+		/*public XmlWriter(IAliases aliases, IIdentifierFormatter formatter, IIdentityStore store, ITypePartResolver parts,
+		                 System.Xml.XmlWriter writer)
+			: this(aliases, formatter, store, parts, writer, DefaultSeparator) {}*/
 
 		public XmlWriter(IAliases aliases, IIdentifierFormatter formatter, IIdentityStore store, ITypePartResolver parts,
-		                 System.Xml.XmlWriter writer, Delimiter separator)
+		                 System.Xml.XmlWriter writer)
 		{
 			_aliases = aliases;
 			_formatter = formatter;
 			_store = store;
 			_parts = parts;
 			_writer = writer;
-			_separator = separator;
 			_selector = Get;
 		}
 
@@ -71,8 +69,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 		public void Start(IIdentity identity)
 		{
-			var identifier = identity.Identifier.NullIfEmpty();
-			if (identifier != null)
+			var identifier = identity.Identifier;
+			if (!string.IsNullOrEmpty(identifier))
 			{
 				_writer.WriteStartElement(identity.Name, identifier);
 			}
@@ -84,12 +82,12 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 		public void EndCurrent() => _writer.WriteEndElement();
 
-		public void Content(object content) => _writer.WriteValue(content);
+		public void Content(string content) => _writer.WriteString(content);
 
-		public void Content(IIdentity property, object content)
+		public void Content(IIdentity property, string content)
 		{
 			var identifier = property.Identifier.NullIfEmpty();
-			var prefix = identifier != null ? Prefix(identifier) : null;
+			var prefix = identifier != null ? _writer.LookupPrefix(identifier) : null;
 			var name = property.Name;
 
 			if (!string.IsNullOrEmpty(prefix))
@@ -101,7 +99,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 				_writer.WriteStartAttribute(name);
 			}
 
-			Content(content);
+			_writer.WriteString(content);
 			EndCurrent();
 		}
 
@@ -140,7 +138,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		public string Get(MemberInfo parameter)
 			=> parameter is TypeInfo
 				? GetType((TypeInfo) parameter)
-				: string.Concat(GetType(parameter.GetReflectedType()), _separator, parameter.Name);
+				: string.Concat(GetType(parameter.GetReflectedType()), Separator, parameter.Name);
 
 		string GetType(TypeInfo parameter)
 		{

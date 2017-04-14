@@ -26,7 +26,7 @@ using System.Xml;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
-	public class XmlWriterFactory : IXmlWriterFactory
+	public sealed class XmlWriterFactory : IXmlWriterFactory
 	{
 		public static XmlWriterFactory Default { get; } = new XmlWriterFactory();
 		XmlWriterFactory() : this(Defaults.WriterSettings) {}

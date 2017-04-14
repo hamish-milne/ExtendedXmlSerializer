@@ -47,10 +47,11 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
 
 		public override ISerializer Get(TypeInfo parameter)
 		{
-			var entry = _entries.Get(parameter);
+			var entry = _entries.Get(parameter).Adapt();
 			var reader = _contents.Create(parameter,
-			                              new ConditionalInnerContentHandler(_contents, new CollectionInnerContentHandler(entry, _contents)));
-			var result = new Serializer(reader, new EnumerableWriter(_enumerators, entry));
+			                              new ConditionalInnerContentHandler(_contents,
+			                                                                 new CollectionInnerContentHandler(entry, _contents)));
+			var result = new Serializer(reader, new EnumerableWriter(_enumerators, entry).Adapt());
 			return result;
 		}
 	}

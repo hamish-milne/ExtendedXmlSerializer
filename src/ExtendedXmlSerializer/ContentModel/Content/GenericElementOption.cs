@@ -21,6 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
 using System.Collections.Immutable;
 using System.Reflection;
 using ExtendedXmlSerializer.ContentModel.Identification;
@@ -28,11 +29,32 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	class GenericElementOption : NamedElementOptionBase
+	sealed class GenericElementOption : NamedElementOptionBase
 	{
-		public GenericElementOption(IIdentities identities) : base(IsGenericTypeSpecification.Default, identities) {}
+		readonly IGenericAdapter<IIdentity, ImmutableArray<Type>, IWriter> _adapter;
 
-		public sealed override IWriter Create(IIdentity identity, TypeInfo classification)
-			=> new GenericElement(identity, classification.GetGenericArguments().ToImmutableArray());
+		public GenericElementOption(IIdentities identities) : this(identities, Adapter.Default) {}
+
+		public GenericElementOption(IIdentities identities,
+		                            IGenericAdapter<IIdentity, ImmutableArray<Type>, IWriter> adapter)
+			: base(IsGenericTypeSpecification.Default, identities)
+		{
+			_adapter = adapter;
+		}
+
+		public override IWriter Create(IIdentity identity, TypeInfo classification)
+			=> _adapter.Get(classification)
+			           .Invoke(identity, classification.GetGenericArguments().ToImmutableArray());
+
+		sealed class Adapter : GenericAdapter<IIdentity, ImmutableArray<Type>, IWriter>
+		{
+			public static Adapter Default { get; } = new Adapter();
+			Adapter() : base(typeof(Writer<>)) {}
+
+			sealed class Writer<T> : GenericWriterAdapter<T>
+			{
+				public Writer(IIdentity identity, ImmutableArray<Type> arguments) : base(new GenericElement<T>(identity, arguments)) {}
+			}
+		}
 	}
 }

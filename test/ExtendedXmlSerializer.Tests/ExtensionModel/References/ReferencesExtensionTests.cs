@@ -233,7 +233,7 @@ namespace ExtendedXmlSerializer.Tests.ExtensionModel.References
 
 		[Fact]
 		public void VerifyThrow()
-			=> Assert.Throws<CircularReferencesDetectedException>(() =>
+			=> Assert.Throws<CircularReferencesDetectedException<Subject>>(() =>
 			                                                      {
 				                                                      var support = new SerializationSupport();
 				                                                      var instance = new Subject

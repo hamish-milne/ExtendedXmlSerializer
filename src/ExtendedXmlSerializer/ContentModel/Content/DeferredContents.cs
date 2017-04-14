@@ -1,6 +1,6 @@
-﻿// MIT License
+// MIT License
 //
-// Copyright (c) 2016 Wojciech Nagórski
+// Copyright (c) 2016 Wojciech Nag�rski
 //                    Michael DeMond
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,16 +21,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using Xunit;
+using System;
+using System.Reflection;
 
-namespace ExtendedXmlSerializer.Tests
+namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	public class SerializerTests
+	sealed class DeferredContents : IContents
 	{
-		[Fact]
-		public void Verify()
-		{
+		readonly Func<IContents> _contents;
 
+		public DeferredContents(Func<IContents> contents)
+		{
+			_contents = contents;
 		}
+
+		public ISerializer Get(TypeInfo parameter) => _contents().Get(parameter);
 	}
 }

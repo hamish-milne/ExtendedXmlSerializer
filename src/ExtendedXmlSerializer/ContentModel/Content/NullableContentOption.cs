@@ -39,7 +39,7 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 		public NullableContentOption(ConverterContentOption converters) : this(Specification, converters) {}
 
 		public NullableContentOption(Func<TypeInfo, bool> specification, ConverterContentOption converters)
-			: base(specification, new CoercedSource<TypeInfo, ISerializer>(Alteration.Default, converters).Get) {}
+			: base(specification, new AlteredParameterSource<TypeInfo, ISerializer>(Alteration.Default, converters).Get) {}
 
 		sealed class Alteration : IAlteration<TypeInfo>
 		{

@@ -30,22 +30,22 @@ using ExtendedXmlSerializer.ExtensionModel.Content;
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
 {
-	sealed class DeferredReferenceSerializer : ISerializer
+	sealed class DeferredReferenceSerializer<T> : ISerializer<T>
 	{
 		readonly IReservedItems _reserved;
-		readonly ISerializer _serializer;
+		readonly ISerializer<T> _serializer;
 
-		public DeferredReferenceSerializer(ISerializer serializer) : this(ReservedItems.Default, serializer) {}
+		public DeferredReferenceSerializer(ISerializer<T> serializer) : this(ReservedItems.Default, serializer) {}
 
-		public DeferredReferenceSerializer(IReservedItems reserved, ISerializer serializer)
+		public DeferredReferenceSerializer(IReservedItems reserved, ISerializer<T> serializer)
 		{
 			_reserved = reserved;
 			_serializer = serializer;
 		}
 
-		public object Get(IFormatReader parameter) => _serializer.Get(parameter);
+		public T Get(IFormatReader parameter) => _serializer.Get(parameter);
 
-		public void Write(IFormatWriter writer, object instance)
+		public void Write(IFormatWriter writer, T instance)
 		{
 			var lists = _reserved.Get(writer);
 			foreach (var o in Yield(instance))

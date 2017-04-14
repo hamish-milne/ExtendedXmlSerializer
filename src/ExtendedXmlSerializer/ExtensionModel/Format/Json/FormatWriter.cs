@@ -51,7 +51,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 		readonly Func<TypeParts, TypeParts> _selector;
 
 		public FormatWriter(IAliases aliases, IIdentifierFormatter formatter, IIdentityStore store, ITypePartResolver parts,
-							JsonTextWriter writer)
+		                    JsonTextWriter writer)
 			: this(aliases, formatter, store, parts, writer, DefaultSeparator) {}
 
 		public FormatWriter(IAliases aliases, IIdentifierFormatter formatter, IIdentityStore store, ITypePartResolver parts,
@@ -87,9 +87,9 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 
 		public void EndCurrent() => _writer.WriteEnd();
 
-		public void Content(object content) => _writer.WriteValue(content);
+		public void Content(string content) => _writer.WriteValue(content);
 
-		public void Content(IIdentity property, object content)
+		public void Content(IIdentity property, string content)
 		{
 			/*var identifier = property.Identifier.NullIfEmpty();
 			var prefix = identifier != null ? Prefix(identifier) : null;

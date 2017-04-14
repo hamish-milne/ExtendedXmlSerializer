@@ -1,18 +1,18 @@
 // MIT License
-//
+// 
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -28,24 +28,20 @@ using ExtendedXmlSerializer.ExtensionModel.References;
 
 namespace ExtendedXmlSerializer.ExtensionModel
 {
-	public interface ISerializationExtension : ISerializerExtension {}
-
-	sealed class SerializationExtension<TInterface, TImplementation> : ISerializationExtension
-		where TImplementation : TInterface
+	sealed class SerializationExtension : ISerializationExtension
 	{
-		public static SerializationExtension<TInterface, TImplementation> Default { get; } =
-			new SerializationExtension<TInterface, TImplementation>();
+		public static SerializationExtension Default { get; } = new SerializationExtension();
 
 		SerializationExtension() {}
 
 		public IServiceRepository Get(IServiceRepository parameter)
 			=> parameter.Register<ISerializer, RuntimeSerializer>()
+			            .Register<ISerializerStore, SerializerStore>()
 			            .Register<ISerializers, Serializers>()
 			            .Decorate<ISerializers, ReferenceAwareSerializers>()
 			            .RegisterConstructorDependency<IContents>((provider, info) => provider.Get<DeferredContents>())
 			            .Register<IContents, Contents>()
-			            .Decorate<IContents>((factory, contents) => new RecursionAwareContents(contents))
-			            .Register<TInterface, TImplementation>();
+			            .Decorate<IContents, RecursionAwareContents>();
 
 		void ICommand<IServices>.Execute(IServices parameter) {}
 	}

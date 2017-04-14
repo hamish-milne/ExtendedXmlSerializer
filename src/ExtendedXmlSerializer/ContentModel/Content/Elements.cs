@@ -30,10 +30,11 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 {
 	sealed class Elements : Selector<TypeInfo, IWriter>, IElements
 	{
-		public Elements(IIdentities identities) : base(
-			new ArrayElementOption(identities),
-			new GenericElementOption(identities),
-			new VariableTypeElementOption(identities),
-			new ElementOption(identities)) {}
+		public Elements(IIdentities identities)
+			: base(
+				new ArrayElementOption(identities),
+				new GenericElementOption(identities),
+				new VariableTypeElementOption(identities),
+				new ElementOption(identities)) {}
 	}
 }

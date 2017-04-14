@@ -27,7 +27,7 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Collections
 {
-	sealed class EnumerableWriter : WriterBase<IEnumerable>
+	sealed class EnumerableWriter : IWriter<IEnumerable>
 	{
 		readonly IEnumerators _enumerator;
 		readonly IWriter _item;
@@ -38,7 +38,7 @@ namespace ExtendedXmlSerializer.ContentModel.Collections
 			_item = item;
 		}
 
-		public override void Write(IFormatWriter writer, IEnumerable instance)
+		public void Write(IFormatWriter writer, IEnumerable instance)
 		{
 			var iterator = _enumerator.Get(instance);
 			while (iterator.MoveNext())

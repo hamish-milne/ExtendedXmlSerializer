@@ -1,18 +1,18 @@
 // MIT License
-//
+// 
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-//
+// 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-//
+// 
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-//
+// 
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -24,73 +24,47 @@
 using System;
 using ExtendedXmlSerializer.ContentModel;
 using ExtendedXmlSerializer.ContentModel.Format;
-using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sprache;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Markup
 {
-	sealed class MarkupExtensionAwareSerializer : ISerializer
+	sealed class MarkupExtensionAwareSerializer<T> : ISerializer<T>
 	{
 		readonly Parser<MarkupExtensionParts> _parser;
 		readonly IMarkupExtensions _container;
-		readonly ISerializer _serializer;
+		readonly ISerializer<T> _serializer;
 
-		public MarkupExtensionAwareSerializer(IMarkupExtensions container, ISerializer serializer)
+		public MarkupExtensionAwareSerializer(IMarkupExtensions container, ISerializer<T> serializer)
 			: this(MarkupExtensionParser.Default, container, serializer) {}
 
 		public MarkupExtensionAwareSerializer(Parser<MarkupExtensionParts> parser, IMarkupExtensions container,
-		                                      ISerializer serializer)
+		                                      ISerializer<T> serializer)
 		{
 			_parser = parser;
 			_container = container;
 			_serializer = serializer;
 		}
 
-		public object Get(IFormatReader parameter)
-		{
-			var candidate = Candidate(parameter);
-			var parts = candidate.Instance as MarkupExtensionParts;
-			var result = parts != null
-				? _container.Get(parameter)
-				            .Get(parts)
-				: candidate.Get();
-			return result;
-		}
-
-		CandidateResult Candidate(IFormatReader parameter)
+		public T Get(IFormatReader parameter)
 		{
 			try
 			{
-				return new CandidateResult(_serializer.Get(parameter));
+				return _serializer.Get(parameter);
 			}
-			catch (Exception e)
+			catch (Exception)
 			{
-				return new CandidateResult(_parser.Parse(parameter.Content()), e);
-			}
-		}
-
-		struct CandidateResult : ISource<object>
-		{
-			readonly Exception _error;
-
-			public CandidateResult(object instance, Exception error = null)
-			{
-				_error = error;
-				Instance = instance;
-			}
-
-			public object Instance { get; }
-
-			public object Get()
-			{
-				if (_error != null)
+				var parts = _parser.TryParse(parameter.Content());
+				if (parts.WasSuccessful)
 				{
-					throw _error;
+					var result = _container.Get(parameter)
+					                       .Get(parts.Value).AsValid<T>();
+					return result;
 				}
-				return Instance;
+				throw;
 			}
 		}
 
-		public void Write(IFormatWriter writer, object instance) => _serializer.Write(writer, instance);
+		public void Write(IFormatWriter writer, T instance) => _serializer.Write(writer, instance);
 	}
 }

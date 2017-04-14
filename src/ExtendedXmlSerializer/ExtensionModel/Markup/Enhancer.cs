@@ -22,18 +22,25 @@
 // SOFTWARE.
 
 using ExtendedXmlSerializer.ContentModel;
+using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Markup
 {
-	sealed class Enhancer : IEnhancer
+	sealed class Enhancer : GenericAdapter<IMarkupExtensions, ISerializer, ISerializer>, IEnhancer
 	{
 		readonly IMarkupExtensions _container;
 
-		public Enhancer(IMarkupExtensions container)
+		public Enhancer(IMarkupExtensions container) : base(typeof(Serializer<>))
 		{
 			_container = container;
 		}
 
-		public ISerializer Get(ISerializer parameter) => new MarkupExtensionAwareSerializer(_container, parameter);
+		public ISerializer Get(ISerializer parameter) => this.GetFrom(parameter).Invoke(_container, parameter);
+
+		sealed class Serializer<T> : GenericSerializerAdapter<T>
+		{
+			public Serializer(IMarkupExtensions markup, ISerializer<T> serializer)
+				: base(new MarkupExtensionAwareSerializer<T>(markup, serializer)) {}
+		}
 	}
 }

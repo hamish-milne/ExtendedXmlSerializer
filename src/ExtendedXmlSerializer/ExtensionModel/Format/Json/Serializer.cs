@@ -21,16 +21,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Reflection;
-using ExtendedXmlSerializer.ContentModel;
-using ExtendedXmlSerializer.ContentModel.Content;
-using ExtendedXmlSerializer.ContentModel.Format;
-using ExtendedXmlSerializer.ContentModel.Reflection;
-using JetBrains.Annotations;
-using Newtonsoft.Json;
-
-namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
+/*namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
+/*
 	/// <summary>
 	/// Extended Xml Serializer
 	/// </summary>
@@ -65,4 +58,5 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 			}
 		}
 	}
-}
+#1#
+}*/

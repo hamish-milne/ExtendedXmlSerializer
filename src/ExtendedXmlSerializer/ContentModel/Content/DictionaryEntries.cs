@@ -26,6 +26,7 @@ using System.Collections.Immutable;
 using System.Reflection;
 using ExtendedXmlSerializer.ContentModel.Identification;
 using ExtendedXmlSerializer.ContentModel.Members;
+using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.ReflectionModel;
 using JetBrains.Annotations;
 
@@ -44,16 +45,17 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 		readonly IInnerContentServices _contents;
 		readonly IMembers _members;
 		readonly IMemberSerializers _serializers;
-		readonly IWriter _element;
+		readonly IWriter<DictionaryEntry> _element;
 		readonly IDictionaryPairTypesLocator _locator;
 
 		[UsedImplicitly]
 		public DictionaryEntries(IInnerContentServices contents, IIdentities identities, IMembers members,
 		                         IMemberSerializers serializers)
-			: this(contents, serializers, members, new ElementOption(identities).Get(Type), Pairs) {}
+			: this(
+				contents, serializers, members, new ElementOption(identities).Get(Type).AsValid<IWriter<DictionaryEntry>>(), Pairs) {}
 
 		public DictionaryEntries(IInnerContentServices contents, IMemberSerializers serializers, IMembers members,
-		                         IWriter element, IDictionaryPairTypesLocator locator)
+		                         IWriter<DictionaryEntry> element, IDictionaryPairTypesLocator locator)
 		{
 			_contents = contents;
 			_members = members;
@@ -65,7 +67,7 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 		IMemberSerializer Create(PropertyInfo metadata, TypeInfo classification)
 			=> _serializers.Get(_members.Get(new MemberDescriptor(metadata, classification)));
 
-		public ISerializer Get(TypeInfo parameter)
+		public ISerializer<DictionaryEntry> Get(TypeInfo parameter)
 		{
 			var pair = _locator.Get(parameter);
 			var members = new[] {Create(Key, pair.KeyType), Create(Value, pair.ValueType)}.ToImmutableArray();
@@ -73,8 +75,9 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 
 			var reader = _contents.Create(Type, new MemberInnerContentHandler(serialization, _contents, _contents));
 
-			var converter = new Serializer(reader, new MemberListWriter(serialization));
-			var result = new Container(_element, converter);
+			var result = new Serializer<DictionaryEntry>(
+				reader.Adapt<DictionaryEntry>(),
+				new Enclosure<DictionaryEntry>(_element, new MemberListWriter(serialization).Adapt<DictionaryEntry>()));
 			return result;
 		}
 	}

@@ -24,6 +24,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ReflectionModel
@@ -45,5 +46,11 @@ namespace ExtendedXmlSerializer.ReflectionModel
 
 		public static bool IsSatisfiedBy(this ISpecification<Type> @this, TypeInfo parameter)
 			=> @this.IsSatisfiedBy(parameter.AsType());
+
+		public static Func<T1, T> GetFrom<T1, T>(this IGenericAdapter<T1, T> @this, object parameter)
+			=> @this.Get(parameter.AsValid<IGenericAware>().Get());
+
+		public static Func<T1, T2, T> GetFrom<T1, T2, T>(this IGenericAdapter<T1, T2, T> @this, object parameter)
+			=> @this.Get(parameter.AsValid<IGenericAware>().Get());
 	}
 }

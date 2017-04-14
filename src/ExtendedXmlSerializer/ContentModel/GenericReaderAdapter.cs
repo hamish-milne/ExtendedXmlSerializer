@@ -22,19 +22,18 @@
 // SOFTWARE.
 
 using ExtendedXmlSerializer.ContentModel.Format;
-using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ContentModel
 {
-	sealed class GenericReaderAdapter<T> : IReader
+	sealed class GenericReaderAdapter<T> : GenericReaderAdapterBase<T>, IReader<T>
 	{
-		readonly IReader<T> _serializer;
+		readonly IReader<T> _reader;
 
-		public GenericReaderAdapter(IReader<T> serializer)
+		public GenericReaderAdapter(IReader<T> reader) : base(reader)
 		{
-			_serializer = serializer;
+			_reader = reader;
 		}
 
-		object IParameterizedSource<IFormatReader, object>.Get(IFormatReader parameter) => _serializer.Get(parameter);
+		public T Get(IFormatReader parameter) => _reader.Get(parameter);
 	}
 }

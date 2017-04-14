@@ -21,25 +21,63 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
 using System.Reflection;
+using ExtendedXmlSerializer.ContentModel.Format;
 using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Conversion
 {
-	sealed class Serializers : CacheBase<TypeInfo, ISerializer>, ISerializers
+	sealed class Serializers : ISerializers
 	{
 		readonly IConverters _converters;
+		readonly IGenericAdapter<IConverter, ISerializer> _activators;
 
-		public Serializers(IConverters converters)
+		public Serializers(IConverters converters) : this(converters, Adapter.Default) {}
+
+		public Serializers(IConverters converters, IGenericAdapter<IConverter, ISerializer> activators)
 		{
 			_converters = converters;
+			_activators = activators;
 		}
 
-		protected override ISerializer Create(TypeInfo parameter)
+		public ISerializer Get(TypeInfo parameter) => _activators.Get(parameter).Invoke(_converters.Get(parameter));
+
+		sealed class Adapter : GenericAdapter<IConverter, ISerializer>
 		{
-			var converter = _converters.Get(parameter);
-			var result = new DelegatedSerializer(converter.Parse, converter.Format);
-			return result;
+			public static Adapter Default { get; } = new Adapter();
+			Adapter() : base(typeof(Serializer<>)) {}
+
+			class Serializer : ISerializer
+			{
+				object IParameterizedSource<IFormatReader, object>.Get(IFormatReader parameter)
+				{
+					throw new InvalidOperationException("This exists for static type checking purposes only.");
+				}
+
+				void IWriter<object>.Write(IFormatWriter writer, object instance)
+				{
+					throw new InvalidOperationException("This exists for static type checking purposes only.");
+				}
+			}
+
+			sealed class Serializer<T> : Serializer, ISerializer<T>
+			{
+				readonly IConverter<T> _serializer;
+
+				public Serializer(IConverter<T> serializer)
+				{
+					_serializer = serializer;
+				}
+
+				public T Get(IFormatReader parameter)
+				{
+					throw new NotImplementedException();
+				}
+
+				public void Write(IFormatWriter writer, T instance) => writer.Content(_serializer.Format(instance));
+			}
 		}
 	}
 }
