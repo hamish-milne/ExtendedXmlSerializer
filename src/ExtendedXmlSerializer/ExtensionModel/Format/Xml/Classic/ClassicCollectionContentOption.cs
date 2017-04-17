@@ -31,10 +31,10 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
 {
 	sealed class ClassicCollectionContentOption : CollectionContentOptionBase
 	{
-		readonly IInnerContentServices _contents;
+		readonly IInnerContents _contents;
 		readonly IEnumerators _enumerators;
 
-		public ClassicCollectionContentOption(IActivatingTypeSpecification specification, IInnerContentServices contents,
+		public ClassicCollectionContentOption(IActivatingTypeSpecification specification, IInnerContents contents,
 		                                      IEnumerators enumerators, ISerializers serializers)
 			: base(specification, serializers)
 		{
@@ -45,8 +45,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
 		protected override ISerializer Create(ISerializer item, TypeInfo classification, TypeInfo itemType)
 			=>
 				new Serializer(
-					_contents.Create(classification,
-					                 new ConditionalInnerContentHandler(_contents, new CollectionInnerContentHandler(item, _contents))),
+					_contents.Get(classification).Invoke(
+						new ConditionalInnerContentHandler(_contents, new CollectionInnerContentHandler(item, _contents))),
 					new EnumerableWriter(_enumerators, item).Adapt());
 	}
 }

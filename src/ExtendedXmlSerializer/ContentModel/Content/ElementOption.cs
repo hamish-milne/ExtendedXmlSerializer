@@ -31,11 +31,11 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 {
 	sealed class ElementOption : NamedElementOptionBase
 	{
-		readonly IGenericAdapter<IIdentity, IWriter> _adapter;
+		readonly IGeneric<IIdentity, IWriter> _adapter;
 
 		public ElementOption(IIdentities identities) : this(identities, Adapter.Default) {}
 
-		public ElementOption(IIdentities identities, IGenericAdapter<IIdentity, IWriter> adapter) : base(identities)
+		public ElementOption(IIdentities identities, IGeneric<IIdentity, IWriter> adapter) : base(identities)
 		{
 			_adapter = adapter;
 		}
@@ -43,7 +43,7 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 		public override IWriter Create(IIdentity identity, TypeInfo classification)
 			=> _adapter.Get(classification).Invoke(identity);
 
-		sealed class Adapter : GenericAdapter<IIdentity, IWriter>
+		sealed class Adapter : Generic<IIdentity, IWriter>
 		{
 			public static Adapter Default { get; } = new Adapter();
 			Adapter() : base(typeof(Writer<>)) {}

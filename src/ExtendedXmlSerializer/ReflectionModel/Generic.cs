@@ -28,36 +28,36 @@ using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ReflectionModel
 {
-	public class GenericAdapter<T1, T> : GenericAdapterBase<Func<T1, T>>, IGenericAdapter<T1, T>
+	public class Generic<T1, T> : GenericAdapterBase<Func<T1, T>>, IGeneric<T1, T>
 	{
 		readonly static IParameterizedSource<TypeInfo, Func<T1, T>> Activator
 			= new GenericActivator<Func<T1, T>>(typeof(T1)).ReferenceCache();
 
 
-		public GenericAdapter(Type definition) : this(definition, Activator) {}
+		public Generic(Type definition) : this(definition, Activator) {}
 
-		public GenericAdapter(Type definition, IParameterizedSource<TypeInfo, Func<T1, T>> source) : base(definition, source) {}
+		public Generic(Type definition, IParameterizedSource<TypeInfo, Func<T1, T>> source) : base(definition, source) {}
 	}
 
-	public class GenericAdapter<T1, T2, T> : GenericAdapterBase<Func<T1, T2, T>>, IGenericAdapter<T1, T2, T>
+	public class Generic<T1, T2, T> : GenericAdapterBase<Func<T1, T2, T>>, IGeneric<T1, T2, T>
 	{
 		readonly static IParameterizedSource<TypeInfo, Func<T1, T2, T>> Activator
 			= new GenericActivator<Func<T1, T2, T>>(typeof(T1), typeof(T2)).ReferenceCache();
 
-		public GenericAdapter(Type definition) : this(definition, Activator) {}
+		public Generic(Type definition) : this(definition, Activator) {}
 
-		public GenericAdapter(Type definition, IParameterizedSource<TypeInfo, Func<T1, T2, T>> source)
+		public Generic(Type definition, IParameterizedSource<TypeInfo, Func<T1, T2, T>> source)
 			: base(definition, source) {}
 	}
 
-	public class GenericAdapter<T1, T2, T3, T> : GenericAdapterBase<Func<T1, T2, T3, T>>, IGenericAdapter<T1, T2, T3, T>
+	public class Generic<T1, T2, T3, T> : GenericAdapterBase<Func<T1, T2, T3, T>>, IGeneric<T1, T2, T3, T>
 	{
 		readonly static IParameterizedSource<TypeInfo, Func<T1, T2, T3, T>> Activator
 			= new GenericActivator<Func<T1, T2, T3, T>>(typeof(T1), typeof(T2), typeof(T3)).ReferenceCache();
 
-		public GenericAdapter(Type definition) : this(definition, Activator) {}
+		public Generic(Type definition) : this(definition, Activator) {}
 
-		public GenericAdapter(Type definition, IParameterizedSource<TypeInfo, Func<T1, T2, T3, T>> source)
+		public Generic(Type definition, IParameterizedSource<TypeInfo, Func<T1, T2, T3, T>> source)
 			: base(definition, source) {}
 	}
 }

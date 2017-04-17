@@ -21,15 +21,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
-using System.Reflection;
-using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.ContentModel.Collections;
+using ExtendedXmlSerializer.ContentModel.Format;
+using ExtendedXmlSerializer.ContentModel.Members;
 
-namespace ExtendedXmlSerializer.ReflectionModel
+namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	public interface IGenericAdapter<in T1, out T> : IParameterizedSource<TypeInfo, Func<T1, T>> {}
-
-	public interface IGenericAdapter<in T1, in T2, out T> : IParameterizedSource<TypeInfo, Func<T1, T2, T>> {}
-
-	public interface IGenericAdapter<in T1, in T2, in T3, out T> : IParameterizedSource<TypeInfo, Func<T1, T2, T3, T>> {}
+	public interface IInnerContents : IListContentsSpecification, IMemberHandler, ICollectionContentsHandler,
+	                                  IReaderFormatter, IInnerContentReaders {}
 }

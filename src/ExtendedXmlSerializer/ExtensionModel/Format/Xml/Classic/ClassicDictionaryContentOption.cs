@@ -32,11 +32,11 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
 {
 	sealed class ClassicDictionaryContentOption : ContentOptionBase
 	{
-		readonly IInnerContentServices _contents;
+		readonly IInnerContents _contents;
 		readonly IDictionaryEnumerators _enumerators;
 		readonly IDictionaryEntries _entries;
 
-		public ClassicDictionaryContentOption(IActivatingTypeSpecification specification, IInnerContentServices contents,
+		public ClassicDictionaryContentOption(IActivatingTypeSpecification specification, IInnerContents contents,
 		                                      IDictionaryEnumerators enumerators, IDictionaryEntries entries)
 			: base(specification.And(IsDictionaryTypeSpecification.Default))
 		{
@@ -48,9 +48,9 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
 		public override ISerializer Get(TypeInfo parameter)
 		{
 			var entry = _entries.Get(parameter).Adapt();
-			var reader = _contents.Create(parameter,
-			                              new ConditionalInnerContentHandler(_contents,
-			                                                                 new CollectionInnerContentHandler(entry, _contents)));
+			var reader = _contents.Get(parameter).Invoke(
+				new ConditionalInnerContentHandler(_contents,
+				                                   new CollectionInnerContentHandler(entry, _contents)));
 			var result = new Serializer(reader, new EnumerableWriter(_enumerators, entry).Adapt());
 			return result;
 		}

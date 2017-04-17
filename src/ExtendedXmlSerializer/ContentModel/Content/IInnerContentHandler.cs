@@ -25,5 +25,7 @@ using ExtendedXmlSerializer.Core;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	public interface IInnerContentHandler : ICommand<IInnerContent> {}
+	public interface IInnerContentHandler : IInnerContentHandler<object> { }
+
+	public interface IInnerContentHandler<in T> : ICommand<IInnerContent<T>> { }
 }

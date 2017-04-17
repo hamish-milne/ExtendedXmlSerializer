@@ -39,10 +39,10 @@ namespace ExtendedXmlSerializer.ExtensionModel.Types
 	{
 		readonly static ISpecification<TypeInfo> Specification = new IsAssignableGenericSpecification(typeof(ImmutableArray<>));
 
-		readonly IInnerContentServices _contents;
+		readonly IInnerContents _contents;
 		readonly IEnumerators _enumerators;
 
-		public ImmutableArrayContentOption(IInnerContentServices contents, IEnumerators enumerators, ISerializers serializers)
+		public ImmutableArrayContentOption(IInnerContents contents, IEnumerators enumerators, ISerializers serializers)
 			: base(Specification, serializers)
 		{
 			_contents = contents;
@@ -52,7 +52,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Types
 		protected override ISerializer Create(ISerializer item, TypeInfo classification, TypeInfo itemType)
 			=> new Serializer(CreateReader(itemType, _contents, item), new EnumerableWriter(_enumerators, item).Adapt());
 
-		static IReader CreateReader(TypeInfo itemType, IInnerContentServices contents, IReader item)
+		static IReader CreateReader(TypeInfo itemType, IInnerContents contents, IReader item)
 			=> (IReader) Activator.CreateInstance(typeof(Reader<>).MakeGenericType(itemType.AsType()), contents, item);
 
 		sealed class Reader<T> : IReader
@@ -60,7 +60,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Types
 			readonly IReader<Collection<T>> _reader;
 
 			[UsedImplicitly]
-			public Reader(IInnerContentServices services, IReader item)
+			public Reader(IInnerContents services, IReader item)
 				: this(services.CreateContents<Collection<T>>(new ConditionalInnerContentHandler(services, new CollectionInnerContentHandler(item, services)))) {}
 
 			Reader(IReader<Collection<T>> reader)

@@ -82,7 +82,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 		public void EndCurrent() => _writer.WriteEndElement();
 
-		public void Content(string content) => _writer.WriteString(content);
+		public void Content(string content) => _writer.WriteValue(6776);
 
 		public void Content(IIdentity property, string content)
 		{

@@ -33,7 +33,7 @@ namespace ExtendedXmlSerializer.ContentModel.Collections
 		readonly IClassification _classification;
 		readonly IReader<ArrayList> _reader;
 
-		public ArrayReader(IInnerContentServices services, IClassification classification, IReader item)
+		public ArrayReader(IInnerContents services, IClassification classification, IReader item)
 			: this(
 				services.CreateContents<ArrayList>(new ConditionalInnerContentHandler(services, new CollectionInnerContentHandler(item, services))))
 		{

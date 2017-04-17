@@ -27,14 +27,14 @@ using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ContentModel.Members
 {
-	sealed class MemberInnerContentHandler : IInnerContentHandler, ISpecification<IInnerContent>
+	sealed class MemberInnerContentHandler : ISpecification<IInnerContent>, IInnerContentHandler
 	{
 		readonly IMemberSerialization _serialization;
 		readonly IMemberHandler _handler;
 		readonly IReaderFormatter _formatter;
 
 		public MemberInnerContentHandler(IMemberSerialization serialization, IMemberHandler handler,
-		                            IReaderFormatter formatter)
+		                                 IReaderFormatter formatter)
 		{
 			_serialization = serialization;
 			_handler = handler;

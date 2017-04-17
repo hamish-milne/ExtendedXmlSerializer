@@ -26,7 +26,7 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Markup
 {
-	sealed class Enhancer : GenericAdapter<IMarkupExtensions, ISerializer, ISerializer>, IEnhancer
+	sealed class Enhancer : Generic<IMarkupExtensions, ISerializer, ISerializer>, IEnhancer
 	{
 		readonly IMarkupExtensions _container;
 

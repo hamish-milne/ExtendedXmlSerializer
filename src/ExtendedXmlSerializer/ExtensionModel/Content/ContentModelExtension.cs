@@ -48,7 +48,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content
 			            .Register<CollectionContentOption>()
 			            .Register<IClassification, Classification>()
 			            .Register<IIdentityStore, IdentityStore>()
-			            .Register<IInnerContentServices, InnerContentServices>()
+			            .Register<IInnerContents, InnerContents>()
 			            .Register<IInnerContentReaders, InnerContentReaders>()
 			            .Register<IMemberHandler, MemberHandler>()
 			            .Register<ICollectionContentsHandler, CollectionContentsHandler>()

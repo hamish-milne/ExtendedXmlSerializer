@@ -21,34 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
 using System.Reflection;
-using ExtendedXmlSerializer.ContentModel.Content;
-using ExtendedXmlSerializer.ReflectionModel;
+using ExtendedXmlSerializer.Core.Sources;
 
-namespace ExtendedXmlSerializer.ContentModel.Members
+namespace ExtendedXmlSerializer.ReflectionModel
 {
-	sealed class MemberedContentOption : ContentOptionBase
-	{
-		readonly IMemberSerializations _serializations;
-		readonly IInnerContents _services;
+	public interface IGeneric<in T1, out T> : IParameterizedSource<TypeInfo, Func<T1, T>> {}
 
-		public MemberedContentOption(IActivatingTypeSpecification specification, IMemberSerializations serializations,
-		                             IInnerContents services)
-			: base(specification)
-		{
-			_serializations = serializations;
-			_services = services;
-		}
+	public interface IGeneric<in T1, in T2, out T> : IParameterizedSource<TypeInfo, Func<T1, T2, T>> {}
 
-		public override ISerializer Get(TypeInfo parameter)
-		{
-			var members = _serializations.Get(parameter);
-			var handler = new MemberInnerContentHandler(members, _services, _services);
-			var reader = _services.Get(parameter).Invoke(handler);
-			var result = new Serializer(reader, new MemberListWriter(members));
-			return result;
-		}
-
-
-	}
+	public interface IGeneric<in T1, in T2, in T3, out T> : IParameterizedSource<TypeInfo, Func<T1, T2, T3, T>> {}
 }

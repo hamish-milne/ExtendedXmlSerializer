@@ -29,7 +29,7 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	sealed class RecursionAwareContents : GenericAdapter<IContents, ISerializer>, IContents
+	sealed class RecursionAwareContents : Generic<IContents, ISerializer>, IContents
 	{
 		readonly IContents _contents;
 		readonly ISet<TypeInfo> _types;

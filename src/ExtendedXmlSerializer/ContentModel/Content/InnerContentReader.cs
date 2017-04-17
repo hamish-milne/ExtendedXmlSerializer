@@ -25,28 +25,32 @@ using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	sealed class InnerContentReader : IReader
+	sealed class InnerContentReader<T> : IReader<T>
 	{
-		readonly IInnerContentActivator _activator;
-		readonly IInnerContentHandler _content;
-		readonly IInnerContentResult _result;
+		readonly IInnerContentActivator<T> _activator;
+		readonly IInnerContentHandler<T> _content;
+		readonly IInnerContentResult<T> _result;
 
-		public InnerContentReader(IInnerContentActivator activator, IInnerContentHandler content, IInnerContentResult result)
+		public InnerContentReader(IInnerContentActivator<T> activator, IInnerContentHandler<T> content, IInnerContentResult<T> result)
 		{
 			_activator = activator;
 			_content = content;
 			_result = result;
 		}
 
-		public object Get(IFormatReader parameter)
+		public T Get(IFormatReader parameter)
 		{
-			var adapter = _activator.Get(parameter);
-			while (adapter?.MoveNext() ?? false)
+			var content = _activator.Get(parameter);
+			if (content != null)
 			{
-				_content.Execute(adapter);
+				while (content.MoveNext())
+				{
+					_content.Execute(content);
+				}
+				return _result.Get(content);
 			}
-			var result = adapter != null ? _result.Get(adapter) : null;
-			return result;
+
+			return default(T);
 		}
 	}
 }

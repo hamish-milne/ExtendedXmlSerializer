@@ -31,12 +31,12 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 {
 	sealed class GenericElementOption : NamedElementOptionBase
 	{
-		readonly IGenericAdapter<IIdentity, ImmutableArray<Type>, IWriter> _adapter;
+		readonly IGeneric<IIdentity, ImmutableArray<Type>, IWriter> _adapter;
 
 		public GenericElementOption(IIdentities identities) : this(identities, Adapter.Default) {}
 
 		public GenericElementOption(IIdentities identities,
-		                            IGenericAdapter<IIdentity, ImmutableArray<Type>, IWriter> adapter)
+		                            IGeneric<IIdentity, ImmutableArray<Type>, IWriter> adapter)
 			: base(IsGenericTypeSpecification.Default, identities)
 		{
 			_adapter = adapter;
@@ -46,7 +46,7 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 			=> _adapter.Get(classification)
 			           .Invoke(identity, classification.GetGenericArguments().ToImmutableArray());
 
-		sealed class Adapter : GenericAdapter<IIdentity, ImmutableArray<Type>, IWriter>
+		sealed class Adapter : Generic<IIdentity, ImmutableArray<Type>, IWriter>
 		{
 			public static Adapter Default { get; } = new Adapter();
 			Adapter() : base(typeof(Writer<>)) {}

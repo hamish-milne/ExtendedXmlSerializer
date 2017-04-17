@@ -28,7 +28,7 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
 {
-	sealed class DeferredReferenceSerializers : GenericAdapter<ISerializer, ISerializer>, ISerializers
+	sealed class DeferredReferenceSerializers : Generic<ISerializer, ISerializer>, ISerializers
 	{
 		readonly ISerializers _serializers;
 

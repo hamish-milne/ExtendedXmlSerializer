@@ -32,7 +32,7 @@ using JetBrains.Annotations;
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
 	[UsedImplicitly]
-	sealed class Serializers : GenericAdapter<IWriter, ISerializer, ISerializer>, ISerializers
+	sealed class Serializers : Generic<IWriter, ISerializer, ISerializer>, ISerializers
 	{
 		readonly IElements _elements;
 		readonly IContents _contents;

@@ -29,7 +29,7 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
 {
-	sealed class CircularReferenceEnabledSerialization : GenericAdapter<ISerializer, ISerializer>, ISerializers
+	sealed class CircularReferenceEnabledSerialization : Generic<ISerializer, ISerializer>, ISerializers
 	{
 		readonly ISerializers _serializers;
 

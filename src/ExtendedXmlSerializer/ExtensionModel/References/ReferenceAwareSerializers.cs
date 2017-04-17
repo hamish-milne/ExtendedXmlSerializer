@@ -31,7 +31,7 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
 {
-	sealed class ReferenceAwareSerializers : GenericAdapter<IRootReferences, ISerializer, ISerializer>, ISerializers
+	sealed class ReferenceAwareSerializers : Generic<IRootReferences, ISerializer, ISerializer>, ISerializers
 	{
 		readonly IStaticReferenceSpecification _specification;
 		readonly IRootReferences _references;

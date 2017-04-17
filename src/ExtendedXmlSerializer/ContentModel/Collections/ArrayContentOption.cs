@@ -32,11 +32,11 @@ namespace ExtendedXmlSerializer.ContentModel.Collections
 	{
 		readonly static IsArraySpecification Specification = IsArraySpecification.Default;
 
-		readonly IInnerContentServices _contents;
+		readonly IInnerContents _contents;
 		readonly IEnumerators _enumerators;
 		readonly IClassification _classification;
 
-		public ArrayContentOption(IInnerContentServices contents, IEnumerators enumerators, ISerializers serializers,
+		public ArrayContentOption(IInnerContents contents, IEnumerators enumerators, ISerializers serializers,
 		                          IClassification classification)
 			: base(Specification, serializers)
 		{
