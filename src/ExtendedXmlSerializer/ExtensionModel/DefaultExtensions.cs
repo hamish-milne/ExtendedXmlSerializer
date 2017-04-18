@@ -30,8 +30,8 @@ using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Content.Members;
 using ExtendedXmlSerializer.ExtensionModel.Format;
 using ExtendedXmlSerializer.ExtensionModel.References;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 using ExtendedXmlSerializer.ExtensionModel.Roots;
-using ExtendedXmlSerializer.ExtensionModel.Types;
 
 namespace ExtendedXmlSerializer.ExtensionModel
 {

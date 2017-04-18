@@ -24,7 +24,7 @@
 using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Expressions;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Markup
 {

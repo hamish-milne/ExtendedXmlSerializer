@@ -25,11 +25,11 @@ using System.Collections.Immutable;
 using System.Linq;
 using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 using ExtendedXmlSerializer.Tests.Support;
 using Xunit;
 
-namespace ExtendedXmlSerializer.Tests.ExtensionModel.Types
+namespace ExtendedXmlSerializer.Tests.ExtensionModel.Reflection
 {
 	public class ImmutableArrayExtensionTests
 	{

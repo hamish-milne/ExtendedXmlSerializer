@@ -28,7 +28,7 @@ using System.Reflection;
 using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.Core;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
 	public static class Extensions
 	{

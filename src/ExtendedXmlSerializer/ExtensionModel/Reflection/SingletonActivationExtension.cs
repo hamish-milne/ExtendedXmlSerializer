@@ -1,18 +1,18 @@
 // MIT License
-// 
+//
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,21 +21,37 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
-using System.Collections.Generic;
+using System.Reflection;
 using ExtendedXmlSerializer.ReflectionModel;
+using JetBrains.Annotations;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	sealed class ActivationContextActivator : IActivator
+	sealed class SingletonActivationExtension : ISerializerExtension
 	{
-		readonly IActivationContexts _contexts;
+		public static SingletonActivationExtension Default { get; } = new SingletonActivationExtension();
+		SingletonActivationExtension() {}
 
-		public ActivationContextActivator(IActivationContexts contexts)
+		public IServiceRepository Get(IServiceRepository parameter)
+			=> parameter.RegisterInstance<ISingletonCandidates>(SingletonCandidates.Default)
+			            .Register<ISingletonLocator, SingletonLocatorRegistration>()
+			            .Decorate<IActivators, SingletonAwareActivators>();
+
+		public void Execute(IServices parameter) {}
+
+		sealed class SingletonLocatorRegistration : ISingletonLocator
 		{
-			_contexts = contexts;
-		}
+			readonly ISingletonLocator _locator;
 
-		public object Get() => _contexts.Get(new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase));
+			[UsedImplicitly]
+			public SingletonLocatorRegistration() : this(SingletonLocator.Default) { }
+
+			public SingletonLocatorRegistration(ISingletonLocator locator)
+			{
+				_locator = locator;
+			}
+
+			public object Get(TypeInfo parameter) => _locator.Get(parameter);
+		}
 	}
 }

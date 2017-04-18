@@ -25,7 +25,7 @@ using ExtendedXmlSerializer.ContentModel.Reflection;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
 	sealed class TypeModelExtension : ISerializerExtension
 	{

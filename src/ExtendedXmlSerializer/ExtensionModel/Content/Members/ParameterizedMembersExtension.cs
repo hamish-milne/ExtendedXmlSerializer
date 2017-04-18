@@ -24,7 +24,7 @@
 using ExtendedXmlSerializer.ContentModel.Content.Composite;
 using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
 using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Content.Members

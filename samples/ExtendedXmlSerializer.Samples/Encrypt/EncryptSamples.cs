@@ -27,7 +27,7 @@ using System.Linq;
 using ExtendedXmlSerializer.ContentModel.Conversion;
 using ExtendedXmlSerializer.ExtensionModel.Encryption;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 
 namespace ExtendedXmlSerialization.Samples.Encrypt
 {

@@ -1,6 +1,6 @@
-// MIT License
+﻿// MIT License
 // 
-// Copyright (c) 2016 Wojciech Nag�rski
+// Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,19 +21,31 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections.Immutable;
 using System.Reflection;
-using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.ContentModel.Identification;
+using ExtendedXmlSerializer.ContentModel.Reflection;
+using ExtendedXmlSerializer.Core;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	sealed class DescendingConstructorQuery : IAlteration<IEnumerable<ConstructorInfo>>
+	public class ImmutableArrayAwareGenericTypes : IGenericTypes
 	{
-		public static DescendingConstructorQuery Default { get; } = new DescendingConstructorQuery();
-		DescendingConstructorQuery() {}
+		readonly static TypeInfo Check = typeof(ImmutableArray).GetTypeInfo();
+		readonly static ImmutableArray<TypeInfo> Type = typeof(ImmutableArray<>).GetTypeInfo().Yield().ToImmutableArray();
 
-		public IEnumerable<ConstructorInfo> Get(IEnumerable<ConstructorInfo> parameter)
-			=> parameter.OrderByDescending(c => c.GetParameters().Length);
+		readonly IGenericTypes _types;
+
+		public ImmutableArrayAwareGenericTypes(IGenericTypes types)
+		{
+			_types = types;
+		}
+
+		public ImmutableArray<TypeInfo> Get(IIdentity parameter)
+		{
+			var type = _types.Get(parameter);
+			var result = Equals(type.Only(), Check) ? Type : type;
+			return result;
+		}
 	}
 }

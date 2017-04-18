@@ -24,7 +24,7 @@
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
 	public sealed class AllConstructorsExtension : ISerializerExtension
 	{

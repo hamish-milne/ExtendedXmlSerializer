@@ -21,28 +21,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using ExtendedXmlSerializer.Core.LightInject;
-using ExtendedXmlSerializer.ReflectionModel;
+using ExtendedXmlSerializer.Core.Sources;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	sealed class ConstructorSelector : IConstructorSelector
+	sealed class DescendingConstructorQuery : IAlteration<IEnumerable<ConstructorInfo>>
 	{
-		public static ConstructorSelector Default { get; } = new ConstructorSelector();
-		ConstructorSelector() : this(Constructors.Default) {}
+		public static DescendingConstructorQuery Default { get; } = new DescendingConstructorQuery();
+		DescendingConstructorQuery() {}
 
-		readonly IConstructors _constructors;
-
-		public ConstructorSelector(IConstructors constructors)
-		{
-			_constructors = constructors;
-		}
-
-		public ConstructorInfo Execute(Type implementingType) => _constructors.Get(implementingType.GetTypeInfo())
-		                                                                      .OrderBy(c => c.GetParameters().Length)
-		                                                                      .First();
+		public IEnumerable<ConstructorInfo> Get(IEnumerable<ConstructorInfo> parameter)
+			=> parameter.OrderByDescending(c => c.GetParameters().Length);
 	}
 }

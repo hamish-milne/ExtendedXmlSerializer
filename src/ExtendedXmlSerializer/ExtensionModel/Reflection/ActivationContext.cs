@@ -1,6 +1,6 @@
-﻿// MIT License
+// MIT License
 // 
-// Copyright (c) 2016 Wojciech Nagórski
+// Copyright (c) 2016 Wojciech Nag�rski
 //                    Michael DeMond
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,23 +21,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	sealed class AllConstructors : IConstructors
+	sealed class ActivationContext : IActivationContext
 	{
-		readonly IConstructors _constructors;
+		readonly ITableSource<string, object> _source;
+		readonly IActivator _activator;
 
-		public AllConstructors(IConstructors constructors)
+		public ActivationContext(ITableSource<string, object> source, IActivator activator)
 		{
-			_constructors = constructors;
+			_source = source;
+			_activator = activator;
 		}
 
-		public IEnumerable<ConstructorInfo> Get(TypeInfo parameter)
-			=> parameter.DeclaredConstructors.Union(_constructors.Get(parameter));
+		public bool IsSatisfiedBy(string parameter) => _source.IsSatisfiedBy(parameter);
+
+		public object Get(string parameter) => _source.Get(parameter);
+
+		public void Assign(string key, object value) => _source.Assign(key, value);
+
+		public object Get() => _activator.Get();
+		public bool Remove(string key) => _source.Remove(key);
 	}
 }

@@ -21,51 +21,41 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
+using System.Collections.Immutable;
 using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
-using ExtendedXmlSerializer.Core.Specifications;
 using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	class VariableTypeWalker : TypeMemberWalkerBase<TypeInfo>, ISource<IEnumerable<TypeInfo>>
+	sealed class ActivationContexts : IActivationContexts
 	{
-		readonly static VariableTypeSpecification Specification = VariableTypeSpecification.Default;
+		readonly IMemberAccessors _accessors;
+		readonly ImmutableArray<IMember> _members;
+		readonly Func<Func<string, object>, IActivator> _activator;
 
-		readonly ISpecification<TypeInfo> _specification;
+		public ActivationContexts(IMemberAccessors accessors, ImmutableArray<IMember> members, IActivator activator)
+			: this(accessors, members, activator.Accept) {}
 
-		public VariableTypeWalker(ITypeMembers members, TypeInfo root) : this(Specification, members, root) {}
-
-		public VariableTypeWalker(ISpecification<TypeInfo> specification, ITypeMembers members, TypeInfo root)
-			: base(members, root)
+		public ActivationContexts(IMemberAccessors accessors, ImmutableArray<IMember> members,
+		                          Func<Func<string, object>, IActivator> activator)
 		{
-			_specification = specification;
+			_accessors = accessors;
+			_members = members;
+			_activator = activator;
 		}
 
-		protected override IEnumerable<TypeInfo> Select(TypeInfo type)
+		public IActivationContext Get(IDictionary<string, object> parameter)
 		{
-			foreach (var typeInfo in type.Yield().Concat(base.Select(type)))
-			{
-				if (_specification.IsSatisfiedBy(typeInfo))
-				{
-					yield return typeInfo;
-				}
-			}
+			var source = new TableSource<string, object>(parameter);
+			var command = new ApplyMemberValuesCommand(_accessors, _members, source);
+			var alteration = new ConfiguringAlteration<object>(command);
+			var activator = new AlteringActivator(alteration, _activator.Invoke(source.Get));
+			var result = new ActivationContext(source, activator);
+			return result;
 		}
-
-		protected override IEnumerable<TypeInfo> Yield(IMember member)
-		{
-			var type = member.MemberType;
-			if (!Schedule(type))
-			{
-				yield return type;
-			}
-		}
-
-		public IEnumerable<TypeInfo> Get() => this.SelectMany(x => x);
 	}
 }

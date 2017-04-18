@@ -30,7 +30,7 @@ using ExtendedXmlSerializer.ContentModel.Reflection;
 using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
 	sealed class TypeNamesExtension : ISerializerExtension
 	{
@@ -61,7 +61,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Types
 			            .Register<IIdentities, Identities>()
 			            .Register<IIdentifiers, Identifiers>()
 			            .Register<ITypeIdentities, TypeIdentities>()
-			            .Register<ITypes, ContentModel.Reflection.Types>()
+			            .Register<ITypes, Types>()
 			            .Register<IGenericTypes, GenericTypes>()
 			            .RegisterInstance<IPartitionedTypeSpecification>(PartitionedTypeSpecification.Default)
 			            .Register(Register);

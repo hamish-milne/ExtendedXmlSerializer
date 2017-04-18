@@ -27,7 +27,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.ExtensionModel.Content.Members;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.Configuration

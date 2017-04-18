@@ -22,7 +22,7 @@
 // SOFTWARE.
 
 using ExtendedXmlSerializer.ContentModel.Content.Composite;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Content.Members
 {

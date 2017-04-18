@@ -28,12 +28,12 @@ using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Encryption;
 using ExtendedXmlSerializer.ExtensionModel.Format;
 using ExtendedXmlSerializer.ExtensionModel.References;
-using ExtendedXmlSerializer.ExtensionModel.Types;
 using ExtendedXmlSerializer.Tests.Support;
 using ExtendedXmlSerializer.Tests.TestObject;
 using JetBrains.Annotations;
 using Xunit;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 
 namespace ExtendedXmlSerializer.Tests.Configuration
 {

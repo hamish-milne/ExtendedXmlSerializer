@@ -21,29 +21,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ExtendedXmlSerializer.Core.Sources;
+using System;
+using System.Linq;
+using System.Reflection;
+using ExtendedXmlSerializer.Core.LightInject;
 using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	sealed class ActivationContext : IActivationContext
+	sealed class ConstructorSelector : IConstructorSelector
 	{
-		readonly ITableSource<string, object> _source;
-		readonly IActivator _activator;
+		public static ConstructorSelector Default { get; } = new ConstructorSelector();
+		ConstructorSelector() : this(Constructors.Default) {}
 
-		public ActivationContext(ITableSource<string, object> source, IActivator activator)
+		readonly IConstructors _constructors;
+
+		public ConstructorSelector(IConstructors constructors)
 		{
-			_source = source;
-			_activator = activator;
+			_constructors = constructors;
 		}
 
-		public bool IsSatisfiedBy(string parameter) => _source.IsSatisfiedBy(parameter);
-
-		public object Get(string parameter) => _source.Get(parameter);
-
-		public void Assign(string key, object value) => _source.Assign(key, value);
-
-		public object Get() => _activator.Get();
-		public bool Remove(string key) => _source.Remove(key);
+		public ConstructorInfo Execute(Type implementingType) => _constructors.Get(implementingType.GetTypeInfo())
+		                                                                      .OrderBy(c => c.GetParameters().Length)
+		                                                                      .First();
 	}
 }

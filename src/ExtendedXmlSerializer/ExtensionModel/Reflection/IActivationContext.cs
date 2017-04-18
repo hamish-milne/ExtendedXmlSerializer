@@ -1,6 +1,6 @@
-﻿// MIT License
+// MIT License
 // 
-// Copyright (c) 2016 Wojciech Nagórski
+// Copyright (c) 2016 Wojciech Nag�rski
 //                    Michael DeMond
 // 
 // Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -21,31 +21,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Immutable;
-using System.Reflection;
-using ExtendedXmlSerializer.ContentModel.Identification;
-using ExtendedXmlSerializer.ContentModel.Reflection;
-using ExtendedXmlSerializer.Core;
+using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	public class ImmutableArrayAwareGenericTypes : IGenericTypes
-	{
-		readonly static TypeInfo Check = typeof(ImmutableArray).GetTypeInfo();
-		readonly static ImmutableArray<TypeInfo> Type = typeof(ImmutableArray<>).GetTypeInfo().Yield().ToImmutableArray();
-
-		readonly IGenericTypes _types;
-
-		public ImmutableArrayAwareGenericTypes(IGenericTypes types)
-		{
-			_types = types;
-		}
-
-		public ImmutableArray<TypeInfo> Get(IIdentity parameter)
-		{
-			var type = _types.Get(parameter);
-			var result = Equals(type.Only(), Check) ? Type : type;
-			return result;
-		}
-	}
+	public interface IActivationContext : ITableSource<string, object>, IActivator {}
 }

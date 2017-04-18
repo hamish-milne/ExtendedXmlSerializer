@@ -21,10 +21,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Collections.Generic;
 using ExtendedXmlSerializer.Core.Sources;
-using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	public interface IActivationContext : ITableSource<string, object>, IActivator {}
+	public interface IActivationContexts : IParameterizedSource<IDictionary<string, object>, IActivationContext> {}
 }

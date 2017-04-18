@@ -21,15 +21,51 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
+using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.Core.Specifications;
 using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	sealed class QueriedConstructors : Cache<TypeInfo, ConstructorInfo>, IQueriedConstructors
+	class VariableTypeWalker : TypeMemberWalkerBase<TypeInfo>, ISource<IEnumerable<TypeInfo>>
 	{
-		public QueriedConstructors(IValidConstructorSpecification specification, IConstructors constructors)
-			: base(new ConstructorLocator(specification, new ConstructorQuery(constructors)).Get) {}
+		readonly static VariableTypeSpecification Specification = VariableTypeSpecification.Default;
+
+		readonly ISpecification<TypeInfo> _specification;
+
+		public VariableTypeWalker(ITypeMembers members, TypeInfo root) : this(Specification, members, root) {}
+
+		public VariableTypeWalker(ISpecification<TypeInfo> specification, ITypeMembers members, TypeInfo root)
+			: base(members, root)
+		{
+			_specification = specification;
+		}
+
+		protected override IEnumerable<TypeInfo> Select(TypeInfo type)
+		{
+			foreach (var typeInfo in type.Yield().Concat(base.Select(type)))
+			{
+				if (_specification.IsSatisfiedBy(typeInfo))
+				{
+					yield return typeInfo;
+				}
+			}
+		}
+
+		protected override IEnumerable<TypeInfo> Yield(IMember member)
+		{
+			var type = member.MemberType;
+			if (!Schedule(type))
+			{
+				yield return type;
+			}
+		}
+
+		public IEnumerable<TypeInfo> Get() => this.SelectMany(x => x);
 	}
 }

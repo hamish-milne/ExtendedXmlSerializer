@@ -26,7 +26,7 @@ using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.LightInject;
 using ExtendedXmlSerializer.Core.Sources;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 
 namespace ExtendedXmlSerializer.ExtensionModel
 {

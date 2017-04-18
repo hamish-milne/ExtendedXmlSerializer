@@ -28,7 +28,7 @@ using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.ExtensionModel.References;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 using ExtendedXmlSerializer.Tests.Support;
 using ExtendedXmlSerializer.Tests.TestObject;
 using JetBrains.Annotations;

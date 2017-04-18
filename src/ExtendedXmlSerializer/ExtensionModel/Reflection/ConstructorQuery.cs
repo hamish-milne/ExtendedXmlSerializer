@@ -21,54 +21,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
+using System.Collections.Generic;
+using System.Reflection;
 using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	sealed class SingletonAwareActivators : IActivators
+	sealed class ConstructorQuery : DecoratedSource<TypeInfo, IEnumerable<ConstructorInfo>>, IConstructors
 	{
-		readonly IActivators _activators;
-		readonly ISingletonLocator _locator;
+		readonly static DescendingConstructorQuery Query = DescendingConstructorQuery.Default;
 
-		public SingletonAwareActivators(IActivators activators, ISingletonLocator locator)
-		{
-			_activators = activators;
-			_locator = locator;
-		}
+		public ConstructorQuery(IConstructors source) : this(Query, source) {}
 
-		public IActivator Get(Type parameter)
-		{
-			var singleton = _locator.Get(parameter);
-
-			var activator = _activators.Get(parameter);
-			var result = singleton != null ? new Activator(activator, singleton) : activator;
-			return result;
-		}
-
-		sealed class Activator : IActivator
-		{
-			readonly IActivator _activator;
-			readonly object _singleton;
-
-			public Activator(IActivator activator, object singleton)
-			{
-				_activator = activator;
-				_singleton = singleton;
-			}
-
-			public object Get()
-			{
-				try
-				{
-					return _activator.Get();
-				}
-				catch (Exception)
-				{
-					return _singleton;
-				}
-			}
-		}
+		public ConstructorQuery(IAlteration<IEnumerable<ConstructorInfo>> query, IConstructors source)
+			: base(new AlteredSource<TypeInfo, IEnumerable<ConstructorInfo>>(query, source)) {}
 	}
 }

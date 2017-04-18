@@ -21,10 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Generic;
+using System.Reflection;
 using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	public interface IActivationContexts : IParameterizedSource<IDictionary<string, object>, IActivationContext> {}
+	sealed class QueriedConstructors : Cache<TypeInfo, ConstructorInfo>, IQueriedConstructors
+	{
+		public QueriedConstructors(IValidConstructorSpecification specification, IConstructors constructors)
+			: base(new ConstructorLocator(specification, new ConstructorQuery(constructors)).Get) {}
+	}
 }

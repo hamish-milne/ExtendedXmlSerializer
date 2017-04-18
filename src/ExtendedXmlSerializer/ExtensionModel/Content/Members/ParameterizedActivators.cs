@@ -27,7 +27,7 @@ using System.Linq;
 using System.Reflection;
 using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
 using ExtendedXmlSerializer.Core.Sources;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Content.Members

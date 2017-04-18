@@ -24,7 +24,7 @@
 using System.Collections.Generic;
 using ExtendedXmlSerializer.ExtensionModel.Format;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 using Xunit;
 
 namespace ExtendedXmlSerializer.Tests.ContentModel.Content.Composite.Collections

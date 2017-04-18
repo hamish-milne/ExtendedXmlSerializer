@@ -27,7 +27,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 
 namespace ExtendedXmlSerializer.ExtensionModel.AttachedProperties
 {

@@ -22,40 +22,53 @@
 // SOFTWARE.
 
 using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
-using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.ReflectionModel;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	sealed class ActivationContexts : IActivationContexts
+	sealed class SingletonAwareActivators : IActivators
 	{
-		readonly IMemberAccessors _accessors;
-		readonly ImmutableArray<IMember> _members;
-		readonly Func<Func<string, object>, IActivator> _activator;
+		readonly IActivators _activators;
+		readonly ISingletonLocator _locator;
 
-		public ActivationContexts(IMemberAccessors accessors, ImmutableArray<IMember> members, IActivator activator)
-			: this(accessors, members, activator.Accept) {}
-
-		public ActivationContexts(IMemberAccessors accessors, ImmutableArray<IMember> members,
-		                          Func<Func<string, object>, IActivator> activator)
+		public SingletonAwareActivators(IActivators activators, ISingletonLocator locator)
 		{
-			_accessors = accessors;
-			_members = members;
-			_activator = activator;
+			_activators = activators;
+			_locator = locator;
 		}
 
-		public IActivationContext Get(IDictionary<string, object> parameter)
+		public IActivator Get(Type parameter)
 		{
-			var source = new TableSource<string, object>(parameter);
-			var command = new ApplyMemberValuesCommand(_accessors, _members, source);
-			var alteration = new ConfiguringAlteration<object>(command);
-			var activator = new AlteringActivator(alteration, _activator.Invoke(source.Get));
-			var result = new ActivationContext(source, activator);
+			var singleton = _locator.Get(parameter);
+
+			var activator = _activators.Get(parameter);
+			var result = singleton != null ? new Activator(activator, singleton) : activator;
 			return result;
+		}
+
+		sealed class Activator : IActivator
+		{
+			readonly IActivator _activator;
+			readonly object _singleton;
+
+			public Activator(IActivator activator, object singleton)
+			{
+				_activator = activator;
+				_singleton = singleton;
+			}
+
+			public object Get()
+			{
+				try
+				{
+					return _activator.Get();
+				}
+				catch (Exception)
+				{
+					return _singleton;
+				}
+			}
 		}
 	}
 }

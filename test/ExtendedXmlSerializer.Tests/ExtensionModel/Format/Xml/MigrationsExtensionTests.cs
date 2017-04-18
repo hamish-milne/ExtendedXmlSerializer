@@ -22,7 +22,7 @@
 // SOFTWARE.
 
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
-using ExtendedXmlSerializer.ExtensionModel.Types;
+using ExtendedXmlSerializer.ExtensionModel.Reflection;
 using ExtendedXmlSerializer.Tests.Support;
 using Xunit;
 
