@@ -23,7 +23,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using ExtendedXmlSerializer.ContentModel.Conversion;
+using ExtendedXmlSerializer.ContentModel.Content.Conversion;
 using ExtendedXmlSerializer.ExtensionModel.Expressions;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Markup

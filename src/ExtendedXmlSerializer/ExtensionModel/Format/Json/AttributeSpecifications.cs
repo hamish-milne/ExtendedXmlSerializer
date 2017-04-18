@@ -23,7 +23,7 @@
 
 using System.Reflection;
 using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
-using ExtendedXmlSerializer.ContentModel.Conversion;
+using ExtendedXmlSerializer.ContentModel.Content.Conversion;
 using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json

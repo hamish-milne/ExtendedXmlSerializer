@@ -21,7 +21,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Collections.Generic;
 using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Content.Composite;
 using ExtendedXmlSerializer.ContentModel.Content.Composite.Collections;
@@ -37,39 +36,39 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content
 	sealed class ContentModelExtension : ISerializerExtension
 	{
 		public static ContentModelExtension Default { get; } = new ContentModelExtension();
-		ContentModelExtension() { }
+		ContentModelExtension() {}
 
 		public IServiceRepository Get(IServiceRepository parameter)
 			=> parameter.Register(typeof(IAlteration<>), typeof(DefaultAlterationRegistration<>))
-			            .Register<IComparer<IContentOption>, SortComparer<IContentOption>>()
+			            /*.Register<IComparer<IContentOption>, SortComparer<IContentOption>>()
 			            .RegisterAsSet<IContentOption, ContentOptions>()
 			            .RegisterAsStart<IContentOption, Start>()
-			            .RegisterAsFinish<IContentOption, Finish>()
+			            .RegisterAsFinish<IContentOption, Finish>()*/
 			            /*.Register<IDictionaryEntries, DictionaryEntries>()*/
-			            .Register<ArrayContentOption>()
+			            /*.Register<ArrayContentOption>()*/
 			            /*.Register<DictionaryContentOption>()*/
-			            .Register<CollectionContentOption>()
+			            /*.Register<CollectionContentOption>()*/
 			            .Register<IClassification, Classification>()
 			            .Register<IIdentityStore, IdentityStore>()
 			            .Register(typeof(IInnerContents<>), typeof(InnerContents<>))
-
-			.Register<ICompositeContents, CompositeContents>()
+			            .Register<ICompositeContents, CompositeContents>()
 			            .Register<ICompositeCollectionContents, CompositeCollectionContents>()
-			            /*.Register<IDictionaryContents, DictionaryContents>()*/
-
-
-						.Register(typeof(IMemberHandler<>), typeof(MemberHandler<>))
+			            .Register(typeof(IMemberHandler<>), typeof(MemberHandler<>))
 			            .Register(typeof(IMemberAssignment<>), typeof(MemberAssignmentRegistration<>))
-						.Register(typeof(IContentsHandler<>), typeof(ContentsHandler<>))
+			            .Register(typeof(IContentsHandler<>), typeof(ContentsHandler<>))
+			            /*.Register<IDictionaryContents, DictionaryContents>()*/
 			            /*.RegisterInstance<IInnerContentResult>(InnerContentResult.Default)
 			            .RegisterInstance<ICollectionAssignment>(CollectionAssignment.Default)
 			            .RegisterInstance<IListContentsSpecification>(ListContentsSpecification.Default)*/
 			            .RegisterInstance(ReflectionSerializer.Default);
 
-		public void Execute(IServices parameter) => parameter.Get<ISortOrder>()
-		                                                     .Sort<ArrayContentOption>(0)
-		                                                     /*.Sort<DictionaryContentOption>(1)*/
-		                                                     .Sort<CollectionContentOption>(2);
+		void ICommand<IServices>.Execute(IServices parameter)
+		{
+			/*parameter.Get<ISortOrder>()
+					 .Sort<ArrayContentOption>(0)
+					 /*.Sort<DictionaryContentOption>(1)#1#
+					 .Sort<CollectionContentOption>(2);*/
+		}
 
 		sealed class MemberAssignmentRegistration<T> : IMemberAssignment<T>
 		{
@@ -117,7 +116,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content
 			readonly IAlteration<T> _alteration;
 
 			[UsedImplicitly]
-			public DefaultAlterationRegistration() : this(Self<T>.Default) { }
+			public DefaultAlterationRegistration() : this(Self<T>.Default) {}
 
 			public DefaultAlterationRegistration(IAlteration<T> alteration)
 			{

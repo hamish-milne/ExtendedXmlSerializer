@@ -28,7 +28,7 @@ using System.Linq;
 using System.Reflection;
 using System.Xml.Linq;
 using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
-using ExtendedXmlSerializer.ContentModel.Conversion;
+using ExtendedXmlSerializer.ContentModel.Content.Conversion;
 using ExtendedXmlSerializer.ContentModel.Format;
 using ExtendedXmlSerializer.ContentModel.Identification;
 using ExtendedXmlSerializer.ContentModel.Properties;
