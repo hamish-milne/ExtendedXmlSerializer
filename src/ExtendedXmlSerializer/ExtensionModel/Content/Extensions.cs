@@ -21,15 +21,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Reflection;
 using ExtendedXmlSerializer.Configuration;
+using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Content.Conversion;
 using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.Core.Specifications;
 using ExtendedXmlSerializer.ExtensionModel.Content.Members;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Content
 {
 	public static class Extensions
 	{
+		public static IServiceRepository Decorate<T>(this IServiceRepository @this, ISpecification<TypeInfo> specification)
+			where T : IElement
+			=> new ElementDecoration<T>(specification).Get(@this);
+
+
+
 		public static IConfigurationContainer Emit(this IConfigurationContainer @this, IEmitBehavior behavior) => behavior.Get(@this);
 
 		public static IMemberConfiguration Ignore(this IMemberConfiguration @this)

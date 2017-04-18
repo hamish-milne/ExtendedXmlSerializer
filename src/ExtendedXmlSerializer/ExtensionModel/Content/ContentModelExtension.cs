@@ -21,15 +21,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Reflection;
+using ExtendedXmlSerializer.ContentModel;
 using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Content.Composite;
 using ExtendedXmlSerializer.ContentModel.Content.Composite.Collections;
 using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
+using ExtendedXmlSerializer.ContentModel.Content.Conversion;
 using ExtendedXmlSerializer.ContentModel.Identification;
 using ExtendedXmlSerializer.ContentModel.Reflection;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.Core.Specifications;
+using ExtendedXmlSerializer.ReflectionModel;
 using JetBrains.Annotations;
+using VariableTypeSpecification = ExtendedXmlSerializer.ReflectionModel.VariableTypeSpecification;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Content
 {
@@ -48,7 +54,14 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content
 			            /*.Register<ArrayContentOption>()*/
 			            /*.Register<DictionaryContentOption>()*/
 			            /*.Register<CollectionContentOption>()*/
-			            .Register<IClassification, Classification>()
+			            .Register<IElement, Element>()
+			            .Decorate<VariableTypeElement>(VariableTypeSpecification.Default)
+			            .Decorate<GenericElement>(IsGenericTypeSpecification.Default)
+			            .Decorate<ArrayElement>(IsArraySpecification.Default)
+
+			.Register<IContent, ConverterContent>()
+
+						.Register<IClassification, Classification>()
 			            .Register<IIdentityStore, IdentityStore>()
 			            .Register(typeof(IInnerContents<>), typeof(InnerContents<>))
 			            .Register<ICompositeContents, CompositeContents>()
@@ -124,6 +137,23 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content
 			}
 
 			public T Get(T parameter) => _alteration.Get(parameter);
+		}
+	}
+
+	sealed class ElementDecoration<T> : DecorateAlteration<IElement, T, TypeInfo, IWriter> where T : IElement
+	{
+		public ElementDecoration(ISpecification<TypeInfo> specification) : base(new Factory(specification).Create) {}
+
+		sealed class Factory
+		{
+			readonly ISpecification<TypeInfo> _specification;
+
+			public Factory(ISpecification<TypeInfo> specification)
+			{
+				_specification = specification;
+			}
+
+			public IElement Create(IElement element, T arg2) => new DecoratedElement(_specification, arg2, element);
 		}
 	}
 }

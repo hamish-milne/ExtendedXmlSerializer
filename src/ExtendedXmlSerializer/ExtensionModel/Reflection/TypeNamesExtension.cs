@@ -24,7 +24,6 @@
 using System.Collections.Generic;
 using System.Reflection;
 using ExtendedXmlSerializer.Configuration;
-using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Identification;
 using ExtendedXmlSerializer.ContentModel.Reflection;
 using ExtendedXmlSerializer.Core.Sources;
@@ -53,7 +52,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 		public IServiceRepository Get(IServiceRepository parameter)
 			=> parameter.RegisterInstance(_defaults)
 			            .Register<IAssemblyTypePartitions, AssemblyTypePartitions>()
-			            .Register<IElements, Elements>()
+			            /*.Register<IElements, Elements>()*/
 			            .Register<ITypeFormatter, TypeFormatter>()
 			            .Register<ITypePartResolver, TypePartResolver>()
 			            .RegisterInstance<IDictionary<Assembly, IIdentity>>(WellKnownIdentities.Default)

@@ -34,19 +34,20 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 	[UsedImplicitly]
 	sealed class Serializers : Generic<IWriter, ISerializer, ISerializer>, ISerializers
 	{
-		readonly IElements _elements;
-		readonly IContents _contents;
+		readonly IElement _element;
+		readonly IContent _content;
 
-		public Serializers(IElements elements, IContents contents) : base(typeof(Serializer<>))
+		public Serializers(IElement element, IContent content) : base(typeof(Serializer<>))
 		{
-			_elements = elements;
-			_contents = contents;
+			_element = element;
+			_content = content;
 		}
 
 		public new ISerializer Get(TypeInfo parameter)
 		{
 			var type = parameter.AccountForNullable();
-			var result = base.Get(parameter).Invoke(_elements.Get(type), _contents.Get(type));
+			var writer = _element.Get(type);
+			var result = base.Get(parameter).Invoke(writer, _content.Get(type));
 			return result;
 		}
 

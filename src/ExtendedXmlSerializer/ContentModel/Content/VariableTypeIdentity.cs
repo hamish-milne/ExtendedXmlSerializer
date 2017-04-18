@@ -21,20 +21,42 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
+using System.Reflection;
 using ExtendedXmlSerializer.ContentModel.Format;
 using ExtendedXmlSerializer.ContentModel.Identification;
+using ExtendedXmlSerializer.ContentModel.Reflection;
+using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	sealed class Element<T> : IWriter<T>
+	sealed class VariableTypeIdentity : IWriter
 	{
-		readonly IIdentity _identity;
+		readonly ISpecification<Type> _specification;
+		readonly IWriter<object> _start;
+		readonly IIdentities _identities;
 
-		public Element(IIdentity identity)
+		public VariableTypeIdentity(Type definition, IIdentity identity, IIdentities identities)
+			: this(new VariableTypeSpecification(definition), new Identity<object>(identity), identities) {}
+
+		public VariableTypeIdentity(ISpecification<Type> specification, IWriter<object> start, IIdentities identities)
 		{
-			_identity = identity;
+			_specification = specification;
+			_start = start;
+			_identities = identities;
 		}
 
-		public void Write(IFormatWriter writer, T instance) => writer.Start(_identity);
+		public void Write(IFormatWriter writer, object instance)
+		{
+			var type = instance.GetType();
+			if (_specification.IsSatisfiedBy(type))
+			{
+				writer.Start(_identities.Get(type.GetTypeInfo()));
+			}
+			else
+			{
+				_start.Write(writer, instance);
+			}
+		}
 	}
 }

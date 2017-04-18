@@ -27,19 +27,20 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	sealed class ElementOption : NamedElementOptionBase
+	sealed class Element : IElement
 	{
+		readonly IIdentities _identities;
 		readonly IGeneric<IIdentity, IWriter> _adapter;
 
-		public ElementOption(IIdentities identities) : this(identities, Adapter.Default) {}
+		public Element(IIdentities identities) : this(identities, Adapter.Default) {}
 
-		public ElementOption(IIdentities identities, IGeneric<IIdentity, IWriter> adapter) : base(identities)
+		public Element(IIdentities identities, IGeneric<IIdentity, IWriter> adapter)
 		{
+			_identities = identities;
 			_adapter = adapter;
 		}
 
-		public override IWriter Create(IIdentity identity, TypeInfo classification)
-			=> _adapter.Get(classification).Invoke(identity);
+		public IWriter Get(TypeInfo parameter) => _adapter.Get(parameter).Invoke(_identities.Get(parameter));
 
 		sealed class Adapter : Generic<IIdentity, IWriter>
 		{
@@ -48,7 +49,7 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 
 			sealed class Writer<T> : WriterAdapter<T>
 			{
-				public Writer(IIdentity identity) : base(new Element<T>(identity)) {}
+				public Writer(IIdentity identity) : base(new Identity<T>(identity)) {}
 			}
 		}
 	}

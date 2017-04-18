@@ -36,9 +36,9 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 		readonly static Func<TypeInfo, bool> Specification = IsNullableTypeSpecification.Default.IsSatisfiedBy;
 
 		[UsedImplicitly]
-		public NullableContentOption(ConverterContentOption converters) : this(Specification, converters) {}
+		public NullableContentOption(ConverterContent converters) : this(Specification, converters) {}
 
-		public NullableContentOption(Func<TypeInfo, bool> specification, ConverterContentOption converters)
+		public NullableContentOption(Func<TypeInfo, bool> specification, ConverterContent converters)
 			: base(specification, new AlteredParameterSource<TypeInfo, ISerializer>(Alteration.Default, converters).Get) {}
 
 		sealed class Alteration : IAlteration<TypeInfo>

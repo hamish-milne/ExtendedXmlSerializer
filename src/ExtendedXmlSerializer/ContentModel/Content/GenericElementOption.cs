@@ -29,22 +29,22 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	sealed class GenericElementOption : NamedElementOptionBase
+	sealed class GenericElement : IElement
 	{
+		readonly IIdentities _identities;
 		readonly IGeneric<IIdentity, ImmutableArray<Type>, IWriter> _adapter;
 
-		public GenericElementOption(IIdentities identities) : this(identities, Adapter.Default) {}
+		public GenericElement(IIdentities identities) : this(identities, Adapter.Default) {}
 
-		public GenericElementOption(IIdentities identities,
-		                            IGeneric<IIdentity, ImmutableArray<Type>, IWriter> adapter)
-			: base(IsGenericTypeSpecification.Default, identities)
+		public GenericElement(IIdentities identities, IGeneric<IIdentity, ImmutableArray<Type>, IWriter> adapter)
 		{
+			_identities = identities;
 			_adapter = adapter;
 		}
 
-		public override IWriter Create(IIdentity identity, TypeInfo classification)
-			=> _adapter.Get(classification)
-			           .Invoke(identity, classification.GetGenericArguments().ToImmutableArray());
+		public IWriter Get(TypeInfo parameter)
+			=> _adapter.Get(parameter)
+			           .Invoke(_identities.Get(parameter), parameter.GetGenericArguments().ToImmutableArray());
 
 		sealed class Adapter : Generic<IIdentity, ImmutableArray<Type>, IWriter>
 		{
@@ -53,7 +53,8 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 
 			sealed class Writer<T> : WriterAdapter<T>
 			{
-				public Writer(IIdentity identity, ImmutableArray<Type> arguments) : base(new GenericElement<T>(identity, arguments)) {}
+				public Writer(IIdentity identity, ImmutableArray<Type> arguments)
+					: base(new GenericIdentity<T>(identity, arguments)) {}
 			}
 		}
 	}

@@ -28,7 +28,7 @@ using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	class DelegatedContentOption : DelegatedOption<TypeInfo, ISerializer>, IContentOption
+	class DelegatedContentOption : DelegatedOption<TypeInfo, ISerializer>, IContent
 	{
 		public DelegatedContentOption(Func<TypeInfo, bool> specification, Func<TypeInfo, ISerializer> source)
 			: base(specification, source) {}
