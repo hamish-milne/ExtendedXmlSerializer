@@ -1,18 +1,18 @@
 // MIT License
-// 
+//
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -21,23 +21,38 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
-using System.Linq;
 using System.Reflection;
-using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.Core.Specifications;
-using ExtendedXmlSerializer.ReflectionModel;
+using ExtendedXmlSerializer.ContentModel.Properties;
+using JetBrains.Annotations;
 
-namespace ExtendedXmlSerializer.ContentModel.Content
+namespace ExtendedXmlSerializer.ContentModel.Content.Composite.Members
 {
-	sealed class ReflectionContentOption : FixedContentOption
+	sealed class VariableTypeMemberContent : IMemberContent
 	{
-		readonly static AnySpecification<TypeInfo> Specification =
-			new AnySpecification<TypeInfo>(new[] {typeof(TypeInfo), typeof(Type)}
-				                               .YieldMetadata()
-				                               .Select(IsAssignableSpecification.Defaults.Get)
-				                               .ToArray());
+		readonly IVariableTypeMemberSpecifications _specifications;
+		readonly IProperty<TypeInfo> _type;
+		readonly ISerializer _runtime;
+		readonly IContent _content;
 
-		public ReflectionContentOption(ReflectionSerializer serializer) : base(Specification, serializer.Adapt()) {}
+		[UsedImplicitly]
+		public VariableTypeMemberContent(ISerializer runtime, IContent contents)
+			: this(VariableTypeMemberSpecifications.Default, ExplicitTypeProperty.Default, runtime, contents) {}
+
+		public VariableTypeMemberContent(IVariableTypeMemberSpecifications specifications, IProperty<TypeInfo> type,
+		                                  ISerializer runtime, IContent content)
+		{
+			_specifications = specifications;
+			_type = type;
+			_runtime = runtime;
+			_content = content;
+		}
+
+		public ISerializer Get(IMember parameter)
+		{
+			var contents = _content.Get(parameter.MemberType);
+			var specification = _specifications.Get(parameter);
+			var result = new Serializer(contents, new VariableTypedMemberWriter(specification, _runtime, contents, _type));
+			return result;
+		}
 	}
 }

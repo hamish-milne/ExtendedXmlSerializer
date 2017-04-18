@@ -30,7 +30,7 @@ using Xunit;
 
 namespace ExtendedXmlSerializer.Tests.ContentModel.Content.Composite.Collections
 {
-	public class CollectionContentOptionTests
+	public class CollectionContentTests
 	{
 		[Fact]
 		public void Field()

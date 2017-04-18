@@ -32,10 +32,10 @@ namespace ExtendedXmlSerializer.ContentModel.Content.Composite.Members
 		readonly IMemberAccessors _accessors;
 		readonly IAttributeSpecifications _runtime;
 		readonly IMemberConverters _converters;
-		readonly IMemberContents _content;
+		readonly IMemberContent _content;
 
 		public MemberSerializers(IAttributeSpecifications runtime, IMemberAccessors accessors,
-		                         IMemberConverters converters, IMemberContents content)
+		                         IMemberConverters converters, IMemberContent content)
 		{
 			_runtime = runtime;
 			_accessors = accessors;

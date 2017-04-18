@@ -1,18 +1,18 @@
 // MIT License
-// 
+//
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -22,39 +22,44 @@
 // SOFTWARE.
 
 using System.Reflection;
-using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.Core.Specifications;
+using ExtendedXmlSerializer.ContentModel.Reflection;
 using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Content.Composite.Collections
 {
-	abstract class CollectionContentOptionBase : ContentOptionBase
+	sealed class ArrayContent : IContent
 	{
 		readonly static CollectionItemTypeLocator Locator = CollectionItemTypeLocator.Default;
+		/*readonly static IsArraySpecification Specification = IsArraySpecification.Default;*/
 
+		readonly IInnerContents _contents;
+		readonly IEnumerators _enumerators;
 		readonly ISerializers _serializers;
+		readonly IClassification _classification;
 		readonly ICollectionItemTypeLocator _locator;
 
-		protected CollectionContentOptionBase(IActivatingTypeSpecification specification, ISerializers serializers)
-			: this(specification.And(IsCollectionTypeSpecification.Default), serializers) {}
+		public ArrayContent(IInnerContents contents, IEnumerators enumerators, ISerializers serializers,
+		                          IClassification classification)
+			: this(contents, enumerators, serializers, classification, Locator) {}
 
-		protected CollectionContentOptionBase(ISpecification<TypeInfo> specification, ISerializers serializers)
-			: this(specification, serializers, Locator) {}
-
-		protected CollectionContentOptionBase(ISpecification<TypeInfo> specification, ISerializers serializers,
-		                                      ICollectionItemTypeLocator locator) : base(specification)
+		public ArrayContent(IInnerContents contents, IEnumerators enumerators, ISerializers serializers,
+		                          IClassification classification, ICollectionItemTypeLocator locator)
 		{
+			_contents = contents;
+			_enumerators = enumerators;
 			_serializers = serializers;
+			_classification = classification;
 			_locator = locator;
 		}
 
-		public sealed override ISerializer Get(TypeInfo parameter)
+		public ISerializer Get(TypeInfo parameter)
 		{
 			var itemType = _locator.Get(parameter);
-			var result = Create(_serializers.Get(itemType), parameter, itemType);
+			var item = _serializers.Get(itemType);
+			var reader = new ArrayReader(_contents, _classification, item);
+			var writer = new EnumerableWriter<object>(_enumerators, item).Adapt();
+			var result = new Serializer(reader, writer);
 			return result;
 		}
-
-		protected abstract ISerializer Create(ISerializer item, TypeInfo classification, TypeInfo itemType);
 	}
 }

@@ -31,7 +31,6 @@ using ExtendedXmlSerializer.ContentModel.Format;
 using ExtendedXmlSerializer.ContentModel.Identification;
 using ExtendedXmlSerializer.Core;
 using JetBrains.Annotations;
-using IContents = ExtendedXmlSerializer.ContentModel.Content.IContents;
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
 {
@@ -44,7 +43,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 			=> parameter.Decorate<IInnerContentResult, InnerContentResult>()
 			            .Decorate<IMemberHandler, Handler>()
 			            .Decorate<IReferenceMaps, DeferredReferenceMaps>()
-			            .Decorate<IContents, DeferredReferenceContents>()
+			            .Decorate<IContent, DeferredReferenceContents>()
 			            .Decorate<ISerializers, DeferredReferenceSerializers>()
 			            .Decorate<IReferenceEncounters, DeferredReferenceEncounters>()
 			            .Decorate(typeof(IFormatReaders<>), typeof(Factory<>));

@@ -21,19 +21,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
 using System.Reflection;
 using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	class DelegatedContentOption : DelegatedOption<TypeInfo, ISerializer>, IContent
+	class FixedContent : FixedOption<TypeInfo, ISerializer>, IContent
 	{
-		public DelegatedContentOption(Func<TypeInfo, bool> specification, Func<TypeInfo, ISerializer> source)
-			: base(specification, source) {}
-
-		public DelegatedContentOption(ISpecification<TypeInfo> specification, Func<TypeInfo, ISerializer> source)
-			: base(specification, source) {}
+		public FixedContent(ISpecification<TypeInfo> specification, ISerializer context) : base(specification, context) {}
 	}
 }

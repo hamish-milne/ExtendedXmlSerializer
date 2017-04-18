@@ -27,15 +27,13 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Content.Composite.Collections
 {
-	sealed class CollectionContentOption : DelegatedContentOption
+	/*sealed class CollectionContent : DelegatedContent
 	{
-		public CollectionContentOption(IActivatingTypeSpecification specification, ICompositeCollectionContents contents)
+		public CollectionContent(IActivatingTypeSpecification specification, ICompositeCollectionContents contents)
 			: base(specification, contents.Get) {}
-	}
+	}*/
 
-	public interface ICompositeCollectionContents : ISerializerSource {}
-
-	sealed class CompositeCollectionContents : ICompositeCollectionContents
+	sealed class CompositeCollectionContents : IContent
 	{
 		readonly ISerializers _serializers;
 		readonly IMemberSerializations _members;

@@ -25,11 +25,11 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Xml.Linq;
 using ExtendedXmlSerializer.ContentModel;
+using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Format;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
 using JetBrains.Annotations;
-using IContents = ExtendedXmlSerializer.ContentModel.Content.IContents;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
@@ -40,18 +40,18 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 		public CustomXmlExtension(IDictionary<TypeInfo, IExtendedXmlCustomSerializer> store) : base(store) {}
 
-		public IServiceRepository Get(IServiceRepository parameter) => parameter.Decorate<IContents>(Register);
+		public IServiceRepository Get(IServiceRepository parameter) => parameter.Decorate<IContent>(Register);
 
-		IContents Register(IServiceProvider _, IContents contents) => new Contents(this, contents);
+		IContent Register(IServiceProvider _, IContent contents) => new Contents(this, contents);
 
 		void ICommand<IServices>.Execute(IServices parameter) {}
 
-		sealed class Contents : IContents
+		sealed class Contents : IContent
 		{
 			readonly IParameterizedSource<TypeInfo, IExtendedXmlCustomSerializer> _custom;
-			readonly IContents _contents;
+			readonly IContent _contents;
 
-			public Contents(IParameterizedSource<TypeInfo, IExtendedXmlCustomSerializer> custom, IContents contents)
+			public Contents(IParameterizedSource<TypeInfo, IExtendedXmlCustomSerializer> custom, IContent contents)
 			{
 				_custom = custom;
 				_contents = contents;

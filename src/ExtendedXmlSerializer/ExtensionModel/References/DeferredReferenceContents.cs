@@ -1,18 +1,18 @@
 // MIT License
-// 
+//
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
-// 
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -23,27 +23,28 @@
 
 using System.Reflection;
 using ExtendedXmlSerializer.ContentModel;
+using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.Core.Specifications;
 using ExtendedXmlSerializer.ReflectionModel;
 using JetBrains.Annotations;
-using IContents = ExtendedXmlSerializer.ContentModel.Content.IContents;
+
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
 {
-	sealed class DeferredReferenceContents : IContents
+	sealed class DeferredReferenceContents : IContent
 	{
 		readonly static IsCollectionTypeSpecification IsCollectionTypeSpecification = IsCollectionTypeSpecification.Default;
 
 		readonly ISpecification<TypeInfo> _specification;
 		readonly IRootReferences _references;
-		readonly IContents _contents;
+		readonly IContent _contents;
 
 		[UsedImplicitly]
-		public DeferredReferenceContents(IRootReferences references, IContents contents)
+		public DeferredReferenceContents(IRootReferences references, IContent contents)
 			: this(IsCollectionTypeSpecification, references, contents) {}
 
 		public DeferredReferenceContents(ISpecification<TypeInfo> specification, IRootReferences references,
-		                                 IContents contents)
+		                                 IContent contents)
 		{
 			_specification = specification;
 			_references = references;

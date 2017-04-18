@@ -23,8 +23,8 @@
 
 namespace ExtendedXmlSerializer.ContentModel.Content.Conversion
 {
-	sealed class ConverterContent : DelegatedContentOption
+	sealed class ConverterContent : DelegatedContent
 	{
-		public ConverterContent(IConverters converters, ISerializers serializers) : base(converters, serializers.Get) {}
+		public ConverterContent(ISerializers serializers) : base(serializers.Get) {}
 	}
 }

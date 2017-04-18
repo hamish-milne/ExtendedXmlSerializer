@@ -43,8 +43,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 			         .Register<IEntities, Entities>()
 			         .Decorate<IActivation, ReferenceActivation>()
 			         .Decorate<ISerializers, CircularReferenceEnabledSerialization>()
-					 .Decorate<IContents, ReferenceContents>()
-					 .Decorate<IContents, RecursionAwareContents>();
+					 .Decorate<IContent, ReferenceContent>()
+					 .Decorate<IContent, RecursionAwareContent>();
 
 		void ICommand<IServices>.Execute(IServices parameter) {}
 	}

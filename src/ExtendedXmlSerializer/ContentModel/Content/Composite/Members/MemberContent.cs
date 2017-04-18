@@ -21,17 +21,32 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
+using ExtendedXmlSerializer.ContentModel.Reflection;
+using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.Core.Specifications;
+
 namespace ExtendedXmlSerializer.ContentModel.Content.Composite.Members
 {
-	sealed class DefaultMemberContents : IMemberContents
+	class MemberContent : Selector<IMember, ISerializer>, IMemberContent
 	{
-		readonly IContents _contents;
+		public MemberContent(VariableTypeMemberContent variable, DefaultMemberContent content)
+			: base(
+				new Option(
+					new DelegatedAssignedSpecification<IMember, IVariableTypeSpecification>(
+						VariableTypeMemberSpecifications.Default.Get), variable),
+				new Option(content)
+			) {}
 
-		public DefaultMemberContents(IContents contents)
+		sealed class Option : DecoratedOption<IMember, ISerializer>
 		{
-			_contents = contents;
-		}
+			public Option(IMemberContent source) : this(x => true, source) {}
 
-		public ISerializer Get(IMember parameter) => _contents.Get(parameter.MemberType);
+			public Option(Func<IMember, bool> specification, IMemberContent source)
+				: base(new DelegatedSpecification<IMember>(specification), source) {}
+
+			public Option(ISpecification<IMember> specification, IParameterizedSource<IMember, ISerializer> source)
+				: base(specification, source) {}
+		}
 	}
 }

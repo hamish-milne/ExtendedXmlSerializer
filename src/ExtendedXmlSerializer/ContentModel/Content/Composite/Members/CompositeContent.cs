@@ -22,31 +22,15 @@
 // SOFTWARE.
 
 using System.Reflection;
-using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Content.Composite.Members
 {
-	sealed class CompositeContentOption : ContentOptionBase
-	{
-		readonly ICompositeContents _contents;
-
-		public CompositeContentOption(IActivatingTypeSpecification specification, ICompositeContents contents)
-			: base(specification)
-		{
-			_contents = contents;
-		}
-
-		public override ISerializer Get(TypeInfo parameter) => _contents.Get(parameter);
-	}
-
-	public interface ICompositeContents : ISerializerSource {}
-
-	sealed class CompositeContents : ICompositeContents
+	sealed class CompositeContent : IContent
 	{
 		readonly IMemberSerializations _members;
 		readonly IInnerContents _services;
 
-		public CompositeContents(IMemberSerializations members, IInnerContents services)
+		public CompositeContent(IMemberSerializations members, IInnerContents services)
 		{
 			_members = members;
 			_services = services;

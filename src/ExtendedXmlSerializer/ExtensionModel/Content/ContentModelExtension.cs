@@ -64,8 +64,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content
 						.Register<IClassification, Classification>()
 			            .Register<IIdentityStore, IdentityStore>()
 			            .Register(typeof(IInnerContents<>), typeof(InnerContents<>))
-			            .Register<ICompositeContents, CompositeContents>()
-			            .Register<ICompositeCollectionContents, CompositeCollectionContents>()
+			            /*.Register<ICompositeContent, CompositeContent>()
+			            .Register<ICompositeCollectionContents, CompositeCollectionContents>()*/
 			            .Register(typeof(IMemberHandler<>), typeof(MemberHandler<>))
 			            .Register(typeof(IMemberAssignment<>), typeof(MemberAssignmentRegistration<>))
 			            .Register(typeof(IContentsHandler<>), typeof(ContentsHandler<>))

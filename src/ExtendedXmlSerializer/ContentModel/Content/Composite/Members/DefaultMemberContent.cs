@@ -21,15 +21,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Reflection;
-using ExtendedXmlSerializer.Core.Sources;
-using JetBrains.Annotations;
-
-namespace ExtendedXmlSerializer.ContentModel.Content
+namespace ExtendedXmlSerializer.ContentModel.Content.Composite.Members
 {
-	[UsedImplicitly]
-	sealed class Contents : Selector<TypeInfo, ISerializer>, IContents
+	sealed class DefaultMemberContent : IMemberContent
 	{
-		public Contents(params IContentOption[] options) : base(options) {}
+		readonly IContent _content;
+
+		public DefaultMemberContent(IContent content)
+		{
+			_content = content;
+		}
+
+		public ISerializer Get(IMember parameter) => _content.Get(parameter.MemberType);
 	}
 }
