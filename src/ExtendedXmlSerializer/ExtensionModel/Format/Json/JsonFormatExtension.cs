@@ -1,4 +1,4 @@
-﻿// MIT License
+﻿/*// MIT License
 //
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
@@ -21,16 +21,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Text;
-using ExtendedXmlSerializer.ContentModel.Collections;
-using ExtendedXmlSerializer.ContentModel.Content;
-using ExtendedXmlSerializer.ContentModel.Format;
-using ExtendedXmlSerializer.ContentModel.Identification;
-using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.Core.Specifications;
-using ExtendedXmlSerializer.ReflectionModel;
-using Newtonsoft.Json;
-
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
 	sealed class JsonFormatExtension : IFormatExtension
@@ -52,12 +42,12 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 			            .RegisterInstance<IIdentifierFormatter>(IdentifierFormatter.Default)
 			            .RegisterInstance<IReaderFormatter>(ReaderFormatter.Default)
 			            .RegisterInstance<IFormattedContentSpecification>(FormattedContentSpecification.Default)
-			            /*.RegisterInstance<IListContentsSpecification>(new ListContentsSpecification(_specification))*/
-			            /*.Register<IInnerContentActivation, XmlInnerContentActivation>()*/
+			            /*.RegisterInstance<IListContentsSpecification>(new ListContentsSpecification(_specification))#1#
+			            /*.Register<IInnerContentActivation, XmlInnerContentActivation>()#1#
 			            .Register<IFormatWriters<JsonTextWriter>, FormatWriterContext>()
 		/*.Register<IFormatReaderContexts<XmlNameTable>, FormatReaderContexts>()
-		.Register<IFormatReaders<System.Xml.XmlReader>, FormatReaders>()*/;
+		.Register<IFormatReaders<System.Xml.XmlReader>, FormatReaders>()#1#;
 
 		void ICommand<IServices>.Execute(IServices parameter) {}
 	}
-}
+}*/

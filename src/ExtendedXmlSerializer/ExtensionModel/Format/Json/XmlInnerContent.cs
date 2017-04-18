@@ -22,7 +22,7 @@
 // SOFTWARE.
 
 using System;
-using ExtendedXmlSerializer.ContentModel.Content;
+using ExtendedXmlSerializer.ContentModel.Content.Composite;
 using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json

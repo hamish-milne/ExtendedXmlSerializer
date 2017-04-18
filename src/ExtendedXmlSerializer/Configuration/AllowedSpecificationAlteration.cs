@@ -22,7 +22,7 @@
 // SOFTWARE.
 
 using System.Linq;
-using ExtendedXmlSerializer.ContentModel.Members;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
 using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.Core.Specifications;
 using ExtendedXmlSerializer.ExtensionModel.Content.Members;

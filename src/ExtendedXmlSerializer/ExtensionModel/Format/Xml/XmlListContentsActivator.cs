@@ -22,8 +22,8 @@
 // SOFTWARE.
 
 using System.Collections;
-using ExtendedXmlSerializer.ContentModel.Collections;
-using ExtendedXmlSerializer.ContentModel.Content;
+using ExtendedXmlSerializer.ContentModel.Content.Composite;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Collections;
 using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml

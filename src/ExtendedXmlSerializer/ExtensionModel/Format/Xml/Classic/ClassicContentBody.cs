@@ -1,4 +1,4 @@
-// MIT License
+/*// MIT License
 //
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
@@ -21,8 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ExtendedXmlSerializer.ContentModel.Collections;
 using ExtendedXmlSerializer.ContentModel.Content;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Collections;
 using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
@@ -31,7 +31,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
 	{
 		public ClassicContentBody(
 			ArrayContentOption array,
-			/*ClassicDictionaryContentOption dictionary,*/
-			ClassicCollectionContentOption collection) : base(array, /*dictionary,*/ collection) {}
+			/*ClassicDictionaryContentOption dictionary,#1#
+			ClassicCollectionContentOption collection) : base(array, /*dictionary,#1# collection) {}
 	}
-}
+}*/

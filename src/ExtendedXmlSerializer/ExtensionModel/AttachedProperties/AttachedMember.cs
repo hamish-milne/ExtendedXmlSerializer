@@ -22,8 +22,8 @@
 // SOFTWARE.
 
 using System.Reflection;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
 using ExtendedXmlSerializer.ContentModel.Identification;
-using ExtendedXmlSerializer.ContentModel.Members;
 using ExtendedXmlSerializer.Core;
 
 namespace ExtendedXmlSerializer.ExtensionModel.AttachedProperties

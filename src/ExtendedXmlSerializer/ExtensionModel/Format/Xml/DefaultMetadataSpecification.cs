@@ -23,7 +23,7 @@
 
 using System.Reflection;
 using System.Xml.Serialization;
-using ExtendedXmlSerializer.ContentModel.Members;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.ReflectionModel;
 

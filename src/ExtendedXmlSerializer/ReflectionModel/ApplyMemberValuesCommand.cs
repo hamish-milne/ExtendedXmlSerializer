@@ -22,7 +22,7 @@
 // SOFTWARE.
 
 using System.Collections.Immutable;
-using ExtendedXmlSerializer.ContentModel.Members;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
 

@@ -22,7 +22,7 @@
 // SOFTWARE.
 
 using System.Reflection;
-using ExtendedXmlSerializer.ContentModel.Collections;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Collections;
 using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.Core.Specifications;
 using ExtendedXmlSerializer.ReflectionModel;

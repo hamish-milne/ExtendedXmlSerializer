@@ -1,4 +1,4 @@
-// MIT License
+/*// MIT License
 //
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
@@ -22,16 +22,13 @@
 // SOFTWARE.
 
 using System.Collections.Immutable;
-using System.Collections.ObjectModel;
 using System.Reflection;
 using ExtendedXmlSerializer.ContentModel;
-using ExtendedXmlSerializer.ContentModel.Collections;
 using ExtendedXmlSerializer.ContentModel.Content;
-using ExtendedXmlSerializer.ContentModel.Format;
+using ExtendedXmlSerializer.ContentModel.Content.Composite;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Collections;
 using ExtendedXmlSerializer.Core.Specifications;
 using ExtendedXmlSerializer.ReflectionModel;
-using JetBrains.Annotations;
-using Activator = System.Activator;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Types
 {
@@ -52,12 +49,12 @@ namespace ExtendedXmlSerializer.ExtensionModel.Types
 		protected override ISerializer Create(ISerializer item, TypeInfo classification, TypeInfo itemType)
 		{
 			/*return new Serializer(CreateReader(itemType, _contents, item),
-			                      new EnumerableWriter<object>(_enumerators, item).Adapt());*/
+			                      new EnumerableWriter<object>(_enumerators, item).Adapt());#1#
 			return null;
 		}
 
 		/*static IReader CreateReader(TypeInfo itemType, IInnerContents contents, IReader item)
-			=> (IReader) Activator.CreateInstance(typeof(Reader<>).MakeGenericType(itemType.AsType()), contents, item);*/
+			=> (IReader) Activator.CreateInstance(typeof(Reader<>).MakeGenericType(itemType.AsType()), contents, item);#1#
 
 		/*sealed class Reader<T> : IReader
 		{
@@ -73,6 +70,6 @@ namespace ExtendedXmlSerializer.ExtensionModel.Types
 			}
 
 			public object Get(IFormatReader parameter) => _reader.Get(parameter).ToImmutableArray();
-		}*/
+		}#1#
 	}
-}
+}*/

@@ -21,12 +21,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
 using System.Collections.Generic;
-using ExtendedXmlSerializer.ContentModel.Collections;
 using ExtendedXmlSerializer.ContentModel.Content;
+using ExtendedXmlSerializer.ContentModel.Content.Composite;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Collections;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
 using ExtendedXmlSerializer.ContentModel.Identification;
-using ExtendedXmlSerializer.ContentModel.Members;
 using ExtendedXmlSerializer.ContentModel.Reflection;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
@@ -40,7 +40,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content
 		ContentModelExtension() { }
 
 		public IServiceRepository Get(IServiceRepository parameter)
-			=> parameter.Register(typeof(IAlteration<>), typeof(AlterationRegistration<>))
+			=> parameter.Register(typeof(IAlteration<>), typeof(DefaultAlterationRegistration<>))
 			            .Register<IComparer<IContentOption>, SortComparer<IContentOption>>()
 			            .RegisterAsSet<IContentOption, ContentOptions>()
 			            .RegisterAsStart<IContentOption, Start>()
@@ -112,14 +112,14 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content
 		}
 */
 
-		sealed class AlterationRegistration<T> : IAlteration<T>
+		sealed class DefaultAlterationRegistration<T> : IAlteration<T>
 		{
 			readonly IAlteration<T> _alteration;
 
 			[UsedImplicitly]
-			public AlterationRegistration() : this(Self<T>.Default) { }
+			public DefaultAlterationRegistration() : this(Self<T>.Default) { }
 
-			public AlterationRegistration(IAlteration<T> alteration)
+			public DefaultAlterationRegistration(IAlteration<T> alteration)
 			{
 				_alteration = alteration;
 			}

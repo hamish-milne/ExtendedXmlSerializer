@@ -1,5 +1,4 @@
-﻿using System;
-using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
+﻿using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 
 namespace ExtendedXmlSerializer.Tests.Support
 {

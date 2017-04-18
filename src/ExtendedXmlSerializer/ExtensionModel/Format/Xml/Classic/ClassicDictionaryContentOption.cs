@@ -1,4 +1,4 @@
-// MIT License
+/*// MIT License
 //
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
@@ -21,16 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Reflection;
-using ExtendedXmlSerializer.ContentModel;
-using ExtendedXmlSerializer.ContentModel.Collections;
-using ExtendedXmlSerializer.ContentModel.Content;
-using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.ReflectionModel;
-
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
 {
-/*
 	sealed class ClassicDictionaryContentOption : ContentOptionBase
 	{
 		readonly IInnerContents _contents;
@@ -56,5 +48,4 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
 			return result;
 		}
 	}
-*/
-}
+}*/

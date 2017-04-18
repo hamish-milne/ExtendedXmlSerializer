@@ -1,4 +1,4 @@
-// MIT License
+/*// MIT License
 //
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
@@ -26,10 +26,10 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Reflection;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
 using ExtendedXmlSerializer.ContentModel.Conversion;
 using ExtendedXmlSerializer.ContentModel.Format;
 using ExtendedXmlSerializer.ContentModel.Identification;
-using ExtendedXmlSerializer.ContentModel.Members;
 using ExtendedXmlSerializer.ContentModel.Properties;
 using ExtendedXmlSerializer.ContentModel.Reflection;
 using ExtendedXmlSerializer.Core;
@@ -74,12 +74,12 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 			if (identifier != null)
 			{
 
-				/*_writer.WriteStartElement(identity.Name, identifier);#1#
+				/*_writer.WriteStartElement(identity.Name, identifier);#2#
 			}
 			else
 			{
 				_writer.WriteStartElement(identity.Name);
-			}*/
+			}#1#
 			_writer.WriteStartObject();
 			_writer.WritePropertyName("$type");
 			_writer.WriteValue(IdentityFormatter.Default.Get(identity));
@@ -102,7 +102,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 			else
 			{
 				_writer.WriteAttributeString(name, content);
-			}*/
+			}#1#
 		}
 
 		string Prefix(string parameter) => Lookup(parameter) ?? CreatePrefix(parameter);
@@ -116,7 +116,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 			}
 
 			var result = parameter == this.Get(string.Empty) ? string.Empty : lookup;
-			return result;*/
+			return result;#1#
 			return null;
 		}
 
@@ -169,4 +169,4 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 			Clear();
 		}
 	}
-}
+}*/

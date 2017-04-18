@@ -1,4 +1,4 @@
-// MIT License
+/*// MIT License
 //
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
@@ -21,13 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ExtendedXmlSerializer.ContentModel;
-using ExtendedXmlSerializer.ContentModel.Content;
-using ExtendedXmlSerializer.ContentModel.Format;
-
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
-/*
 	sealed class XmlInnerContentActivator<T> : IInnerContentActivator<T>
 	{
 		readonly IReader _activator;
@@ -53,5 +48,4 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 			return result;
 		}
 	}
-*/
-}
+}*/

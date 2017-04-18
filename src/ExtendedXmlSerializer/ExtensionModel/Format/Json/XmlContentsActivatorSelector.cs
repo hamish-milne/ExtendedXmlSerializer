@@ -1,4 +1,4 @@
-// MIT License
+/*// MIT License
 //
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
@@ -21,15 +21,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System.Reflection;
-using ExtendedXmlSerializer.ContentModel.Collections;
-using ExtendedXmlSerializer.Core.Sources;
-using ExtendedXmlSerializer.Core.Specifications;
-using ExtendedXmlSerializer.ReflectionModel;
-
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
-/*
 	sealed class XmlContentsActivatorSelector : Selector<TypeInfo, IXmlContentsActivator>
 	{
 		public static XmlContentsActivatorSelector Default { get; } = new XmlContentsActivatorSelector();
@@ -48,5 +41,4 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 				: base(specification, instance) {}
 		}
 	}
-*/
-}
+}*/

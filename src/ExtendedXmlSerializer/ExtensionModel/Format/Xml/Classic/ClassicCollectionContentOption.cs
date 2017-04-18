@@ -1,4 +1,4 @@
-// MIT License
+/*// MIT License
 //
 // Copyright (c) 2016 Wojciech Nagórski
 //                    Michael DeMond
@@ -23,8 +23,9 @@
 
 using System.Reflection;
 using ExtendedXmlSerializer.ContentModel;
-using ExtendedXmlSerializer.ContentModel.Collections;
 using ExtendedXmlSerializer.ContentModel.Content;
+using ExtendedXmlSerializer.ContentModel.Content.Composite;
+using ExtendedXmlSerializer.ContentModel.Content.Composite.Collections;
 using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
@@ -47,6 +48,6 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic
 				/*new Serializer(
 					_contents.Get(classification).Invoke(
 						new ConditionalInnerContentCommand(_contents, new CollectionInnerContentCommand<,>(item, _contents))),
-					new EnumerableWriter(_enumerators, item))*/null;
+					new EnumerableWriter(_enumerators, item))#1#null;
 	}
-}
+}*/
