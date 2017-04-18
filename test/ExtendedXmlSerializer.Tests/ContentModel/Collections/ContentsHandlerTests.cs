@@ -29,7 +29,7 @@ using Xunit;
 
 namespace ExtendedXmlSerializer.Tests.ContentModel.Collections
 {
-	public class CollectionWithMembersInnerContentHandlerTests
+	public class ContentsHandlerTests
 	{
 		const string HelloWorld = "Hello World!";
 		readonly IExtendedXmlSerializer _serializer = new ConfigurationContainer().Create();

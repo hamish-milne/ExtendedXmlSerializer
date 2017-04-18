@@ -27,6 +27,8 @@ using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ReflectionModel
 {
+	public interface IGeneric<out T> : IParameterizedSource<TypeInfo, Func<T>> { }
+
 	public interface IGeneric<in T1, out T> : IParameterizedSource<TypeInfo, Func<T1, T>> {}
 
 	public interface IGeneric<in T1, in T2, out T> : IParameterizedSource<TypeInfo, Func<T1, T2, T>> {}

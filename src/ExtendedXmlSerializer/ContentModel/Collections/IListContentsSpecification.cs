@@ -26,5 +26,5 @@ using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ContentModel.Collections
 {
-	public interface IListContentsSpecification : ISpecification<IInnerContent> {}
+	public interface IListContentsSpecification : ISpecification<IInnerContent<object>> {}
 }

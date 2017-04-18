@@ -21,23 +21,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ExtendedXmlSerializer.ContentModel.Format;
+using ExtendedXmlSerializer.ContentModel.Content;
 
 namespace ExtendedXmlSerializer.ContentModel.Collections
 {
-	class MemberedCollectionWriter : DecoratedWriter
+	sealed class CollectionInnerContentCommand<T> : IInnerContentCommand
 	{
-		readonly IWriter _items;
+		readonly IReader<T> _item;
+		readonly IContentsHandler<T> _handler;
 
-		public MemberedCollectionWriter(IWriter members, IWriter items) : base(members)
+		public CollectionInnerContentCommand(IReader<T> item, IContentsHandler<T> handler)
 		{
-			_items = items;
+			_item = item;
+			_handler = handler;
 		}
 
-		public sealed override void Write(IFormatWriter writer, object instance)
-		{
-			base.Write(writer, instance);
-			_items.Write(writer, instance);
-		}
+		public void Execute(IInnerContent<object> parameter) => _handler.Handle((IListInnerContent) parameter, _item);
 	}
 }

@@ -35,7 +35,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content.Members
 			_result = result;
 		}
 
-		public object Get(IInnerContent parameter)
+		public object Get(IInnerContent<object> parameter)
 			=> (parameter.Current as IActivationContext)?.Get() ?? _result.Get(parameter);
 	}
 }

@@ -21,11 +21,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ExtendedXmlSerializer.Core;
+using System;
+using System.Reflection;
+using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	public interface IInnerContentHandler : IInnerContentHandler<object> { }
+	class DelegatedContentOption : DelegatedOption<TypeInfo, ISerializer>, IContentOption
+	{
+		public DelegatedContentOption(Func<TypeInfo, bool> specification, Func<TypeInfo, ISerializer> source)
+			: base(specification, source) {}
 
-	public interface IInnerContentHandler<in T> : ICommand<IInnerContent<T>> { }
+		public DelegatedContentOption(ISpecification<TypeInfo> specification, Func<TypeInfo, ISerializer> source)
+			: base(specification, source) {}
+	}
 }

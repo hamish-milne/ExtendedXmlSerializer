@@ -33,39 +33,39 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content
 		ReaderContextExtension() {}
 
 		public IServiceRepository Get(IServiceRepository parameter)
-			=> parameter.Decorate<IAlteration<IInnerContentHandler>, Wrapper>();
+			=> parameter.Decorate<IAlteration<IInnerContentCommand>, Wrapper>();
 
 		void ICommand<IServices>.Execute(IServices parameter) {}
 
-		sealed class Wrapper : IAlteration<IInnerContentHandler>
+		sealed class Wrapper : IAlteration<IInnerContentCommand>
 		{
-			readonly IAlteration<IInnerContentHandler> _handler;
+			readonly IAlteration<IInnerContentCommand> _handler;
 
-			public Wrapper(IAlteration<IInnerContentHandler> handler)
+			public Wrapper(IAlteration<IInnerContentCommand> handler)
 			{
 				_handler = handler;
 			}
 
-			public IInnerContentHandler Get(IInnerContentHandler parameter) => new Handler(_handler.Get(parameter));
+			public IInnerContentCommand Get(IInnerContentCommand parameter) => new Command(_handler.Get(parameter));
 
-			sealed class Handler : IInnerContentHandler
+			sealed class Command : IInnerContentCommand
 			{
 				readonly IContentsHistory _contexts;
-				readonly IInnerContentHandler _handler;
+				readonly IInnerContentCommand _command;
 
-				public Handler(IInnerContentHandler handler) : this(ContentsHistory.Default, handler) {}
+				public Command(IInnerContentCommand command) : this(ContentsHistory.Default, command) {}
 
-				public Handler(IContentsHistory contexts, IInnerContentHandler handler)
+				public Command(IContentsHistory contexts, IInnerContentCommand command)
 				{
 					_contexts = contexts;
-					_handler = handler;
+					_command = command;
 				}
 
-				public void Execute(IInnerContent parameter)
+				public void Execute(IInnerContent<object> parameter)
 				{
 					var contexts = _contexts.Get(parameter.Get());
 					contexts.Push(parameter);
-					_handler.Execute(parameter);
+					_command.Execute(parameter);
 					contexts.Pop();
 				}
 			}

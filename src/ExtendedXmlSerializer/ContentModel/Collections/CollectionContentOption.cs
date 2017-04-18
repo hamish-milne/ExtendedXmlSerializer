@@ -28,29 +28,42 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Collections
 {
-	sealed class CollectionContentOption : CollectionContentOptionBase
+	sealed class CollectionContentOption : DelegatedContentOption
 	{
-		readonly IMemberSerializations _serializations;
-		readonly IEnumerators _enumerators;
-		readonly IInnerContents _contents;
+		public CollectionContentOption(IActivatingTypeSpecification specification, ICompositeCollectionContents contents)
+			: base(specification, contents.Get) {}
+	}
 
-		public CollectionContentOption(IActivatingTypeSpecification specification, IMemberSerializations serializations,
-		                               IEnumerators enumerators, ISerializers serializers, IInnerContents contents)
-			: base(specification, serializers)
+	public interface ICompositeCollectionContents : ISerializerSource {}
+
+	sealed class CompositeCollectionContents : ICompositeCollectionContents
+	{
+		readonly ISerializers _serializers;
+		readonly IMemberSerializations _members;
+		readonly IInnerContents _contents;
+		readonly IEnumerators _enumerators;
+
+		public CompositeCollectionContents(ISerializers serializers, IMemberSerializations members, IInnerContents contents,
+		                                   IEnumerators enumerators)
 		{
-			_serializations = serializations;
-			_enumerators = enumerators;
+			_serializers = serializers;
+			_members = members;
 			_contents = contents;
+			_enumerators = enumerators;
 		}
 
-		protected override ISerializer Create(ISerializer item, TypeInfo classification, TypeInfo itemType)
+		public ISerializer Get(TypeInfo parameter)
 		{
-			var members = _serializations.Get(classification);
-			var handler = new CollectionWithMembersInnerContentHandler(_contents,
-			                                                      new MemberInnerContentHandler(members, _contents, _contents),
-			                                                      new CollectionInnerContentHandler(item, _contents));
-			var reader = _contents.Get(classification).Invoke(handler);
-			var writer = new MemberedCollectionWriter(new MemberListWriter(members), new EnumerableWriter(_enumerators, item).Adapt());
+			var item = _serializers.Get(parameter);
+
+			var members = _members.Get(parameter);
+			var handler = new CompositeCollectionInnerContentCommand<object>(
+				_contents,
+				new InnerContentCommand<object>(members, _contents, _contents),
+				new CollectionInnerContentCommand<object>(item, _contents));
+			var reader = new InnerContentReader(_contents.Get(parameter), handler, _contents);
+			var writer = new CompositeCollectionWriter<object>(new MemberListWriter(members),
+			                                                   new EnumerableWriter<object>(_enumerators, item).Adapt());
 			var result = new Serializer(reader, writer);
 			return result;
 		}

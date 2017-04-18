@@ -25,16 +25,9 @@ using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer.ContentModel
 {
-	class DecoratedWriter : IWriter
+	class DecoratedWriter : DecoratedWriter<object>, IWriter
 	{
-		readonly IWriter _writer;
-
-		public DecoratedWriter(IWriter writer)
-		{
-			_writer = writer;
-		}
-
-		public virtual void Write(IFormatWriter writer, object instance) => _writer.Write(writer, instance);
+		public DecoratedWriter(IWriter<object> writer) : base(writer) {}
 	}
 
 	class DecoratedWriter<T> : IWriter<T>

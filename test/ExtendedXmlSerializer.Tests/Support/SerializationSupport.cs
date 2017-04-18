@@ -51,10 +51,19 @@ namespace ExtendedXmlSerializer.Tests.Support
 			return result;
 		}
 
-		public void WriteLine<T>(T instance)
+		public void WriteLine<T>(Action<string> output, T instance)
 		{
-			// https://github.com/aspnet/Tooling/issues/324#issuecomment-275236780
-			throw new InvalidOperationException(_serializer.Serialize(instance));
+
+			try
+			{
+				// https://github.com/aspnet/Tooling/issues/324#issuecomment-275236780
+				throw new InvalidOperationException(_serializer.Serialize(instance));
+			}
+			catch (Exception e)
+			{
+				output(e.ToString());
+				throw;
+			}
 		}
 
 		public TInstance Deserialize<TInstance>(XmlReader reader) => _serializer.Deserialize<TInstance>(reader);

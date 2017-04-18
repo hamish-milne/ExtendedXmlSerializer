@@ -25,13 +25,19 @@ using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
+	sealed class InnerContentReader : DecoratedReader<object>, IReader
+	{
+		public InnerContentReader(IInnerContentActivator<object> activator, IInnerContentCommand<object> content, IInnerContentResult<object> result)
+			: base(new InnerContentReader<object>(activator, content, result)) {}
+	}
+
 	sealed class InnerContentReader<T> : IReader<T>
 	{
 		readonly IInnerContentActivator<T> _activator;
-		readonly IInnerContentHandler<T> _content;
+		readonly IInnerContentCommand<T> _content;
 		readonly IInnerContentResult<T> _result;
 
-		public InnerContentReader(IInnerContentActivator<T> activator, IInnerContentHandler<T> content, IInnerContentResult<T> result)
+		public InnerContentReader(IInnerContentActivator<T> activator, IInnerContentCommand<T> content, IInnerContentResult<T> result)
 		{
 			_activator = activator;
 			_content = content;

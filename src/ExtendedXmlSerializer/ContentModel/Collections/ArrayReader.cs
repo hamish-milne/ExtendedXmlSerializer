@@ -21,6 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
 using System.Collections;
 using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Format;
@@ -35,7 +36,8 @@ namespace ExtendedXmlSerializer.ContentModel.Collections
 
 		public ArrayReader(IInnerContents services, IClassification classification, IReader item)
 			: this(
-				services.CreateContents<ArrayList>(new ConditionalInnerContentHandler(services, new CollectionInnerContentHandler(item, services))))
+				  null
+				/*services.CreateContents<ArrayList>(new ConditionalInnerContentCommand<Array>(services, new CollectionInnerContentCommand<object>(item, services)))*/)
 		{
 			_classification = classification;
 		}

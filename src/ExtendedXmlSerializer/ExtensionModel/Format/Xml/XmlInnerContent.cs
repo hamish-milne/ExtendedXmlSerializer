@@ -22,24 +22,25 @@
 // SOFTWARE.
 
 using System;
+using System.Collections;
 using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
-	sealed class XmlInnerContent : IInnerContent
+	sealed class XmlInnerContent<T> : IInnerContent<T>
 	{
 		readonly IFormatReader _reader;
 		readonly XmlContent _content;
 
-		public XmlInnerContent(IFormatReader reader, object current, XmlContent content)
+		public XmlInnerContent(IFormatReader reader, T current, XmlContent content)
 		{
 			Current = current;
 			_reader = reader;
 			_content = content;
 		}
 
-		public object Current { get; }
+		public T Current { get; }
 
 		public IFormatReader Get() => _reader;
 
@@ -53,5 +54,9 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		{
 			throw new NotSupportedException();
 		}
+
+		object IEnumerator.Current => Current;
+
+		public void Dispose() => Reset();
 	}
 }

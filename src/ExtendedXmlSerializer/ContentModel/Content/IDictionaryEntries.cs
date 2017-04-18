@@ -27,5 +27,5 @@ using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	public interface IDictionaryEntries : IParameterizedSource<TypeInfo, ISerializer<DictionaryEntry>> {}
+	
 }

@@ -23,11 +23,11 @@
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	sealed class InnerContentResult : IInnerContentResult
+	sealed class InnerContentResult<T> : IInnerContentResult<T>
 	{
-		public static InnerContentResult Default { get; } = new InnerContentResult();
+		public static InnerContentResult<T> Default { get; } = new InnerContentResult<T>();
 		InnerContentResult() {}
 
-		public object Get(IInnerContent<object> parameter) => parameter.Current;
+		public T Get(IInnerContent<T> parameter) => parameter.Current;
 	}
 }

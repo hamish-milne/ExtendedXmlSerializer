@@ -25,9 +25,10 @@ using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	abstract class EnclosureBase : DecoratedWriter
+/*
+	abstract class EnclosureBase : IWriter
 	{
-		protected EnclosureBase(IWriter body) : base(body) {}
+		protected EnclosureBase(IWriter body) {}
 
 		public sealed override void Write(IFormatWriter writer, object instance)
 		{
@@ -42,4 +43,5 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 
 		protected abstract void Finish(IFormatWriter writer, object instance);
 	}
+*/
 }

@@ -27,11 +27,11 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Collections
 {
-	sealed class ListContentsSpecification : DecoratedSpecification<IInnerContent>, IListContentsSpecification
+	sealed class ListContentsSpecification : DecoratedSpecification<IInnerContent<object>>, IListContentsSpecification
 	{
 		public static ListContentsSpecification Default { get; } = new ListContentsSpecification();
 		ListContentsSpecification() : this(IsTypeSpecification<IListInnerContent>.Default) {}
 
-		public ListContentsSpecification(ISpecification<IInnerContent> specification) : base(specification) {}
+		public ListContentsSpecification(ISpecification<IInnerContent<object>> specification) : base(specification) {}
 	}
 }

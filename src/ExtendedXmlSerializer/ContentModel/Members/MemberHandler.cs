@@ -25,16 +25,16 @@ using ExtendedXmlSerializer.ContentModel.Content;
 
 namespace ExtendedXmlSerializer.ContentModel.Members
 {
-	sealed class MemberHandler : IMemberHandler
+	sealed class MemberHandler<T> : IMemberHandler<T>
 	{
-		readonly IMemberAssignment _assignment;
+		readonly IMemberAssignment<T> _assignment;
 
-		public MemberHandler(IMemberAssignment assignment)
+		public MemberHandler(IMemberAssignment<T> assignment)
 		{
 			_assignment = assignment;
 		}
 
-		public void Handle(IInnerContent contents, IMemberSerializer member)
+		public void Handle(IInnerContent<T> contents, IMemberSerializer member)
 		{
 			var adapter = contents.Get();
 			var value = member.Get(adapter);

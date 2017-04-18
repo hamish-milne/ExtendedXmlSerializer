@@ -26,7 +26,7 @@ using ExtendedXmlSerializer.ContentModel.Content;
 
 namespace ExtendedXmlSerializer.ContentModel.Collections
 {
-	public interface IListInnerContent : IInnerContent
+	public interface IListInnerContent : IInnerContent<object>
 	{
 		IList List { get; }
 	}

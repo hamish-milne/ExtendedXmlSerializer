@@ -28,12 +28,12 @@ using ExtendedXmlSerializer.Core.Specifications;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
-	sealed class ElementSpecification : ISpecification<IInnerContent>
+	sealed class ElementSpecification : ISpecification<IInnerContent<object>>
 	{
 		public static ElementSpecification Default { get; } = new ElementSpecification();
 		ElementSpecification() {}
 
-		public bool IsSatisfiedBy(IInnerContent parameter)
+		public bool IsSatisfiedBy(IInnerContent<object> parameter)
 			=> parameter.Get()
 			            .Get()
 			            .AsValid<System.Xml.XmlReader>()

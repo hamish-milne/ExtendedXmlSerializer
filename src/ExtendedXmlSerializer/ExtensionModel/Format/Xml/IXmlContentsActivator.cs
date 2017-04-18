@@ -26,8 +26,10 @@ using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
-	interface IXmlContentsActivator
+	interface IXmlContentsActivator : IXmlContentsActivator<object> {}
+
+	interface IXmlContentsActivator<T>
 	{
-		IInnerContent Create(IFormatReader reader, object instance, XmlContent content);
+		IInnerContent<T> Create(IFormatReader reader, T instance, XmlContent content);
 	}
 }

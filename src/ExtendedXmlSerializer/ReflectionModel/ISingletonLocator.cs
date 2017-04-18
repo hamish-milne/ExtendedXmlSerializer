@@ -24,7 +24,7 @@
 using System.Reflection;
 using ExtendedXmlSerializer.Core.Sources;
 
-namespace ExtendedXmlSerializer.ExtensionModel.Types
+namespace ExtendedXmlSerializer.ReflectionModel
 {
-	public interface ISingletons : IParameterizedSource<PropertyInfo, object> {}
+	public interface ISingletonLocator : IParameterizedSource<TypeInfo, object> {}
 }

@@ -25,18 +25,26 @@ using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.Tests.Support;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace ExtendedXmlSerializer.Tests
 {
 	public class SerializeTests
 	{
+		readonly ITestOutputHelper _output;
 		/*readonly IXmlWriterFactory _writerFactory = XmlWriterFactory.Default;*/
+
+		public SerializeTests(ITestOutputHelper output)
+		{
+			_output = output;
+		}
 
 		[Fact]
 		public void Verify()
 		{
 			var sut = new ConfigurationContainer().OptimizeConverters().Create().ForTesting();
-			sut.WriteLine(1234);
+			sut.WriteLine(_output.WriteLine, 1234);
+
 			/*First(sut);
 			Measure(sut);*/
 		}

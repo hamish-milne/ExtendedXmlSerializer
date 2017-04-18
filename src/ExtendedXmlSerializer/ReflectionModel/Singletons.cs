@@ -21,23 +21,14 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ExtendedXmlSerializer.Core;
+using System.Reflection;
 using ExtendedXmlSerializer.Core.Sources;
-using ExtendedXmlSerializer.Core.Specifications;
 
-namespace ExtendedXmlSerializer.ContentModel.Content
+namespace ExtendedXmlSerializer.ReflectionModel
 {
-	sealed class ConditionalInnerContentHandler : FixedOption<IInnerContent, ICommand<IInnerContent>>, IInnerContentHandler
+	sealed class Singletons : ReferenceCache<PropertyInfo, object>, ISingletons
 	{
-		public ConditionalInnerContentHandler(ISpecification<IInnerContent> specification, ICommand<IInnerContent> instance)
-			: base(specification, instance) {}
-
-		public void Execute(IInnerContent parameter)
-		{
-			if (IsSatisfiedBy(parameter))
-			{
-				Get(parameter).Execute(parameter);
-			}
-		}
+		public static Singletons Default { get; } = new Singletons();
+		Singletons() : base(x => x.GetValue(null)) {}
 	}
 }

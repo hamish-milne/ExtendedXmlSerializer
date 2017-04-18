@@ -26,5 +26,5 @@ using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ReflectionModel
 {
-	public interface IGenericActivator<out T> : IParameterizedSource<TypeInfo, T> {}
+	/*public interface IGenericActivator<out T> : IParameterizedSource<TypeInfo, T> {}*/
 }

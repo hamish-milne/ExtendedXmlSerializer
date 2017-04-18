@@ -28,6 +28,6 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 {
 	sealed class Finish : Items<IContentOption>, IFinish<IContentOption>
 	{
-		public Finish(MemberedContentOption membered, RuntimeContentOption runtime) : base(membered, runtime) {}
+		public Finish(CompositeContentOption composite, RuntimeContentOption runtime) : base(composite, runtime) {}
 	}
 }

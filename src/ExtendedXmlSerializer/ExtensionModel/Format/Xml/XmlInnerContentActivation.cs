@@ -21,10 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System;
 using System.Reflection;
+using ExtendedXmlSerializer.ContentModel;
 using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Reflection;
 using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.ReflectionModel;
 using JetBrains.Annotations;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
@@ -44,6 +47,12 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		}
 
 		public IInnerContentActivator Get(TypeInfo parameter)
-			=> new XmlInnerContentActivator(_activation.Get(parameter), _activator.Get(parameter));
+			=> Adapter.Default.Get(parameter).Invoke(_activation.Get(parameter), _activator.Get(parameter));
+
+		sealed class Adapter : Generic<IReader, IXmlContentsActivator, IInnerContentActivator>
+		{
+			public static Adapter Default { get; } = new Adapter();
+			Adapter() : base(typeof(XmlInnerContentActivator<>)) {}
+		}
 	}
 }

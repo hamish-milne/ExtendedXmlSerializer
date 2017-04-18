@@ -48,14 +48,9 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 			public static Adapter Default { get; } = new Adapter();
 			Adapter() : base(typeof(Writer<>)) {}
 
-			sealed class Writer<T> : Element<T>, IWriter
+			sealed class Writer<T> : WriterAdapter<T>
 			{
-				public Writer(IIdentity identity) : base(identity) {}
-
-				void IWriter<object>.Write(IFormatWriter writer, object instance)
-				{
-					throw new InvalidOperationException("This exists for static type checking purposes only.");
-				}
+				public Writer(IIdentity identity) : base(new Element<T>(identity)) {}
 			}
 		}
 	}

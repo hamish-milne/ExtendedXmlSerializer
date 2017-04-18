@@ -52,19 +52,19 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 
 		sealed class InnerContentResult : IInnerContentResult
 		{
-			readonly ICommand<IInnerContent> _command;
+			readonly ICommand<IInnerContent<object>> _command;
 			readonly IInnerContentResult _results;
 
 			[UsedImplicitly]
 			public InnerContentResult(IInnerContentResult results) : this(ExecuteDeferredCommandsCommand.Default, results) {}
 
-			public InnerContentResult(ICommand<IInnerContent> command, IInnerContentResult results)
+			public InnerContentResult(ICommand<IInnerContent<object>> command, IInnerContentResult results)
 			{
 				_command = command;
 				_results = results;
 			}
 
-			public object Get(IInnerContent parameter)
+			public object Get(IInnerContent<object> parameter)
 			{
 				_command.Execute(parameter);
 				return _results.Get(parameter);
@@ -133,7 +133,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 				_handler = handler;
 			}
 
-			public void Handle(IInnerContent contents, IMemberSerializer member)
+			public void Handle(IInnerContent<object> contents, IMemberSerializer member)
 			{
 				ContentsContext.Default.Assign(contents, member.Access);
 				_handler.Handle(contents, member);

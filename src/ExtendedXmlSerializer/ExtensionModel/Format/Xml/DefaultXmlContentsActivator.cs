@@ -29,9 +29,23 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 	sealed class DefaultXmlContentsActivator : IXmlContentsActivator
 	{
 		public static DefaultXmlContentsActivator Default { get; } = new DefaultXmlContentsActivator();
+		DefaultXmlContentsActivator() : this(DefaultXmlContentsActivator<object>.Default) {}
+
+		readonly IXmlContentsActivator<object> _activator;
+		public DefaultXmlContentsActivator(IXmlContentsActivator<object> activator)
+		{
+			_activator = activator;
+		}
+
+		public IInnerContent<object> Create(IFormatReader reader, object instance, XmlContent content) => _activator.Create(reader, instance, content);
+	}
+
+	sealed class DefaultXmlContentsActivator<T> : IXmlContentsActivator<T>
+	{
+		public static DefaultXmlContentsActivator<T> Default { get; } = new DefaultXmlContentsActivator<T>();
 		DefaultXmlContentsActivator() {}
 
-		public IInnerContent Create(IFormatReader reader, object instance, XmlContent content)
-			=> new XmlInnerContent(reader, instance, content);
+		public IInnerContent<T> Create(IFormatReader reader, T instance, XmlContent content)
+			=> new XmlInnerContent<T>(reader, instance, content);
 	}
 }

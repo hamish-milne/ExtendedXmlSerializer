@@ -53,5 +53,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 		{
 			throw new NotSupportedException();
 		}
+
+		public void Dispose() => Reset();
 	}
 }

@@ -40,7 +40,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			_lists = lists;
 		}
 
-		public IInnerContent Create(IFormatReader reader, object instance, XmlContent content)
+		public IInnerContent<object> Create(IFormatReader reader, object instance, XmlContent content)
 			=> new XmlListInnerContent(reader, instance, instance as IList ?? _lists.Get(instance), content);
 	}
 }

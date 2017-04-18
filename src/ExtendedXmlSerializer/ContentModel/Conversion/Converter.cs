@@ -28,7 +28,7 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Conversion
 {
-	class Converter<T> : ConverterBase, IConverter<T>, IGenericAware
+	class Converter<T> : ConverterMarker, IConverter<T>, IGenericAware
 	{
 		readonly static TypeEqualitySpecification<T> Specification = TypeEqualitySpecification<T>.Default;
 

@@ -29,31 +29,39 @@ using ExtendedXmlSerializer.ContentModel.Members;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	sealed class InnerContents : IInnerContents
+	sealed class InnerContents<T> : IInnerContents<T>
 	{
 		readonly IListContentsSpecification _specification;
-		readonly IMemberHandler _member;
-		readonly ICollectionContentsHandler _collection;
+		readonly IInnerContentActivation _activation;
+		readonly IMemberHandler<T> _member;
+		readonly IContentsHandler<T> _collection;
 		readonly IReaderFormatter _formatter;
-		readonly IInnerContentReaders _readers;
+		readonly IInnerContentResult<T> _result;
 
-		public InnerContents(IListContentsSpecification specification, IMemberHandler member,
-		                     ICollectionContentsHandler collection, IReaderFormatter formatter,
-		                     IInnerContentReaders readers)
+		public InnerContents(IListContentsSpecification specification, IInnerContentActivation activation,
+		                     IMemberHandler<T> member, IContentsHandler<T> collection, IReaderFormatter formatter,
+							 IInnerContentResult<T> result)
 		{
 			_specification = specification;
+			_activation = activation;
 			_member = member;
 			_collection = collection;
 			_formatter = formatter;
-			_readers = readers;
+			_result = result;
 		}
 
-		public bool IsSatisfiedBy(IInnerContent parameter) => _specification.IsSatisfiedBy(parameter);
+		public bool IsSatisfiedBy(IInnerContent<object> parameter) => _specification.IsSatisfiedBy(parameter);
+		public IInnerContentActivator Get(TypeInfo parameter) => _activation.Get(parameter);
 
 		public string Get(IFormatReader parameter) => _formatter.Get(parameter);
 
-		public Func<IInnerContentHandler, IReader> Get(TypeInfo parameter) => _readers.Get(parameter);
-		public void Handle(IInnerContent contents, IMemberSerializer member) => _member.Handle(contents, member);
-		public void Handle(IListInnerContent contents, IReader reader) => _collection.Handle(contents, reader);
+		public void Handle(IInnerContent<T> contents, IMemberSerializer member) => _member.Handle(contents, member);
+		public void Handle(IListInnerContent contents, IReader<T> reader) => _collection.Handle(contents, reader);
+
+		public T Get(IInnerContent<T> parameter) => _result.Get(parameter);
+		public void Execute(IInnerContent<T> parameter)
+		{
+			throw new NotImplementedException();
+		}
 	}
 }

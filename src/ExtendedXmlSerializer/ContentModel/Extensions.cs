@@ -42,10 +42,10 @@ namespace ExtendedXmlSerializer.ContentModel
 		public static IReader Adapt<T>(this IReader<T> @this) => new GenericReaderAdapter<T>(@this);
 		public static IReader<T> Adapt<T>(this IReader @this) => new ReaderAdapter<T>(@this);
 
-		public static IInnerContentActivator Get<T>(this IInnerContentActivation @this) => @this.Get(typeof(T).GetTypeInfo());
+		public static IInnerContentActivator<T> Get<T>(this IInnerContentActivation @this) => (IInnerContentActivator<T>) @this.Get(typeof(T).GetTypeInfo());
 
-		public static IReader<T> CreateContents<T>(this IInnerContents @this, IInnerContentHandler parameter)
-			=> new ReaderAdapter<T>(@this.Get(Support<T>.Key).Invoke(parameter));
+		/*public static IReader<T> CreateContents<T>(this IInnerContents @this, IInnerContentHandler parameter)
+			=> new ReaderAdapter<T>(@this.Get(Support<T>.Key).Invoke(parameter));*/
 
 		public static TypeInfo GetClassification(this IClassification @this, IFormatReader parameter,
 		                                         TypeInfo defaultValue = null)

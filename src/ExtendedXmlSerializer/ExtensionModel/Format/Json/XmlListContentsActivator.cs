@@ -28,6 +28,7 @@ using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
+/*
 	sealed class XmlListContentsActivator : IXmlContentsActivator
 	{
 		public static XmlListContentsActivator Default { get; } = new XmlListContentsActivator();
@@ -43,4 +44,5 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 		public IInnerContent Create(IFormatReader reader, object instance, XmlContent content)
 			=> new XmlListInnerContent(reader, instance, instance as IList ?? _lists.Get(instance), content);
 	}
+*/
 }

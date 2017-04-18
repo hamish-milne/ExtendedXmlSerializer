@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<Favorites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <folders />
+  <favorites>
+    <Favorite>
+      <name>MemberedContentOption.cs</name>
+      <path>src\extendedxmlserializer\contentmodel\members\memberedcontentoption.cs</path>
+      <absolutePath>p:\source\-remote\extendedxmlserializer\src\extendedxmlserializer\contentmodel\members\memberedcontentoption.cs</absolutePath>
+      <position>
+        <line>62</line>
+        <column>27</column>
+        <lineHash>xEsF0xzQQ/mjearf0q6bs+Zh5MjI6ziYm2fcgruaTAE=</lineHash>
+      </position>
+    </Favorite>
+  </favorites>
+</Favorites>

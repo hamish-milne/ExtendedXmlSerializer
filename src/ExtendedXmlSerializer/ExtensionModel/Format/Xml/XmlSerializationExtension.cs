@@ -35,10 +35,10 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
 	sealed class XmlSerializationExtension : IFormatExtension
 	{
-		readonly static ISpecification<IInnerContent> Specification =
+		readonly static ISpecification<IInnerContent<object>> Specification =
 			IsTypeSpecification<IListInnerContent>.Default.And(ElementSpecification.Default);
 
-		readonly ISpecification<IInnerContent> _specification;
+		readonly ISpecification<IInnerContent<object>> _specification;
 		readonly XmlReaderSettings _reader;
 		readonly XmlWriterSettings _writer;
 		readonly XmlNameTable _names;
@@ -46,7 +46,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		public XmlSerializationExtension()
 			: this(Specification, Defaults.ReaderSettings, Defaults.WriterSettings, new NameTable()) {}
 
-		public XmlSerializationExtension(ISpecification<IInnerContent> specification, XmlReaderSettings reader,
+		public XmlSerializationExtension(ISpecification<IInnerContent<object>> specification, XmlReaderSettings reader,
 		                                 XmlWriterSettings writer, XmlNameTable names)
 		{
 			_specification = specification;

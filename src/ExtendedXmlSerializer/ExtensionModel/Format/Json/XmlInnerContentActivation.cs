@@ -29,7 +29,8 @@ using JetBrains.Annotations;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
-	sealed class XmlInnerContentActivation : IInnerContentActivation
+/*
+	sealed class XmlInnerContentActivation<T> : IInnerContentActivation<T>
 	{
 		readonly IActivation _activation;
 		readonly IParameterizedSource<TypeInfo, IXmlContentsActivator> _activator;
@@ -43,7 +44,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 			_activator = activator;
 		}
 
-		public IInnerContentActivator Get(TypeInfo parameter)
-			=> new XmlInnerContentActivator(_activation.Get(parameter), _activator.Get(parameter));
+		public IInnerContentActivator<T> Get(TypeInfo parameter)
+			=> new XmlInnerContentActivator<T>(_activation.Get(parameter), _activator.Get(parameter));
 	}
+*/
 }

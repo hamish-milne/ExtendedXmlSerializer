@@ -25,8 +25,10 @@ using ExtendedXmlSerializer.ContentModel.Content;
 
 namespace ExtendedXmlSerializer.ContentModel.Members
 {
-	public interface IMemberHandler
+	public interface IMemberHandler : IMemberHandler<object> {}
+
+	public interface IMemberHandler<in T>
 	{
-		void Handle(IInnerContent contents, IMemberSerializer member);
+		void Handle(IInnerContent<T> contents, IMemberSerializer member);
 	}
 }

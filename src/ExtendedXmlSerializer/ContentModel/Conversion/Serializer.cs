@@ -21,26 +21,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
+using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Format;
-using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ContentModel.Conversion
 {
-	class Serializer : ISerializer
-	{
-		object IParameterizedSource<IFormatReader, object>.Get(IFormatReader parameter)
-		{
-			throw new InvalidOperationException("This exists for static type checking purposes only.");
-		}
-
-		void IWriter<object>.Write(IFormatWriter writer, object instance)
-		{
-			throw new InvalidOperationException("This exists for static type checking purposes only.");
-		}
-	}
-
-	sealed class Serializer<T> : Serializer, ISerializer<T>
+	sealed class Serializer<T> : SerializerMarker, ISerializer<T>
 	{
 		readonly IConverter<T> _converter;
 

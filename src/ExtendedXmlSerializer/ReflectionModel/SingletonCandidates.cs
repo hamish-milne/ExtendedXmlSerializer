@@ -21,39 +21,15 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
-using System.Collections.Immutable;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using ExtendedXmlSerializer.Core;
+using ExtendedXmlSerializer.Core.Sources;
 
 namespace ExtendedXmlSerializer.ReflectionModel
 {
-	sealed class GenericActivator<T> : IGenericActivator<T> where T : class
+	sealed class SingletonCandidates : Items<string>, ISingletonCandidates
 	{
-		readonly ImmutableArray<Type> _types;
-		readonly ImmutableArray<ParameterExpression> _expressions;
+		public static SingletonCandidates Default { get; } = new SingletonCandidates();
+		SingletonCandidates() : this("Default", "Instance", "Implementation", "Singleton") {}
 
-		public GenericActivator(params Type[] types) : this(types.ToImmutableArray()) {}
-
-		public GenericActivator(ImmutableArray<Type> types)
-			: this(types, types.Select(Defaults.Parameter).ToImmutableArray()) {}
-
-		public GenericActivator(ImmutableArray<Type> types, ImmutableArray<ParameterExpression> expressions)
-		{
-			_types = types;
-			_expressions = expressions;
-		}
-
-		public T Get(TypeInfo parameter)
-		{
-			var constructor = parameter.DeclaredConstructors.Only() ?? parameter.GetConstructor(_types.ToArray());
-			var expressions = _expressions.ToArray();
-			var parameters = expressions.Zip(constructor.GetParameters().Select(x => x.ParameterType), Defaults.ExpressionZip);
-			var create = Expression.New(constructor, parameters);
-			var result = Expression.Lambda<T>(create, expressions).Compile();
-			return result;
-		}
+		public SingletonCandidates(params string[] items) : base(items) {}
 	}
 }

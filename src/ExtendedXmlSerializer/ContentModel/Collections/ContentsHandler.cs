@@ -21,22 +21,18 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ExtendedXmlSerializer.ContentModel.Content;
-using ExtendedXmlSerializer.ContentModel.Members;
-using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.Core.Sources;
-
 namespace ExtendedXmlSerializer.ContentModel.Collections
 {
-	sealed class CollectionWithMembersInnerContentHandler : SelectedCommand<IInnerContent>, IInnerContentHandler
+	sealed class ContentsHandler<T> : IContentsHandler<T>
 	{
-		readonly static EmptyCommand<IInnerContent> Empty = EmptyCommand<IInnerContent>.Default;
+		readonly ICollectionAssignment<T> _assignment;
 
-		public CollectionWithMembersInnerContentHandler(IListContentsSpecification specification, MemberInnerContentHandler members,
-		                                  CollectionInnerContentHandler collection)
-			: base(
-				new FixedOption<IInnerContent, ICommand<IInnerContent>>(members, Empty),
-				new FixedOption<IInnerContent, ICommand<IInnerContent>>(specification, collection)
-			) {}
+		public ContentsHandler(ICollectionAssignment<T> assignment)
+		{
+			_assignment = assignment;
+		}
+
+		public void Handle(IListInnerContent contents, IReader<T> reader)
+			=> _assignment.Assign(contents, reader.Get(contents.Get()));
 	}
 }

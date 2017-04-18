@@ -25,8 +25,8 @@ using ExtendedXmlSerializer.ContentModel.Content;
 
 namespace ExtendedXmlSerializer.ContentModel.Members
 {
-	public interface IMemberAssignment
+	public interface IMemberAssignment<in T>
 	{
-		void Assign(IInnerContent contents, IMemberAccess access, object value);
+		void Assign(IInnerContent<T> contents, IMemberAccess access, object value);
 	}
 }

@@ -50,18 +50,22 @@ namespace ExtendedXmlSerializer.ExtensionModel.Types
 		}
 
 		protected override ISerializer Create(ISerializer item, TypeInfo classification, TypeInfo itemType)
-			=> new Serializer(CreateReader(itemType, _contents, item), new EnumerableWriter(_enumerators, item).Adapt());
+		{
+			/*return new Serializer(CreateReader(itemType, _contents, item),
+			                      new EnumerableWriter<object>(_enumerators, item).Adapt());*/
+			return null;
+		}
 
-		static IReader CreateReader(TypeInfo itemType, IInnerContents contents, IReader item)
-			=> (IReader) Activator.CreateInstance(typeof(Reader<>).MakeGenericType(itemType.AsType()), contents, item);
+		/*static IReader CreateReader(TypeInfo itemType, IInnerContents contents, IReader item)
+			=> (IReader) Activator.CreateInstance(typeof(Reader<>).MakeGenericType(itemType.AsType()), contents, item);*/
 
-		sealed class Reader<T> : IReader
+		/*sealed class Reader<T> : IReader
 		{
 			readonly IReader<Collection<T>> _reader;
 
 			[UsedImplicitly]
 			public Reader(IInnerContents services, IReader item)
-				: this(services.CreateContents<Collection<T>>(new ConditionalInnerContentHandler(services, new CollectionInnerContentHandler(item, services)))) {}
+				: this(services.CreateContents<Collection<T>>(new ConditionalInnerContentCommand(services, new CollectionInnerContentCommand<,>(item, services)))) {}
 
 			Reader(IReader<Collection<T>> reader)
 			{
@@ -69,6 +73,6 @@ namespace ExtendedXmlSerializer.ExtensionModel.Types
 			}
 
 			public object Get(IFormatReader parameter) => _reader.Get(parameter).ToImmutableArray();
-		}
+		}*/
 	}
 }

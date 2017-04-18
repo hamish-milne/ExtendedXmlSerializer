@@ -29,4 +29,18 @@ namespace ExtendedXmlSerializer.ContentModel.Members
 	public interface IMemberSerialization : ISource<ImmutableArray<IMemberSerializer>>,
 	                                        IParameterizedSource<string, IMemberSerializer>,
 	                                        IParameterizedSource<object, ImmutableArray<IMemberSerializer>> {}
+
+	/*
+public interface IMemberSerialization : ISource<ImmutableArray<IMemberSerializer>>,
+										IParameterizedSource<string, IMemberSerializer>
+{
+ImmutableArray<IMemberSerializer<T>> For<T>(T instance);
+}
+public interface IMemberSerialization<T> : ISource<ImmutableArray<IMemberSerializer>>,
+										   IParameterizedSource<string, IMemberSerializer<T>>,
+										   IParameterizedSource<T, >>
+{
+
+}*/
+
 }

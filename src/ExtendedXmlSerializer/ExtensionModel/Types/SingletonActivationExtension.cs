@@ -21,7 +21,9 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using System.Reflection;
 using ExtendedXmlSerializer.ReflectionModel;
+using JetBrains.Annotations;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Types
 {
@@ -32,9 +34,24 @@ namespace ExtendedXmlSerializer.ExtensionModel.Types
 
 		public IServiceRepository Get(IServiceRepository parameter)
 			=> parameter.RegisterInstance<ISingletonCandidates>(SingletonCandidates.Default)
-			            .Register<ISingletonLocator, SingletonLocator>()
+			            .Register<ISingletonLocator, SingletonLocatorRegistration>()
 			            .Decorate<IActivators, SingletonAwareActivators>();
 
 		public void Execute(IServices parameter) {}
+
+		sealed class SingletonLocatorRegistration : ISingletonLocator
+		{
+			readonly ISingletonLocator _locator;
+
+			[UsedImplicitly]
+			public SingletonLocatorRegistration() : this(SingletonLocator.Default) { }
+
+			public SingletonLocatorRegistration(ISingletonLocator locator)
+			{
+				_locator = locator;
+			}
+
+			public object Get(TypeInfo parameter) => _locator.Get(parameter);
+		}
 	}
 }

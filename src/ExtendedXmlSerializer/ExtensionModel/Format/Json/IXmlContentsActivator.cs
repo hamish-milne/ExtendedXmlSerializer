@@ -26,7 +26,7 @@ using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
-	interface IXmlContentsActivator
+	interface IXmlContentsActivator<T>
 	{
 		IInnerContent Create(IFormatReader reader, object instance, XmlContent content);
 	}

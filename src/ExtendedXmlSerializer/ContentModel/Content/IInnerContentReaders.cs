@@ -25,5 +25,5 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ContentModel.Content
 {
-	public interface IInnerContentReaders : IGeneric<IInnerContentHandler, IReader> {}
+	/*public interface IInnerContentReaders : IGeneric<IInnerContentHandler, IReader> {}*/
 }
