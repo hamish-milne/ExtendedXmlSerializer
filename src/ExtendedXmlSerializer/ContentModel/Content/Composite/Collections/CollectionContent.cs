@@ -33,14 +33,14 @@ namespace ExtendedXmlSerializer.ContentModel.Content.Composite.Collections
 			: base(specification, contents.Get) {}
 	}*/
 
-	sealed class CompositeCollectionContents : IContent
+	sealed class CompositeCollectionContent : IContent
 	{
 		readonly ISerializers _serializers;
 		readonly IMemberSerializations _members;
 		readonly IInnerContents _contents;
 		readonly IEnumerators _enumerators;
 
-		public CompositeCollectionContents(ISerializers serializers, IMemberSerializations members, IInnerContents contents,
+		public CompositeCollectionContent(ISerializers serializers, IMemberSerializations members, IInnerContents contents,
 		                                   IEnumerators enumerators)
 		{
 			_serializers = serializers;

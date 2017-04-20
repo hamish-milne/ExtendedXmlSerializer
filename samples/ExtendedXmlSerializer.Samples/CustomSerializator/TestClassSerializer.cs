@@ -23,7 +23,6 @@
 
 using System;
 using System.Globalization;
-using System.Xml;
 using System.Xml.Linq;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 
@@ -46,7 +45,7 @@ namespace ExtendedXmlSerialization.Samples.CustomSerializator
             throw new InvalidOperationException("Invalid xml for class TestClassWithSerializer");
         }
 
-        public void Serializer(XmlWriter writer, TestClass obj)
+		public void Serializer(System.Xml.XmlWriter writer, TestClass obj)
         {
             writer.WriteElementString("String", obj.PropStr);
             writer.WriteElementString("Int", obj.PropInt.ToString(CultureInfo.InvariantCulture));

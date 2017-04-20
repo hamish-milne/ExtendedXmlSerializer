@@ -22,7 +22,6 @@
 // SOFTWARE.
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.ExtensionModel;
@@ -69,14 +68,10 @@ namespace ExtendedXmlSerializer.Configuration
 		public static IConfigurationContainer Extend(this IConfigurationContainer @this,
 		                                             params ISerializerExtension[] extensions)
 		{
-			var items = @this.With(extensions).ToList();
+			var items = @this.TypeZip(extensions).ToList();
 			@this.Clear();
 			items.ForEach(@this.Add);
 			return @this;
 		}
-
-		public static ISerializerExtension[] With(this IEnumerable<ISerializerExtension> @this,
-		                                          params ISerializerExtension[] extensions)
-			=> @this.TypeZip(extensions).ToArray();
 	}
 }

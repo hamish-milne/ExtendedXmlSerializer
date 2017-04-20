@@ -47,13 +47,15 @@ namespace ExtendedXmlSerializer.ContentModel.Content
 		{
 			var type = parameter.AccountForNullable();
 			var writer = _element.Get(type);
-			var result = base.Get(parameter).Invoke(writer, _content.Get(type));
+			var serializer = _content.Get(type);
+			var result = base.Get(parameter)
+			                 .Invoke(writer, serializer);
 			return result;
 		}
 
 		sealed class Serializer<T> : SerializerAdapter<T>
 		{
-			public Serializer(IWriter<T> element, ISerializer<T> content) : base(content, new Enclosure<T>(element, content)) {}
+			public Serializer(IWriter<T> identity, ISerializer<T> content) : base(content, new Enclosure<T>(identity, content)) {}
 		}
 	}
 

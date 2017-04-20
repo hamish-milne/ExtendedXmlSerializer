@@ -27,10 +27,10 @@ using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 {
-	sealed class TypeModelExtension : ISerializerExtension
+	sealed class ReflectionModelExtension : ISerializerExtension
 	{
-		public static TypeModelExtension Default { get; } = new TypeModelExtension();
-		TypeModelExtension() {}
+		public static ReflectionModelExtension Default { get; } = new ReflectionModelExtension();
+		ReflectionModelExtension() {}
 
 		public IServiceRepository Get(IServiceRepository parameter)
 			=> parameter.Register<ISortOrder, SortOrder>()

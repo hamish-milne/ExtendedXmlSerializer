@@ -26,6 +26,24 @@ using ExtendedXmlSerializer.ContentModel.Format;
 
 namespace ExtendedXmlSerializer
 {
+	public interface ISerializer<in TRead, in TWrite> : IDeserialize<TRead>, ISerialize<TWrite> {}
+
+	class Serializer<TRead, TWrite> : IDeserialize<TRead>, ISerialize<TWrite>
+	{
+		readonly IDeserialize<TRead> _read;
+		readonly ISerialize<TWrite> _write;
+
+		public Serializer(IDeserialize<TRead> read, ISerialize<TWrite> write)
+		{
+			_read = read;
+			_write = write;
+		}
+
+		public TInstance Deserialize<TInstance>(TRead reader) => _read.Deserialize<TInstance>(reader);
+
+		public void Serialize<TInstance>(TWrite parameter, TInstance instance) => _write.Serialize(parameter, instance);
+	}
+
 	sealed class Serialize<T> : ISerialize<T>
 	{
 		readonly IFormatWriters<T> _writers;

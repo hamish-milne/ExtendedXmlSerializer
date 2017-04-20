@@ -30,7 +30,6 @@ using System.Xml.Linq;
 using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
-using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic;
 using ExtendedXmlSerializer.ReflectionModel;
 
@@ -78,7 +77,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			=> @this.Extend(new AutoMemberFormatExtension(maxTextLength));
 
 		public static IConfigurationContainer EnableClassicMode(this IConfigurationContainer @this)
-			=> @this.Emit(EmitBehaviors.Classic).Extend(ClassicExtension.Default);
+			=> @this./*Emit(EmitBehaviors.Classic).*/Extend(ClassicExtension.Default);
 
 		public static IConfigurationContainer UseOptimizedNamespaces(this IConfigurationContainer @this)
 			=> @this.Extend(OptimizedNamespaceExtension.Default);
@@ -136,7 +135,9 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			=> Deserialize<T>(@this, new XmlReaderFactory(settings, settings.NameTable.Context()), stream);
 
 		static T Deserialize<T>(this IExtendedXmlSerializer @this, IXmlReaderFactory factory, Stream stream)
-			=> @this.Deserialize<T>(factory.Get(stream));
+		{
+			return @this.Deserialize<T>((string) null /*factory.Get(stream)*/);
+		}
 
 		public static T Deserialize<T>(this IExtendedXmlSerializer @this, TextReader reader)
 			=> Deserialize<T>(@this, Defaults.ReaderSettings, reader);
@@ -145,7 +146,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			=> Deserialize<T>(@this, new XmlReaderFactory(settings, settings.NameTable.Context()), reader);
 
 		static T Deserialize<T>(this IExtendedXmlSerializer @this, IXmlReaderFactory factory, TextReader reader)
-			=> @this.Deserialize<T>(factory.Get(reader));
+			=> @this.Deserialize<T>(/*factory.Get(reader)*/StreamReader.Null);
 
 
 		/*public static T Deserializer<T>(this IExtendedXmlSerializer<T> @this, string data)

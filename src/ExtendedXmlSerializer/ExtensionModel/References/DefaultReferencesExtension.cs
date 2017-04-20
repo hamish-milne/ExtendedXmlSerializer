@@ -21,6 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.Core;
 
 namespace ExtendedXmlSerializer.ExtensionModel.References
@@ -33,7 +34,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 		public IServiceRepository Get(IServiceRepository parameter)
 			=> parameter.Register<ContainsStaticReferenceSpecification>()
 			            .Register<IStaticReferenceSpecification, ContainsStaticReferenceSpecification>()
-			            .Register<IRootReferences, RootReferences>();
+			            .Register<IRootReferences, RootReferences>()
+			            .Decorate<ISerializers, ReferenceAwareSerializers>();
 
 		void ICommand<IServices>.Execute(IServices parameter) {}
 	}

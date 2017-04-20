@@ -56,14 +56,14 @@ namespace ExtendedXmlSerializer.ExtensionModel
 
 		public override IEnumerator<ISerializerExtension> GetEnumerator()
 		{
-			yield return DefaultReferencesExtension.Default;
+			yield return ReflectionModelExtension.Default;
 			yield return ContentModelExtension.Default;
-			yield return TypeModelExtension.Default;
 			yield return SerializerExtension.Default;
+			yield return DefaultReferencesExtension.Default;
 			yield return _format;
 			yield return new ConverterRegistryExtension();
-			yield return MemberModelExtension.Default;
 			yield return new TypeNamesExtension(_defaultTypeNames);
+			yield return MemberModelExtension.Default;
 			yield return new MemberPropertiesExtension(_defaultMemberNames, _defaultMemberOrder);
 			yield return new AllowedMembersExtension(_metadata);
 			yield return new AllowedMemberValuesExtension();

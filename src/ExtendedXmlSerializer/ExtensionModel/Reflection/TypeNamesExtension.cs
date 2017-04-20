@@ -52,7 +52,6 @@ namespace ExtendedXmlSerializer.ExtensionModel.Reflection
 		public IServiceRepository Get(IServiceRepository parameter)
 			=> parameter.RegisterInstance(_defaults)
 			            .Register<IAssemblyTypePartitions, AssemblyTypePartitions>()
-			            /*.Register<IElements, Elements>()*/
 			            .Register<ITypeFormatter, TypeFormatter>()
 			            .Register<ITypePartResolver, TypePartResolver>()
 			            .RegisterInstance<IDictionary<Assembly, IIdentity>>(WellKnownIdentities.Default)

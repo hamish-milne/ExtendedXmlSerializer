@@ -24,7 +24,6 @@
 using ExtendedXmlSerializer.ContentModel;
 using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.ExtensionModel.References;
 
 namespace ExtendedXmlSerializer.ExtensionModel
 {
@@ -38,7 +37,6 @@ namespace ExtendedXmlSerializer.ExtensionModel
 			=> parameter.Register<ISerializer, RuntimeSerializer>()
 			            .Register<ISerializerStore, SerializerStore>()
 			            .Register<ISerializers, Serializers>()
-			            .Decorate<ISerializers, ReferenceAwareSerializers>()
 			            .RegisterConstructorDependency<IContent>((provider, info) => provider.Get<DeferredContent>())
 			            .Decorate<IContent, RecursionAwareContent>();
 

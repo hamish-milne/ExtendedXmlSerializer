@@ -23,11 +23,11 @@
 
 using System.IO;
 using System.Text;
-using System.Xml;
 using System.Xml.Serialization;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
+using ExtendedXmlSerializer.ContentModel;
 using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.Tests.Performance.Model;
@@ -39,8 +39,10 @@ namespace ExtendedXmlSerializer.Tests.Performance
 		readonly TestClassOtherClass _obj = new TestClassOtherClass();
 		readonly string _xml;
 #pragma warning disable 618
+
 		readonly ExtendedXmlSerialization.IExtendedXmlSerializer _serializer =
 			new ExtendedXmlSerialization.ExtendedXmlSerializer();
+
 #pragma warning restore 618
 
 		public ExtendedXmlSerializerTest()
@@ -60,22 +62,28 @@ namespace ExtendedXmlSerializer.Tests.Performance
 	[Config(typeof(Configuration))]
 	public class ExtendedXmlSerializerV2Test
 	{
-		readonly IExtendedXmlSerializer _serializer = new ConfigurationContainer().EnableClassicMode()
-		                                                                          .OptimizeConverters()
-		                                                                          .Create();
-
-		readonly TestClassOtherClass _obj = new TestClassOtherClass().Init();
-		readonly byte[] _data;
+		/*readonly TestClassOtherClass _obj = new TestClassOtherClass().Init();
+		readonly byte[] _data;*/
 
 		readonly IXmlWriterFactory _writerFactory = XmlWriterFactory.Default;
+		/*readonly IXmlReaderFactory _readerFactory = new XmlReaderFactory();*/
 
-		readonly IXmlReaderFactory _readerFactory = new XmlReaderFactory();
+		readonly IExtendedXmlSerializer _writers = new ConfigurationContainer().EnableClassicMode()
+		                                                                       .OptimizeConverters()
+		                                                                       .Create();
+
+		readonly IWriter<int> _writer;
+
 
 		public ExtendedXmlSerializerV2Test()
 		{
-			_data = Encoding.UTF8.GetBytes(SerializationClassWithPrimitive());
-			DeserializationClassWithPrimitive();
+			_writer = _writers.For<int>();
+			SerializationClassWithPrimitive();
+
+			//_data = Encoding.UTF8.GetBytes(SerializationClassWithPrimitive());
+			//DeserializationClassWithPrimitive();
 		}
+
 
 		[Benchmark]
 		public string SerializationClassWithPrimitive()
@@ -84,7 +92,8 @@ namespace ExtendedXmlSerializer.Tests.Performance
 			{
 				using (var writer = _writerFactory.Get(stream))
 				{
-					_serializer.Serialize(writer, _obj);
+					_writer.Write(_writers.Get(writer), 6776);
+					writer.Flush();
 					stream.Seek(0, SeekOrigin.Begin);
 					var result = new StreamReader(stream).ReadToEnd();
 					return result;
@@ -92,6 +101,7 @@ namespace ExtendedXmlSerializer.Tests.Performance
 			}
 		}
 
+/*
 		[Benchmark]
 		public object DeserializationClassWithPrimitive()
 		{
@@ -103,18 +113,22 @@ namespace ExtendedXmlSerializer.Tests.Performance
 				}
 			}
 		}
+*/
 
 		sealed class Configuration : ManualConfig
 		{
 			public Configuration()
 			{
-				Add(Job.Default.WithWarmupCount(5).WithTargetCount(10));
+				Add(Job.Default
+				       .WithWarmupCount(5)
+				       .WithTargetCount(10));
 			}
 		}
 	}
 
 	public class XmlSerializerTest
 	{
+		readonly IXmlWriterFactory _writerFactory = XmlWriterFactory.Default;
 		readonly IXmlReaderFactory _readerFactory = new XmlReaderFactory();
 		readonly XmlSerializer _serializer = new XmlSerializer(typeof(TestClassOtherClass));
 		readonly TestClassOtherClass _obj = new TestClassOtherClass().Init();
@@ -131,7 +145,7 @@ namespace ExtendedXmlSerializer.Tests.Performance
 		{
 			using (var stream = new MemoryStream())
 			{
-				using (var writer = XmlWriter.Create(stream))
+				using (var writer = _writerFactory.Get(stream))
 				{
 					_serializer.Serialize(writer, _obj);
 					writer.Flush();
