@@ -23,8 +23,6 @@
 
 using System;
 using ExtendedXmlSerializer.Configuration;
-using ExtendedXmlSerializer.ContentModel;
-using ExtendedXmlSerializer.ContentModel.Format;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using FluentAssertions;
 using XmlWriter = System.Xml.XmlWriter;
@@ -58,7 +56,8 @@ namespace ExtendedXmlSerializer.Tests.Support
 			try
 			{
 				// https://github.com/aspnet/Tooling/issues/324#issuecomment-275236780
-				throw new InvalidOperationException(_serializer.Serialize(instance));
+				var serialize = _serializer.Serialize(instance);
+				throw new InvalidOperationException(serialize);
 			}
 			catch (Exception e)
 			{
@@ -69,11 +68,12 @@ namespace ExtendedXmlSerializer.Tests.Support
 
 		//public TInstance Deserialize<TInstance>(XmlReader reader) => _serializer.Deserialize<TInstance>(reader);
 
-		public void Serialize<TInstance>(XmlWriter parameter, TInstance instance)
+		/*public void Serialize<TInstance>(XmlWriter parameter, TInstance instance)
 			=> _serializer.Serialize(parameter, instance);
 
-		public IFormatWriter Get(XmlWriter parameter) => _serializer.Get(parameter);
+		public IFormatWriter Get(XmlWriter parameter) => _serializer.Get(parameter);*/
 
-		public IWriter<T> For<T>() => _serializer.For<T>();
+		/*public IWriter<T> For<T>() => _serializer.For<T>();*/
+		public ISerialize<XmlWriter, TInstance> Get<TInstance>() => _serializer.Get<TInstance>();
 	}
 }

@@ -27,9 +27,9 @@ using Newtonsoft.Json;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
-	sealed class InstanceFormatter<T> : InstanceFormatter<T, JsonTextWriter>
+	sealed class InstanceFormatter<T> : InstanceFormatter<JsonTextWriter, T>
 	{
-		public InstanceFormatter(ISerialize<JsonTextWriter> serializer, IWriterFactory factory, Func<Stream> stream)
+		public InstanceFormatter(ISerialize<JsonTextWriter, T> serializer, IWriterFactory factory, Func<Stream> stream)
 			: base(serializer, factory, stream) {}
 	}
 }

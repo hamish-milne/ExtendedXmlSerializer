@@ -31,7 +31,6 @@ using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic;
-using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
@@ -48,7 +47,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		public static TypeConfiguration<T> CustomSerializer<T>(this TypeConfiguration<T> @this,
 		                                                       IExtendedXmlCustomSerializer<T> serializer)
 		{
-			@this.Configuration.With<CustomXmlExtension>().Assign(@this.Get(), new Adapter<T>(serializer));
+			@this.Configuration.With<CustomXmlExtension>()
+			     .Assign(@this.Get(), new Adapter<T>(serializer));
 			return @this;
 		}
 
@@ -63,12 +63,14 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		public static TypeConfiguration<T> AddMigration<T>(this TypeConfiguration<T> @this,
 		                                                   IEnumerable<Action<XElement>> migrations)
 		{
-			@this.Configuration.With<MigrationsExtension>().Add(@this.Get(), migrations.Fixed());
+			@this.Configuration.With<MigrationsExtension>()
+			     .Add(@this.Get(), migrations.Fixed());
 			return @this;
 		}
 
 		public static IExtendedXmlSerializer Create(this IConfigurationContainer @this)
-			=> @this.AsValid<ConfigurationContainer>().Create();
+			=> @this.AsValid<ConfigurationContainer>()
+			        .Create();
 
 		public static IConfigurationContainer UseAutoFormatting(this IConfigurationContainer @this)
 			=> @this.Extend(AutoMemberFormatExtension.Default);
@@ -77,13 +79,11 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			=> @this.Extend(new AutoMemberFormatExtension(maxTextLength));
 
 		public static IConfigurationContainer EnableClassicMode(this IConfigurationContainer @this)
-			=> @this./*Emit(EmitBehaviors.Classic).*/Extend(ClassicExtension.Default);
+			=> @this. /*Emit(EmitBehaviors.Classic).*/Extend(ClassicExtension.Default);
 
 		public static IConfigurationContainer UseOptimizedNamespaces(this IConfigurationContainer @this)
 			=> @this.Extend(OptimizedNamespaceExtension.Default);
 
-
-		readonly static Func<Stream> New = Activators.Default.New<MemoryStream>;
 
 		readonly static IXmlWriterFactory WriterFactory
 			= new XmlWriterFactory(CloseSettings.Default.Get(Defaults.WriterSettings));
@@ -91,14 +91,15 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		readonly static XmlReaderSettings CloseRead = CloseSettings.Default.Get(Defaults.ReaderSettings);
 
 		public static IExtendedXmlSerializer Create<T>(this T @this, Func<T, IConfigurationContainer> configure)
-			where T : IConfigurationContainer => configure(@this).Create();
+			where T : IConfigurationContainer => configure(@this)
+			.Create();
 
 
 		public static string Serialize<T>(this IExtendedXmlSerializer @this, T instance)
-			=> Serialize(@this, WriterFactory, New, instance);
+			=> Serialize(@this, WriterFactory, Defaults.Stream, instance);
 
 		public static string Serialize<T>(this IExtendedXmlSerializer @this, XmlWriterSettings settings, T instance)
-			=> Serialize(@this, new XmlWriterFactory(CloseSettings.Default.Get(settings)), New, instance);
+			=> Serialize(@this, new XmlWriterFactory(CloseSettings.Default.Get(settings)), Defaults.Stream, instance);
 
 		public static string Serialize<T>(this IExtendedXmlSerializer @this, Stream stream, T instance)
 			=> Serialize(@this, XmlWriterFactory.Default, stream.Self, instance);
@@ -109,7 +110,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 		static string Serialize<T>(this IExtendedXmlSerializer @this, IXmlWriterFactory factory, Func<Stream> stream,
 		                           T instance)
-			=> new InstanceFormatter<T>(@this, factory, stream).Get(instance);
+			=> new InstanceFormatter<T>(@this.Get<T>(), factory, stream).Get(instance);
 
 		public static void Serialize<T>(this IExtendedXmlSerializer @this, TextWriter writer, T instance)
 			=> Serialize(@this, XmlWriterFactory.Default, writer, instance);
@@ -119,7 +120,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			=> Serialize(@this, new XmlWriterFactory(settings), writer, instance);
 
 		static void Serialize<T>(this IExtendedXmlSerializer @this, IXmlWriterFactory factory, TextWriter writer, T instance)
-			=> @this.Serialize(factory.Get(writer), instance);
+			=> @this.Get<T>()
+			        .Serialize(factory.Get(writer), instance);
 
 		public static XmlParserContext Context(this XmlNameTable @this)
 			=> XmlParserContexts.Default.Get(@this ?? new NameTable());
@@ -146,7 +148,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			=> Deserialize<T>(@this, new XmlReaderFactory(settings, settings.NameTable.Context()), reader);
 
 		static T Deserialize<T>(this IExtendedXmlSerializer @this, IXmlReaderFactory factory, TextReader reader)
-			=> @this.Deserialize<T>(/*factory.Get(reader)*/StreamReader.Null);
+			=> @this.Deserialize<T>( /*factory.Get(reader)*/StreamReader.Null);
 
 
 		/*public static T Deserializer<T>(this IExtendedXmlSerializer<T> @this, string data)

@@ -21,18 +21,21 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using ExtendedXmlSerializer.Core.Sources;
+using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
+using ExtendedXmlSerializer.Tests.Support;
+using FluentAssertions;
 using Xunit;
 using Xunit.Abstractions;
 
 namespace ExtendedXmlSerializer.Tests
 {
-	public class SerializeTests
+	public class SerializersTests
 	{
 		readonly ITestOutputHelper _output;
-		readonly IXmlWriterFactory _writerFactory = XmlWriterFactory.Default;
 
-		public SerializeTests(ITestOutputHelper output)
+		public SerializersTests(ITestOutputHelper output)
 		{
 			_output = output;
 		}
@@ -40,34 +43,22 @@ namespace ExtendedXmlSerializer.Tests
 		[Fact]
 		public void Verify()
 		{
-			/*var sut = new ConfigurationContainer().EnableClassicMode()
+			var sut = new ConfigurationContainer()/*.EnableClassicMode()*/
 			                                      .OptimizeConverters()
 			                                      .Create()
 			                                      .ForTesting();
-			var writer = sut.For<int>();*/
-			//sut.WriteLine(_output.WriteLine, 1234);
+
+			/*sut.WriteLine(_output.WriteLine, 1234);*/
 			/*var number = sut.Cycle(6776);
 			number.Should().Be(6776);*/
 
-			/*var text = First(writer, sut);*/
-			//Measure(writer, sut);
+			var formatter = new InstanceFormatter<int>(sut.Get<int>());
+			First(formatter);
+			Measure(formatter);
 		}
 
-		/*string First(IWriter<int> w, IExtendedXmlSerializer sut)
-		{
-			using (var stream = new MemoryStream())
-			{
-				using (var writer = _writerFactory.Get(stream))
-				{
-					w.Write(sut.Get(writer), 6776);
-					writer.Flush();
-					stream.Seek(0, SeekOrigin.Begin);
-					var result = new StreamReader(stream).ReadToEnd();
-					return result;
-				}
-			}
-		}
+		string First(IFormatter<int> formatter) => formatter.Get(6776);
 
-		void Measure(IWriter<int> w, IExtendedXmlSerializer sut) => First(w, sut);*/
+		void Measure(IFormatter<int> formatter) => First(formatter);
 	}
 }

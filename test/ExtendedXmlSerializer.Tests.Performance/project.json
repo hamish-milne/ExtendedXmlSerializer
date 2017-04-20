@@ -1,9 +1,10 @@
 {
   "version": "2.0.0-alpha3",
-  "buildOptions": {
-    "emitEntryPoint": true,
-    "allowUnsafe": true
-  },
+    "buildOptions": {
+        "emitEntryPoint": true,
+        "preserveCompilationContext": true,
+        "platform": "anycpu"
+    },
   "configurations": {
     "Debug": {
       "buildOptions": {

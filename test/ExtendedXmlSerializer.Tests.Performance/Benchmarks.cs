@@ -23,11 +23,12 @@
 
 using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
-using ExtendedXmlSerializer.ContentModel;
+using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.Tests.Performance.Model;
@@ -65,24 +66,25 @@ namespace ExtendedXmlSerializer.Tests.Performance
 		/*readonly TestClassOtherClass _obj = new TestClassOtherClass().Init();
 		readonly byte[] _data;*/
 
-		readonly IXmlWriterFactory _writerFactory = XmlWriterFactory.Default;
 		/*readonly IXmlReaderFactory _readerFactory = new XmlReaderFactory();*/
 
-		readonly IExtendedXmlSerializer _writers = new ConfigurationContainer().EnableClassicMode()
-		                                                                       .OptimizeConverters()
-		                                                                       .Create();
+		readonly static XmlWriterFactory XmlWriterFactory = XmlWriterFactory.Default;
 
-		readonly IWriter<int> _writer;
+		readonly ISerialize<XmlWriter, int> _serializer = new ConfigurationContainer().EnableClassicMode()
+		                                                                              .OptimizeConverters()
+		                                                                              .Create()
+		                                                                              .Get<int>();
 
+		readonly IFormatter<int> _writer;
 
 		public ExtendedXmlSerializerV2Test()
 		{
-			_writer = _writers.For<int>();
-			SerializationClassWithPrimitive();
-
-			//_data = Encoding.UTF8.GetBytes(SerializationClassWithPrimitive());
-			//DeserializationClassWithPrimitive();
+			_writer = new InstanceFormatter<int>(_serializer);
 		}
+
+
+		[Benchmark]
+		public string Writer() => _writer.Get(6776);
 
 
 		[Benchmark]
@@ -90,9 +92,64 @@ namespace ExtendedXmlSerializer.Tests.Performance
 		{
 			using (var stream = new MemoryStream())
 			{
-				using (var writer = _writerFactory.Get(stream))
+				using (var writer = XmlWriterFactory.Get(stream))
 				{
-					_writer.Write(_writers.Get(writer), 6776);
+					_serializer.Serialize(writer, 6776);
+					writer.Flush();
+					stream.Seek(0, SeekOrigin.Begin);
+					var result = new StreamReader(stream).ReadToEnd();
+					return result;
+				}
+			}
+		}
+
+		/*
+				[Benchmark]
+				public object DeserializationClassWithPrimitive()
+				{
+					using (var stream = new MemoryStream(_data))
+					{
+						using (var reader = _readerFactory.Get(stream))
+						{
+							return _serializer.Deserialize<TestClassOtherClass>(reader);
+						}
+					}
+				}
+		*/
+
+		sealed class Configuration : ManualConfig
+		{
+			public Configuration()
+			{
+				Add(Job.LegacyJitX86
+				       .WithWarmupCount(5)
+				       .WithTargetCount(10));
+			}
+		}
+	}
+
+	public class XmlSerializerTest
+	{
+		readonly IXmlWriterFactory _writerFactory = XmlWriterFactory.Default;
+		readonly IXmlReaderFactory _readerFactory = new XmlReaderFactory();
+		readonly XmlSerializer _serializer = new XmlSerializer(typeof(int));
+		readonly TestClassOtherClass _obj = new TestClassOtherClass().Init();
+		readonly byte[] _xml;
+
+		public XmlSerializerTest()
+		{
+			_xml = Encoding.UTF8.GetBytes(SerializationClassWithPrimitive());
+			//DeserializationClassWithPrimitive();
+		}
+
+		[Benchmark]
+		public string SerializationClassWithPrimitive()
+		{
+			using (var stream = new MemoryStream())
+			{
+				using (var writer = XmlWriterFactory.Default.Get(stream))
+				{
+					_serializer.Serialize(writer, 6776);
 					writer.Flush();
 					stream.Seek(0, SeekOrigin.Begin);
 					var result = new StreamReader(stream).ReadToEnd();
@@ -105,60 +162,6 @@ namespace ExtendedXmlSerializer.Tests.Performance
 		[Benchmark]
 		public object DeserializationClassWithPrimitive()
 		{
-			using (var stream = new MemoryStream(_data))
-			{
-				using (var reader = _readerFactory.Get(stream))
-				{
-					return _serializer.Deserialize<TestClassOtherClass>(reader);
-				}
-			}
-		}
-*/
-
-		sealed class Configuration : ManualConfig
-		{
-			public Configuration()
-			{
-				Add(Job.Default
-				       .WithWarmupCount(5)
-				       .WithTargetCount(10));
-			}
-		}
-	}
-
-	public class XmlSerializerTest
-	{
-		readonly IXmlWriterFactory _writerFactory = XmlWriterFactory.Default;
-		readonly IXmlReaderFactory _readerFactory = new XmlReaderFactory();
-		readonly XmlSerializer _serializer = new XmlSerializer(typeof(TestClassOtherClass));
-		readonly TestClassOtherClass _obj = new TestClassOtherClass().Init();
-		readonly byte[] _xml;
-
-		public XmlSerializerTest()
-		{
-			_xml = Encoding.UTF8.GetBytes(SerializationClassWithPrimitive());
-			DeserializationClassWithPrimitive();
-		}
-
-		[Benchmark]
-		public string SerializationClassWithPrimitive()
-		{
-			using (var stream = new MemoryStream())
-			{
-				using (var writer = _writerFactory.Get(stream))
-				{
-					_serializer.Serialize(writer, _obj);
-					writer.Flush();
-					stream.Seek(0, SeekOrigin.Begin);
-					var result = new StreamReader(stream).ReadToEnd();
-					return result;
-				}
-			}
-		}
-
-		[Benchmark]
-		public object DeserializationClassWithPrimitive()
-		{
 			using (var stream = new MemoryStream(_xml))
 			{
 				using (var reader = _readerFactory.Get(stream))
@@ -168,5 +171,6 @@ namespace ExtendedXmlSerializer.Tests.Performance
 				}
 			}
 		}
+*/
 	}
 }

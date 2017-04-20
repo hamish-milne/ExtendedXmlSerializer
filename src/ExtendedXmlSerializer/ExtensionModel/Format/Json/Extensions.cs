@@ -39,12 +39,13 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 			=> Serialize(@this, WriterFactory.Default, stream.Self, instance);
 
 		static string Serialize<T>(this ISerializer @this, IWriterFactory factory, Func<Stream> stream, T instance)
-			=> new InstanceFormatter<T>(@this, factory, stream).Get(instance);
+			=> new InstanceFormatter<T>(@this.Get<T>(), factory, stream).Get(instance);
 
 		public static void Serialize<T>(this ISerializer @this, TextWriter writer, T instance)
 			=> Serialize(@this, WriterFactory.Default, writer, instance);
 
 		static void Serialize<T>(this ISerializer @this, IWriterFactory factory, TextWriter writer, T instance)
-			=> @this.Serialize(factory.Get(writer), instance);
+			=> @this.Get<T>()
+			        .Serialize(factory.Get(writer), instance);
 	}
 }

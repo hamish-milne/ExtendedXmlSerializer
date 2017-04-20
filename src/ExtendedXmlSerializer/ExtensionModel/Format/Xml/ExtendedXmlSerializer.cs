@@ -56,37 +56,25 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			_store = store;
 		}
 
-		/*sealed class Serializer<T> : IWriter<T>
+		public ISerialize<System.Xml.XmlWriter, TInstance> Get<TInstance>()
+			=> new Serializer<TInstance>(_writers, _store.Get<TInstance>());
+
+		sealed class Serializer<T> : ISerialize<System.Xml.XmlWriter, T>
 		{
-			readonly ISerializer<T> _serializer;
-			readonly IFormatWriters<System.Xml.XmlWriter> _writers;
+			readonly IWriter<T> _writer;
+			readonly IFormatWriters<System.Xml.XmlWriter> _source;
 
-			public Serializer(ISerializer<T> serializer, IFormatWriters<System.Xml.XmlWriter> writers)
+			public Serializer(IFormatWriters<System.Xml.XmlWriter> source, IWriter<T> writer)
 			{
-				_serializer = serializer;
-				_writers = writers;
+				_writer = writer;
+				_source = source;
 			}
 
-			public void Serialize<TInstance>(System.Xml.XmlWriter parameter, TInstance instance)
+			public void Serialize(System.Xml.XmlWriter parameter, T instance)
 			{
-				_serializer.Write(_writers.Get(parameter), instance);
+				_writer.Write(_source.Get(parameter), instance);
+				parameter.Flush();
 			}
-
-			public void Write(IFormatWriter writer, T instance)
-			{
-				throw new System.NotImplementedException();
-			}
-		}*/
-
-		public IWriter<T> For<T>() => _store.Get<T>();
-
-		public void Serialize<TInstance>(System.Xml.XmlWriter parameter, TInstance instance)
-		{
-			_store.Get<TInstance>()
-			      .Write(_writers.Get(parameter), instance);
-			parameter.Flush();
 		}
-
-		public IFormatWriter Get(System.Xml.XmlWriter parameter) => _writers.Get(parameter);
 	}
 }
