@@ -44,14 +44,14 @@ namespace ExtendedXmlSerializer.ExtensionModel.Roots
 			_serialize = serialize;
 		}
 
-		public void Serialize(TParameter parameter, TInstance instance)
+		public void Serialize(TParameter writer, TInstance instance)
 		{
 			if (_specification.IsSatisfiedBy(Support<TInstance>.Key))
 			{
-				_roots.Assign(parameter, instance);
+				_roots.Assign(writer, instance);
 			}
 
-			_serialize.Serialize(parameter, instance);
+			_serialize.Serialize(writer, instance);
 		}
 	}
 }

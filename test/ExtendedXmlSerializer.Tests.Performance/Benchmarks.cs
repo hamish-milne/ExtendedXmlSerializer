@@ -21,30 +21,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using BenchmarkDotNet.Attributes;
 using BenchmarkDotNet.Configs;
 using BenchmarkDotNet.Jobs;
-using ExtendedXmlSerializer.Configuration;
-using ExtendedXmlSerializer.ContentModel.Content.Conversion;
-using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.Core.Sources;
-using ExtendedXmlSerializer.ExtensionModel;
-using ExtendedXmlSerializer.ExtensionModel.Caching;
 using ExtendedXmlSerializer.ExtensionModel.Content;
-using ExtendedXmlSerializer.ExtensionModel.Content.Members;
-using ExtendedXmlSerializer.ExtensionModel.Format;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
-using ExtendedXmlSerializer.ExtensionModel.Format.Xml.Classic;
-using ExtendedXmlSerializer.ExtensionModel.References;
-using ExtendedXmlSerializer.ExtensionModel.Reflection;
-using ExtendedXmlSerializer.ExtensionModel.Roots;
 using ExtendedXmlSerializer.Tests.Performance.Model;
+
 
 namespace ExtendedXmlSerializer.Tests.Performance
 {
@@ -73,6 +59,15 @@ namespace ExtendedXmlSerializer.Tests.Performance
 		public TestClassOtherClass DeserializationClassWithPrimitive() => _serializer.Deserialize<TestClassOtherClass>(_xml);
 	}
 
+/*
+	public class AffinityColumnAttribute : ColumnConfigBaseAttribute
+	{
+		readonly static JobCharacteristicColumn Column = new JobCharacteristicColumn(EnvMode.AffinityCharacteristic);
+
+		public AffinityColumnAttribute() : base(Column) {}
+	}
+*/
+
 	[Config(typeof(Configuration))]
 	public class ExtendedXmlSerializerV2Test
 	{
@@ -81,12 +76,15 @@ namespace ExtendedXmlSerializer.Tests.Performance
 
 		/*readonly IXmlReaderFactory _readerFactory = new XmlReaderFactory();*/
 
-		readonly ISerialize<XmlWriter, int> _serializer = new ConfigurationContainer()
-			.EnableClassicMode()
-			.OptimizeConverters()
-			.Create()
-			.Get<int>();
+		readonly ISerialize<XmlWriter, int> _serializer = new ConfigurationContainer().EnableClassicMode()
+		                                                                              .OptimizeConverters()
+		                                                                              .Create()
+		                                                                              .Get();
 
+		/*public ExtendedXmlSerializerV2Test()
+		{
+			Write();
+		}*/
 
 		[Benchmark]
 		public void Write()
@@ -112,17 +110,74 @@ namespace ExtendedXmlSerializer.Tests.Performance
 		*/
 	}
 
+	//[AffinityColumn]
 	sealed class Configuration : ManualConfig
 	{
+		/*readonly static JobCharacteristicColumn Column = new JobCharacteristicColumn(EnvMode.AffinityCharacteristic);*/
+
 		public Configuration()
 		{
-			Add(Job.LegacyJitX64
+			Add(Job.Default
+			       //.With(new WindowsClock())
+			       //.WithAffinity(new IntPtr(2))
 			       .WithWarmupCount(5)
 			       .WithTargetCount(10));
+
+			//Add(ProcessorColumn.Default);
 		}
 	}
 
+/*
+	sealed class ProcessorColumn : TagColumn
+	{
+		[DllImport("kernel32.dll")]
+		static extern int GetCurrentProcessorNumber();
 
+		static string GetCurrentProcessor(string _) => GetCurrentProcessorNumber()
+			.ToString();
+
+		public static ProcessorColumn Default { get; } = new ProcessorColumn();
+		ProcessorColumn() : base("Processor", GetCurrentProcessor) {}
+	}
+*/
+
+/*
+	sealed class EmptyExports : IConfig
+	{
+		readonly IConfig _config;
+
+		public EmptyExports(IConfig config)
+		{
+			_config = config;
+		}
+
+		public IEnumerable<IColumnProvider> GetColumnProviders() => _config.GetColumnProviders();
+
+		public IEnumerable<IExporter> GetExporters() => Enumerable.Empty<IExporter>();
+
+		public IEnumerable<ILogger> GetLoggers() => _config.GetLoggers();
+
+		public IEnumerable<IDiagnoser> GetDiagnosers() => _config.GetDiagnosers();
+
+		public IEnumerable<IAnalyser> GetAnalysers() => _config.GetAnalysers();
+
+		public IEnumerable<Job> GetJobs() => _config.GetJobs();
+
+		public IEnumerable<IValidator> GetValidators() => _config.GetValidators();
+
+		public IEnumerable<HardwareCounter> GetHardwareCounters() => _config.GetHardwareCounters();
+
+		public IOrderProvider GetOrderProvider() => _config.GetOrderProvider();
+
+		public ISummaryStyle GetSummaryStyle() => _config.GetSummaryStyle();
+
+		public ConfigUnionRule UnionRule => _config.UnionRule;
+
+		public bool KeepBenchmarkFiles => false;
+	}
+*/
+
+	[Config(typeof(Configuration))]
 	public class XmlSerializerTest
 	{
 		/*		readonly IXmlReaderFactory _readerFactory = new XmlReaderFactory();*/
@@ -133,7 +188,8 @@ namespace ExtendedXmlSerializer.Tests.Performance
 
 		public XmlSerializerTest()
 		{
-			/*_xml = Encoding.UTF8.GetBytes(SerializationClassWithPrimitive());*/
+			Write();
+			//_xml = Encoding.UTF8.GetBytes(SerializationClassWithPrimitive());
 			//DeserializationClassWithPrimitive();
 		}
 

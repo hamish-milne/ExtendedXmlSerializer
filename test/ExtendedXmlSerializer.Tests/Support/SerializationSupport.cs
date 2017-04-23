@@ -25,6 +25,7 @@ using System;
 using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using FluentAssertions;
+using XmlReader = System.Xml.XmlReader;
 using XmlWriter = System.Xml.XmlWriter;
 
 namespace ExtendedXmlSerializer.Tests.Support
@@ -74,6 +75,11 @@ namespace ExtendedXmlSerializer.Tests.Support
 		public IFormatWriter Get(XmlWriter parameter) => _serializer.Get(parameter);*/
 
 		/*public IWriter<T> For<T>() => _serializer.For<T>();*/
-		public ISerialize<XmlWriter, TInstance> Get<TInstance>() => _serializer.Get<TInstance>();
+
+		public ISerializer<XmlReader, XmlWriter, TInstance> Get<TInstance>() => _serializer.Get<TInstance>();
+		public ISerialize<XmlWriter, int> Get()
+		{
+			return _serializer.Get();
+		}
 	}
 }

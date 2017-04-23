@@ -1,9 +1,7 @@
 {
   "version": "2.0.0-alpha3",
     "buildOptions": {
-        "emitEntryPoint": true,
-        "preserveCompilationContext": true,
-        "platform": "anycpu"
+        "emitEntryPoint": true
     },
   "configurations": {
     "Debug": {
@@ -37,8 +35,8 @@
 
       },
       "dependencies": {
-        "BenchmarkDotNet": "0.10.3",
-        "BenchmarkDotNet.Diagnostics.Windows": "0.10.3"
+        "BenchmarkDotNet": "0.10.4",
+        "BenchmarkDotNet.Diagnostics.Windows": "0.10.4"
       }
     },
     "netcoreapp1.0": {

@@ -21,8 +21,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ExtendedXmlSerializer.ContentModel;
-using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.Core;
 
 namespace ExtendedXmlSerializer.ExtensionModel
@@ -34,11 +32,10 @@ namespace ExtendedXmlSerializer.ExtensionModel
 		SerializationExtension() {}
 
 		public IServiceRepository Get(IServiceRepository parameter)
-			=> parameter.Register<ISerializer, RuntimeSerializer>()
-			            .Register<ISerializerStore, SerializerStore>()
-			            .Register<ISerializers, Serializers>()
-			            .RegisterConstructorDependency<IContent>((provider, info) => provider.Get<DeferredContent>())
-			            .Decorate<IContent, RecursionAwareContent>();
+			=> parameter.Register(typeof(IDeserializes<>), typeof(Deserializes<>))
+			            .Register(typeof(ISerializes<>), typeof(Serializes<>))
+			            .Register(typeof(ISerializers<,>), typeof(Serializers<,>))
+		/*.Register(typeof(ISerializer<,>), typeof(Serializer<,>))*/;
 
 		void ICommand<IServices>.Execute(IServices parameter) {}
 	}

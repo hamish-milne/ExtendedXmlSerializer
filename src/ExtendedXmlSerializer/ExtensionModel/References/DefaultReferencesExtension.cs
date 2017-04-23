@@ -35,7 +35,8 @@ namespace ExtendedXmlSerializer.ExtensionModel.References
 			=> parameter.Register<ContainsStaticReferenceSpecification>()
 			            .Register<IStaticReferenceSpecification, ContainsStaticReferenceSpecification>()
 			            .Register<IRootReferences, RootReferences>()
-			            .Decorate<ISerializers, ReferenceAwareSerializers>();
+			            .Decorate<ISerializers, ReferenceAwareSerializers>()
+			            .Decorate<IContent, RecursionAwareContent>();
 
 		void ICommand<IServices>.Execute(IServices parameter) {}
 	}

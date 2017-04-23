@@ -58,8 +58,8 @@ namespace ExtendedXmlSerializer.ExtensionModel
 		{
 			yield return ReflectionModelExtension.Default;
 			yield return ContentModelExtension.Default;
-			yield return SerializerExtension.Default;
 			yield return DefaultReferencesExtension.Default;
+			yield return SerializationExtension.Default;
 			yield return _format;
 			yield return new ConverterRegistryExtension();
 			yield return new TypeNamesExtension(_defaultTypeNames);
@@ -69,7 +69,6 @@ namespace ExtendedXmlSerializer.ExtensionModel
 			yield return new AllowedMemberValuesExtension();
 			yield return new MemberFormatExtension();
 			yield return RootsExtension.Default;
-			yield return SerializationExtension.Default;
 			yield return CachingExtension.Default;
 		}
 	}

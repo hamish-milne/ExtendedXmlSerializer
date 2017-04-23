@@ -24,16 +24,13 @@
 using System;
 using System.IO;
 using ExtendedXmlSerializer.Core;
-using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Json
 {
 	public static class Extensions
 	{
-		readonly static Func<Stream> New = Activators.Default.New<MemoryStream>;
-
 		public static void Serialize<T>(this ISerializer @this, T instance)
-			=> Serialize(@this, WriterFactory.Default, New, instance);
+			=> Serialize(@this, WriterFactory.Default, Format.Defaults.Stream, instance);
 
 		public static string Serialize<T>(this ISerializer @this, Stream stream, T instance)
 			=> Serialize(@this, WriterFactory.Default, stream.Self, instance);

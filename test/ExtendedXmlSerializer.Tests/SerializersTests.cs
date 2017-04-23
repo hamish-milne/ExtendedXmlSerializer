@@ -21,8 +21,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ExtendedXmlSerializer.Core.Sources;
-using ExtendedXmlSerializer.ExtensionModel.Content;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.Tests.Support;
 using FluentAssertions;
@@ -41,24 +39,23 @@ namespace ExtendedXmlSerializer.Tests
 		}
 
 		[Fact]
-		public void Verify()
+		public void Basic()
 		{
-			var sut = new ConfigurationContainer()/*.EnableClassicMode()*/
-			                                      .OptimizeConverters()
-			                                      .Create()
+			var sut = new ConfigurationContainer().Create()
 			                                      .ForTesting();
 
 			/*sut.WriteLine(_output.WriteLine, 1234);*/
 			/*var number = sut.Cycle(6776);
 			number.Should().Be(6776);*/
 
-			var formatter = new InstanceFormatter<int>(sut.Get<int>());
+			/*var formatter = new InstanceFormatter<int>(sut.Get<int>());
 			First(formatter);
-			Measure(formatter);
+			Measure(formatter);*/
+			sut.Should().NotBeNull();
 		}
 
-		string First(IFormatter<int> formatter) => formatter.Get(6776);
+		/*string First(IFormatter<int> formatter) => formatter.Get(6776);
 
-		void Measure(IFormatter<int> formatter) => First(formatter);
+		void Measure(IFormatter<int> formatter) => First(formatter);*/
 	}
 }

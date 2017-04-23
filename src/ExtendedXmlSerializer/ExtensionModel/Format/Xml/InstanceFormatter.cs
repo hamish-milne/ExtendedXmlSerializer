@@ -28,11 +28,26 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
 	public sealed class InstanceFormatter<T> : InstanceFormatter<System.Xml.XmlWriter, T>
 	{
-		public InstanceFormatter(ISerialize<System.Xml.XmlWriter, T> serializer)
-			: this(serializer, XmlWriterFactory.Default, Defaults.Stream) {}
+		public InstanceFormatter(ISerialize<System.Xml.XmlWriter, T> serialize)
+			: this(serialize, XmlWriterFactory.Default, Format.Defaults.Stream) {}
 
-		public InstanceFormatter(ISerialize<System.Xml.XmlWriter, T> serializer, IXmlWriterFactory factory,
+		public InstanceFormatter(ISerialize<System.Xml.XmlWriter, T> serialize, IXmlWriterFactory factory,
 		                         Func<Stream> stream)
-			: base(serializer, factory, stream) {}
+			: base(new Serialize(serialize), factory, stream) {}
+
+		sealed class Serialize : ISerialize<System.Xml.XmlWriter, T>
+		{
+			readonly ISerialize<System.Xml.XmlWriter, T> _serialize;
+			public Serialize(ISerialize<System.Xml.XmlWriter, T> serialize)
+			{
+				_serialize = serialize;
+			}
+
+			void ISerialize<System.Xml.XmlWriter, T>.Serialize(System.Xml.XmlWriter writer, T instance)
+			{
+				_serialize.Serialize(writer, instance);
+				writer.Flush();
+			}
+		}
 	}
 }

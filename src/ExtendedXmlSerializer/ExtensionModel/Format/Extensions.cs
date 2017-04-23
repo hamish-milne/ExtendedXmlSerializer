@@ -1,11 +1,18 @@
 ﻿using System;
+using System.IO;
 using ExtendedXmlSerializer.Configuration;
 using ExtendedXmlSerializer.ContentModel.Content.Composite.Members;
 using ExtendedXmlSerializer.Core;
 using ExtendedXmlSerializer.Core.Specifications;
+using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format
 {
+	public static class Defaults
+	{
+		public static Func<Stream> Stream { get; } = Activators.Default.New<MemoryStream>;
+	}
+
 	public static class Extensions
 	{
 		public static IMemberConfiguration Attribute<T, TMember>(

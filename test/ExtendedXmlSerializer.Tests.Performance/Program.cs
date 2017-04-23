@@ -33,6 +33,6 @@ namespace ExtendedXmlSerializer.Tests.Performance
 			                                                         typeof(ExtendedXmlSerializerTest),
 			                                                         typeof(ExtendedXmlSerializerV2Test),
 			                                                         typeof(XmlSerializerTest)
-		                                                         }).Run(args);
+		                                                         }).Run(args/*, new EmptyExports(DefaultConfig.Instance)*/);
 	}
 }

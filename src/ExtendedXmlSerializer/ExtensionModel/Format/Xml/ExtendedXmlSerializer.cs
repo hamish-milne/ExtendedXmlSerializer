@@ -21,7 +21,6 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using ExtendedXmlSerializer.ContentModel;
 using ExtendedXmlSerializer.ContentModel.Content;
 using ExtendedXmlSerializer.ContentModel.Format;
 
@@ -47,19 +46,21 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 	sealed class ExtendedXmlSerializer : IExtendedXmlSerializer
 	{
+		readonly ISerializers<System.Xml.XmlReader, System.Xml.XmlWriter> _serializers;
 		readonly IFormatWriters<System.Xml.XmlWriter> _writers;
 		readonly ISerializerStore _store;
 
-		public ExtendedXmlSerializer(IFormatWriters<System.Xml.XmlWriter> writers, ISerializerStore store)
+		public ExtendedXmlSerializer(ISerializers<System.Xml.XmlReader, System.Xml.XmlWriter> serializers, IFormatWriters<System.Xml.XmlWriter> writers, ISerializerStore store)
 		{
+			_serializers = serializers;
 			_writers = writers;
 			_store = store;
 		}
 
-		public ISerialize<System.Xml.XmlWriter, TInstance> Get<TInstance>()
-			=> new Serializer<TInstance>(_writers, _store.Get<TInstance>());
+		/*public ISerialize<System.Xml.XmlWriter, TInstance> Get<TInstance>()
+			=> new Serializer<TInstance>(_writers, _store.Get<TInstance>());*/
 
-		sealed class Serializer<T> : ISerialize<System.Xml.XmlWriter, T>
+		/*sealed class Serializer<T> : ISerialize<System.Xml.XmlWriter, T>
 		{
 			readonly IWriter<T> _writer;
 			readonly IFormatWriters<System.Xml.XmlWriter> _source;
@@ -70,11 +71,15 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 				_source = source;
 			}
 
-			public void Serialize(System.Xml.XmlWriter parameter, T instance)
+			public void Serialize(System.Xml.XmlWriter writer, T instance)
 			{
-				_writer.Write(_source.Get(parameter), instance);
-				parameter.Flush();
+				_writer.Write(_source.Get(writer), instance);
+				writer.Flush();
 			}
-		}
+		}*/
+		public ISerializer<System.Xml.XmlReader, System.Xml.XmlWriter, TInstance> Get<TInstance>()
+			=> _serializers.Get<TInstance>();
+
+		public ISerialize<System.Xml.XmlWriter, int> Get() => new Serialize<System.Xml.XmlWriter, int>(_writers, _store.Get<int>());
 	}
 }

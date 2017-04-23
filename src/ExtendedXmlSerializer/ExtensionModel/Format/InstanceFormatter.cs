@@ -29,14 +29,14 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format
 {
 	public class InstanceFormatter<TParameter, TInstance> : IFormatter<TInstance> where TParameter : IDisposable
 	{
-		readonly ISerialize<TParameter, TInstance> _serializer;
+		readonly ISerialize<TParameter, TInstance> _serialize;
 		readonly IWriterFactory<TParameter> _factory;
 		readonly Func<Stream> _stream;
 
-		public InstanceFormatter(ISerialize<TParameter, TInstance> serializer, IWriterFactory<TParameter> factory,
+		public InstanceFormatter(ISerialize<TParameter, TInstance> serialize, IWriterFactory<TParameter> factory,
 		                         Func<Stream> stream)
 		{
-			_serializer = serializer;
+			_serialize = serialize;
 			_factory = factory;
 			_stream = stream;
 		}
@@ -46,7 +46,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format
 			var stream = _stream();
 			using (var writer = _factory.Get(stream))
 			{
-				_serializer.Serialize(writer, parameter);
+				_serialize.Serialize(writer, parameter);
 
 				stream.Seek(0, SeekOrigin.Begin);
 				var result = new StreamReader(stream).ReadToEnd();

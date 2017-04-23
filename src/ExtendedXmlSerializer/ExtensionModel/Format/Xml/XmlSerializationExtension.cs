@@ -64,7 +64,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			            .RegisterInstance<IReaderFormatter>(ReaderFormatter.Default)
 			            .RegisterInstance<IFormattedContentSpecification>(FormattedContentSpecification.Default)
 			            .RegisterInstance<IListContentsSpecification>(new ListContentsSpecification(_specification))
-			            //.Decorate<ISerialize<System.Xml.XmlWriter>, Serialize>()
+			            //.Decorate<ISerializes<System.Xml.XmlWriter>, Serializes>()
 			            .Register<IInnerContentActivation, XmlInnerContentActivation>()
 			            .Register<IFormatWriters<System.Xml.XmlWriter>, FormatWriterContext>()
 			            .Register<IFormatReaderContexts<XmlNameTable>, FormatReaderContexts>()
@@ -75,7 +75,7 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 	}
 
 /*
-	sealed class Serialize : ISerialize<System.Xml.XmlWriter>
+	sealed class Serializes : ISerializes<System.Xml.XmlWriter>
 	{
 		readonly ISerialize<System.Xml.XmlWriter> _serialize;
 
@@ -88,6 +88,21 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 		{
 			_serialize.Serialize(parameter, instance);
 			parameter.Flush();
+		}
+
+		public ISerialize<System.Xml.XmlWriter, TInstance> Get<TInstance>()
+		{
+			throw new System.NotImplementedException();
+		}
+
+		sealed class Serialize<T> : ISerialize<System.Xml.XmlWriter, T>
+		{
+			public Serialize() {}
+
+			void ISerialize<System.Xml.XmlWriter, T>.Serialize(System.Xml.XmlWriter writer, T instance)
+			{
+				throw new System.NotImplementedException();
+			}
 		}
 	}
 */

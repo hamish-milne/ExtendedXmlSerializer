@@ -21,17 +21,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using System;
-using System.IO;
 using System.Xml;
-using ExtendedXmlSerializer.ReflectionModel;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
 	static class Defaults
 	{
-		public static Func<Stream> Stream { get; } = Activators.Default.New<MemoryStream>;
-
 		public static XmlWriterSettings WriterSettings { get; } = new XmlWriterSettings();
 
 		public static XmlReaderSettings ReaderSettings { get; } = new XmlReaderSettings
@@ -40,13 +35,5 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 			                                                          IgnoreComments = true,
 			                                                          IgnoreProcessingInstructions = true
 		                                                          };
-
-		class MemoryStream : System.IO.MemoryStream
-		{
-			protected override void Dispose(bool disposing)
-			{
-				base.Dispose(disposing);
-			}
-		}
 	}
 }

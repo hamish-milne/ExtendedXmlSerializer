@@ -21,11 +21,13 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using ExtendedXmlSerializer.Core.Sources;
+
 namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 {
 
 
-	public interface IExtendedXmlSerializer : ISerializers<System.Xml.XmlWriter> {}
+	public interface IExtendedXmlSerializer : ISerializers<System.Xml.XmlReader, System.Xml.XmlWriter>, ISource<ISerialize<System.Xml.XmlWriter, int>> {}
 
 /*
 	sealed class ExtendedXmlSerializer : Serializer<System.Xml.XmlReader, System.Xml.XmlWriter>, IExtendedXmlSerializer

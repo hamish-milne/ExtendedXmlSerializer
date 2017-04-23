@@ -35,6 +35,9 @@ using ExtendedXmlSerializer.Core.Sources;
 using ExtendedXmlSerializer.Core.Specifications;
 using ExtendedXmlSerializer.ReflectionModel;
 using JetBrains.Annotations;
+using ISerializers = ExtendedXmlSerializer.ContentModel.Content.ISerializers;
+using RuntimeSerializer = ExtendedXmlSerializer.ContentModel.RuntimeSerializer;
+using Serializers = ExtendedXmlSerializer.ContentModel.Content.Serializers;
 using VariableTypeSpecification = ExtendedXmlSerializer.ReflectionModel.VariableTypeSpecification;
 
 namespace ExtendedXmlSerializer.ExtensionModel.Content
@@ -73,7 +76,13 @@ namespace ExtendedXmlSerializer.ExtensionModel.Content
 			            /*.RegisterInstance<IInnerContentResult>(InnerContentResult.Default)
 			            .RegisterInstance<ICollectionAssignment>(CollectionAssignment.Default)
 			            .RegisterInstance<IListContentsSpecification>(ListContentsSpecification.Default)*/
-			            .RegisterInstance(ReflectionSerializer.Default);
+			            .RegisterInstance(ReflectionSerializer.Default)
+			            .Register<ISerializer, RuntimeSerializer>()
+			            .Register<ISerializerStore, SerializerStore>()
+			            .Register<ISerializers, Serializers>()
+			            .RegisterConstructorDependency<IContent>((provider, info) => provider.Get<DeferredContent>())
+			            
+			;
 
 		void ICommand<IServices>.Execute(IServices parameter)
 		{

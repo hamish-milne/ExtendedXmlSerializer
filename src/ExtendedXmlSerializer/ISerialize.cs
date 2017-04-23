@@ -21,15 +21,28 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+using ExtendedXmlSerializer.ContentModel;
+using ExtendedXmlSerializer.ContentModel.Format;
+
 namespace ExtendedXmlSerializer
 {
-	public interface ISerializers<TParameter>
+	public interface ISerialize<in TWriter, in TInstance>
 	{
-		ISerialize<TParameter, TInstance> Get<TInstance>();
+		void Serialize(TWriter writer, TInstance instance);
 	}
 
-	public interface ISerialize<TParameter, TInstance>
+	sealed class Serialize<TWriter, TInstance> : ISerialize<TWriter, TInstance>
 	{
-		void Serialize(TParameter parameter, TInstance instance);
+		readonly IWriter<TInstance> _writer;
+		readonly IFormatWriters<TWriter> _source;
+
+		public Serialize(IFormatWriters<TWriter> source, IWriter<TInstance> writer)
+		{
+			_writer = writer;
+			_source = source;
+		}
+
+		void ISerialize<TWriter, TInstance>.Serialize(TWriter writer, TInstance instance)
+			=> _writer.Write(_source.Get(writer), instance);
 	}
 }

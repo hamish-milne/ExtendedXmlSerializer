@@ -96,10 +96,10 @@ namespace ExtendedXmlSerializer.ExtensionModel.Format.Xml
 
 
 		public static string Serialize<T>(this IExtendedXmlSerializer @this, T instance)
-			=> Serialize(@this, WriterFactory, Defaults.Stream, instance);
+			=> Serialize(@this, WriterFactory, Format.Defaults.Stream, instance);
 
 		public static string Serialize<T>(this IExtendedXmlSerializer @this, XmlWriterSettings settings, T instance)
-			=> Serialize(@this, new XmlWriterFactory(CloseSettings.Default.Get(settings)), Defaults.Stream, instance);
+			=> Serialize(@this, new XmlWriterFactory(CloseSettings.Default.Get(settings)), Format.Defaults.Stream, instance);
 
 		public static string Serialize<T>(this IExtendedXmlSerializer @this, Stream stream, T instance)
 			=> Serialize(@this, XmlWriterFactory.Default, stream.Self, instance);
