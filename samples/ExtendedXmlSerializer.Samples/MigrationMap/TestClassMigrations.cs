@@ -25,9 +25,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Linq;
-using ExtendedXmlSerializer.ExtensionModel.Xml;
+using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 
-namespace ExtendedXmlSerialization.Samples.MigrationMap
+namespace ExtendedXmlSerializer.Samples.MigrationMap
 {
 // TestClassMigrations
     public class TestClassMigrations : IEnumerable<Action<XElement>>

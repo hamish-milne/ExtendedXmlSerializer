@@ -27,7 +27,7 @@ using System.Xml;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.ExtensionModel.Reflection;
 
-namespace ExtendedXmlSerialization.Samples.MigrationMap
+namespace ExtendedXmlSerializer.Samples.MigrationMap
 {
 	public class MigrationMapSamples
 	{

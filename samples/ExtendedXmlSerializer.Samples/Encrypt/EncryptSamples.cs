@@ -24,12 +24,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using ExtendedXmlSerializer.ContentModel.Conversion;
+using System.Text;
+using ExtendedXmlSerializer.ContentModel.Content.Conversion;
 using ExtendedXmlSerializer.ExtensionModel.Encryption;
 using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.ExtensionModel.Reflection;
 
-namespace ExtendedXmlSerialization.Samples.Encrypt
+namespace ExtendedXmlSerializer.Samples.Encrypt
 {
 	public class EncryptSamples
 	{
@@ -39,10 +40,10 @@ namespace ExtendedXmlSerialization.Samples.Encrypt
 
 // Configuration
 			var serializer = new ConfigurationContainer()
-			    .UseEncryptionAlgorithm(new CustomEncryption())
-                .ConfigureType<Person>().Member(p => p.Password).Encrypt()
-                .Configuration
-                .Create();
+				.UseEncryptionAlgorithm(new CustomEncryption())
+				.ConfigureType<Person>().Member(p => p.Password).Encrypt()
+				.Configuration
+				.Create();
 // EndConfiguration
 
 			Run(serializer);
@@ -65,33 +66,33 @@ namespace ExtendedXmlSerialization.Samples.Encrypt
 		static void Run(IExtendedXmlSerializer serializer)
 		{
 			var list = new List<Person>
-			           {
-				           new Person {Name = "John", Password = "Ab238ds2"},
-				           new Person {Name = "Oliver", Password = "df89nmXhdf"}
-			           };
+					   {
+						   new Person {Name = "John", Password = "Ab238ds2"},
+						   new Person {Name = "Oliver", Password = "df89nmXhdf"}
+					   };
 
 			var xml = serializer.Serialize(list);
 			Console.WriteLine(xml);
 
 			var obj2 = serializer.Deserialize<List<Person>>(xml);
 			Console.WriteLine("Employees count = " + obj2.Count + " - passwords " +
-			                  string.Join(", ", obj2.Select(p => p.Password)));
+							  string.Join(", ", obj2.Select(p => p.Password)));
 		}
 	}
 
 
 // CustomEncryption
-    public class CustomEncryption : ConverterBase<string>, IEncryption
-    {
-        public override string Parse(string data)
-        {
-            return Encoding.UTF8.GetString(Convert.FromBase64String(data));
-        }
+	public class CustomEncryption : ConverterBase<string>, IEncryption
+	{
+		public override string Parse(string data)
+		{
+			return Encoding.UTF8.GetString(Convert.FromBase64String(data));
+		}
 
-        public override string Format(string instance)
-        {
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(instance));
-        }
-    }
+		public override string Format(string instance)
+		{
+			return Convert.ToBase64String(Encoding.UTF8.GetBytes(instance));
+		}
+	}
 // EndCustomEncryption
 }

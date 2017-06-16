@@ -29,7 +29,7 @@ using ExtendedXmlSerializer.ExtensionModel.Format.Xml;
 using ExtendedXmlSerializer.ExtensionModel.References;
 using ExtendedXmlSerializer.ExtensionModel.Reflection;
 
-namespace ExtendedXmlSerialization.Samples.ObjectReference
+namespace ExtendedXmlSerializer.Samples.ObjectReference
 {
 	public class ObjectReferenceSamples
 	{
