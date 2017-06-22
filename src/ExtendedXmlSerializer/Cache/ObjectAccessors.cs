@@ -141,11 +141,16 @@ namespace ExtendedXmlSerialization.Cache
             ParameterExpression itemObject = Expression.Parameter(typeof(object), "item");
 
             // Object casted to specific type using the operator "as".
-            Expression itemCasted = type.GetTypeInfo().IsValueType
-                ? Expression.Unbox(itemObject, type)
-                : Expression.Convert(itemObject, type);
-            // Property from casted object
-            MemberExpression property = Expression.PropertyOrField(itemCasted, propertyName);
+            Expression itemCasted =
+#if !NET35
+				type.GetTypeInfo().IsValueType
+				? Expression.Unbox(itemObject, type)
+                : 
+#endif
+				Expression.Convert(itemObject, type);
+
+			// Property from casted object
+			MemberExpression property = Expression.PropertyOrField(itemCasted, propertyName);
 
             // Secound parameter - value to set
             ParameterExpression value = Expression.Parameter(typeof(object), "value");
@@ -153,8 +158,12 @@ namespace ExtendedXmlSerialization.Cache
             // Because we use this function also for value type we need to add conversion to object
             Expression paramCasted = Expression.Convert(value, property.Type);
 
-            // Assign value to property
-            BinaryExpression assign = Expression.Assign(property, paramCasted);
+#if NET35
+	        Expression assign = Expression.Call(itemCasted, "set_" + propertyName, new[] {property.Type}, paramCasted);
+#else
+			// Assign value to property
+			BinaryExpression assign = Expression.Assign(property, paramCasted);
+#endif
 
             LambdaExpression lambda = Expression.Lambda(typeof(PropertySetter), assign, itemObject, value);
 

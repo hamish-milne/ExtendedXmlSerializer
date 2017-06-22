@@ -61,7 +61,7 @@ namespace ExtendedXmlSerialization.Cache
             var result = type.GetInterfaces()
                              .Where( t => t.GetTypeInfo().IsGenericType &&
                                           t.GetGenericTypeDefinition() == typeof(IEnumerable<>) )
-                             .Select( t => t.GenericTypeArguments[0] ).FirstOrDefault();
+                             .Select( t => t.GetGenericArguments()[0] ).FirstOrDefault();
             
             return result;
         }

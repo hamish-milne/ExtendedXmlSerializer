@@ -48,7 +48,7 @@ namespace ExtendedXmlSerialization.Cache
                     Type = type.GetGenericArguments()[0];
                 }
 
-                Name = Name.Replace("`" + types.Length, "Of" + string.Join("", types.Select(p => p.Name)));
+                Name = Name.Replace("`" + types.Length, "Of" + string.Concat(types.Select(p => p.Name).ToArray()));
             }
             
             FullName = type.FullName;
@@ -73,7 +73,7 @@ namespace ExtendedXmlSerialization.Cache
                     GenericArguments = new[] { elementType };
                 }
 
-                Name = IsArray || isGenericType ? $"ArrayOf{string.Join(string.Empty, GenericArguments.Select(p => p.Name))}" : type.Name;
+                Name = IsArray || isGenericType ? $"ArrayOf{string.Concat(GenericArguments.Select(p => p.Name).ToArray())}" : type.Name;
 
                 if (IsDictionary)
                 {
